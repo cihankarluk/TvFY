@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import logging
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,13 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4asx+=f7#g&i2_1xbo5wa^*7@q9^xtoqn$628mz!a6*#=x(+nr'
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+APP_ENV = os.getenv("APP_STATE")
+logging.warning(f"Using {APP_ENV} environment.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG_STATES = ("TEST", "DEV")
+DEBUG = APP_ENV in DEBUG_STATES
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 
 # Application definition
 
@@ -49,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'TvFY.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +75,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'TvFY.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
@@ -75,8 +83,12 @@ WSGI_APPLICATION = 'TvFY.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        "NAME": os.getenv("DATABASE_NAME"),
+        "USER": os.getenv("DATABASE_USER"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
+        "HOST": os.getenv("DATABASE_HOST", "127.0.0.1"),
+        "PORT": os.getenv("DATABASE_PORT", "5432"),
     }
 }
 
