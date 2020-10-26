@@ -30,4 +30,4 @@ class CreateAccountSerializer(BaseSerializer, serializers.Serializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = "username",
+        fields = "username", "email"
