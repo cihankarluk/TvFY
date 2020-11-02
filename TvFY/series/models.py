@@ -18,3 +18,10 @@ class Series(models.Model):
     genres = models.ManyToManyField(Genre)
     release_date = models.DateField()
     is_active = models.BooleanField()
+
+
+class Episode(models.Model):
+    name = models.CharField(max_length=255)
+    imdb_rate = models.FloatField(blank=True, null=True)
+    release_date = models.DateField()
+    storyline = models.TextField()
