@@ -4,7 +4,7 @@ from TvFY.artist.models import Artist
 from TvFY.genre.models import Genre
 
 
-class Series(models.Model):
+class Movie(models.Model):
     name = models.CharField(max_length=255)
     language = models.CharField(max_length=255, blank=True, null=True)
     imdb_rate = models.FloatField(blank=True, null=True)
@@ -17,4 +17,3 @@ class Series(models.Model):
     storyline = models.TextField()
     genres = models.ManyToManyField(Genre)
     release_date = models.DateField()
-    is_active = models.BooleanField()

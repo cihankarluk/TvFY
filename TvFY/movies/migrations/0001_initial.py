@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Series',
+            name='Movie',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
@@ -27,7 +27,6 @@ class Migration(migrations.Migration):
                 ('image', models.URLField(blank=True, null=True)),
                 ('storyline', models.TextField()),
                 ('release_date', models.DateField()),
-                ('is_active', models.BooleanField()),
                 ('artists', models.ManyToManyField(to='artist.Artist')),
                 ('genres', models.ManyToManyField(to='genre.Genre')),
             ],

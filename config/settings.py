@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'TvFY.core',
     'TvFY.artist',
     'TvFY.series',
-    'TvFY.genres'
+    'TvFY.genre',
+    'TvFY.search',
+    'TvFY.movies'
 ]
 
 MIDDLEWARE = [
