@@ -9,8 +9,6 @@ logger = logging.getLogger('main')
 class Scrapper:
     def __init__(self, urls):
         self.urls = urls
-        self.limit = 3
-        self.timeout = 100
         self.session = None
 
     async def fetch_html(self, url: str):
