@@ -1,11 +1,11 @@
 import re
 from typing import Union
 
-import bs4
+from TvFY.collector.helpers import SoupSelectionMixin
+from TvFY.movies.models import Movie
 
 
-class IMDBEpisodes:
-    soup: bs4.BeautifulSoup
+class IMDBEpisodes(SoupSelectionMixin):
     url: str
 
     @staticmethod
@@ -17,7 +17,10 @@ class IMDBEpisodes:
     @property
     def get_episodes(self) -> tuple:
         result = []
-        for episode_data in self.soup.find_all("div", class_="info"):
+        css_selection = self.soup_selection(
+            self.find_all, selection="info", tag="div"
+        )
+        for episode_data in css_selection:
             data = {
                 "name": episode_data.a['title'],
                 "storyline": episode_data.find(
@@ -33,8 +36,8 @@ class IMDBEpisodes:
         return "episodes", result
 
 
-class IMDBCast:
-    soup: bs4.BeautifulSoup
+class IMDBCast(SoupSelectionMixin):
+    search_type: str
 
     @staticmethod
     def get_actor_name(cast_data: str) -> dict:
@@ -43,13 +46,7 @@ class IMDBCast:
         return result
 
     @staticmethod
-    def get_character_name(cast_data: str) -> tuple:
-        name = cast_data.split('\n')
-        result = "character_name", name
-        return result
-
-    @staticmethod
-    def get_series_information(cast_data: str) -> Union[bool, dict]:
+    def cast_information(cast_data: str) -> Union[bool, dict]:
         # info: '17 episodes, 2019-2022'
         character_name, info = cast_data.split('\n', 1)
 
@@ -78,76 +75,80 @@ class IMDBCast:
     @property
     def get_cast(self):
         results = []
-        css_selection = self.soup.find("table", class_="cast_list")
+        css_selection = self.soup_selection(
+            self.find, selection="cast_list", tag="table"
+        )
         for cast in css_selection.find_all("tr"):
             if character := cast.find('td', class_="character"):
-                series_information = self.get_series_information(character.text.strip())
-                if not series_information:
+                if self.search_type == Movie.type:
+                    cast_information = {"character_name": character.a.text}
+                else:
+                    cast_information = self.cast_information(character.text.strip())
+                if not cast_information:
                     continue
 
                 actor = self.get_actor_name(cast.find("td", class_="").a.text.strip())
-                actor.update(series_information)
+                actor.update(cast_information)
                 results.append(actor)
         return "cast", results
 
 
 class IMDBScrapper(IMDBEpisodes, IMDBCast):
-    def __init__(self, soup, url):
+    def __init__(self, soup, url, search_type):
         self.soup = soup
         self.url = url
-        self.error_objs = []
-
-    def soup_selection(self, css_selector: str, soup):
-        css_selection = soup.select_one(selector=css_selector)
-        return css_selection
-
-    @property
-    def get_runtime(self) -> tuple:
-        css_selector = "#titleDetails > div:nth-child(15) > time"
-        run_time = self.soup_selection(css_selector=css_selector, soup=self.soup)
-        result = "run_time", run_time.text.strip()
-        return result
-
-    @property
-    def get_genre(self) -> tuple:
-        css_selector = "#titleStoryLine > div:nth-child(10)"
-        css_selection = self.soup_selection(css_selector=css_selector, soup=self.soup)
-        genres = [genre.text.strip() for genre in css_selection.findAll('a')]
-        result = "genres_imdb", genres
-        return result
+        self.search_type = search_type
 
     @property
     def get_popularity(self) -> tuple:
-        css_selector = "#title-overview-widget > div.plot_summary_wrapper > div.titleReviewBar > div:nth-child(3) > div.titleReviewBarSubItem > div:nth-child(2) > span"  # noqa
-        css_selection = self.soup_selection(css_selector=css_selector, soup=self.soup)
-        popularity, _ = css_selection.text.split("(")
-        result = "popularity", popularity.strip()
+        css_selection = self.soup_selection(
+            self.find, selection="titleReviewBarSubItem", tag="div"
+        )
+        popularity = css_selection.span.text.split("(")
+        result = "popularity", popularity[0].strip()
         return result
 
     @property
     def get_creator(self) -> tuple:
-        css_selector = "#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div:nth-child(2) > a"  # noqa
-        creator = self.soup_selection(css_selector=css_selector, soup=self.soup)
-        result = "creator", creator.text.strip()
+        css_selection = self.soup_selection(
+            self.find, selection="credit_summary_item", tag="div"
+        )
+        result = "creator", css_selection.a.text.strip()
+        return result
+
+    @property
+    def get_genre(self) -> tuple:
+        css_selection = self.soup_selection(
+            self.select_one, selection="#titleStoryLine > div:nth-child(10)"
+        )
+        genres = [genre.text.strip() for genre in css_selection.find_all('a')]
+        result = "genres_imdb", genres
+        return result
+
+    @property
+    def get_runtime(self) -> tuple:
+        css_selection = self.soup_selection(
+            self.find, tag="time"
+        )
+        result = "run_time", css_selection.text.strip()
         return result
 
     @property
     def get_language(self) -> tuple:
-        css_selector = '#titleDetails > div:nth-child(5) > a'
-        language = self.soup_selection(css_selector=css_selector, soup=self.soup)
+        language = self.soup_selection(
+            self.select_one, selection='#titleDetails > div:nth-child(5) > a'
+        )
         result = "language", language.text.strip()
         return result
 
     @property
     def get_country(self) -> tuple:
-        css_selector = "#titleDetails > div:nth-child(4) > a"
-        country = self.soup_selection(css_selector=css_selector, soup=self.soup)
+        self.soup.find("div", id="titleDetails")
+        css_selection = self.soup_selection(
+            self.select_one, selection="#titleDetails"
+        )
+        # TODO: titleDetails detayları alınacak
         result = "country", country.text.strip()
-        return result
-
-    @property
-    def get_errors(self) -> tuple:
-        result = "errors", self.error_objs
         return result
 
     def run(self):
@@ -168,6 +169,5 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast):
                 self.get_creator,
                 self.get_language,
                 self.get_country,
-                self.get_errors
             ])
         return result
