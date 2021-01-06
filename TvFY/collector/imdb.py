@@ -1,6 +1,8 @@
 import re
 from typing import Union
 
+import bs4
+
 from TvFY.collector.helpers import SoupSelectionMixin
 from TvFY.movies.models import Movie
 
@@ -133,22 +135,83 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast):
         result = "run_time", css_selection.text.strip()
         return result
 
-    @property
-    def get_language(self) -> tuple:
-        language = self.soup_selection(
-            self.select_one, selection='#titleDetails > div:nth-child(5) > a'
-        )
-        result = "language", language.text.strip()
+    @staticmethod
+    def get_language(content) -> dict:
+        language = None
+        if content.h4 and content.h4.text == 'Language:':
+            language = [a.text for a in content.find_all("a")]
+        result = {"language": language} if language else {}
         return result
 
-    @property
-    def get_country(self) -> tuple:
-        self.soup.find("div", id="titleDetails")
+    @staticmethod
+    def get_country(content: bs4) -> dict:
+        country = None
+        if content.h4 and content.h4.text == 'Country:':
+            country = [a.text for a in content.find_all("a")]
+        result = {"country": country} if country else {}
+        return result
+
+    @staticmethod
+    def get_budget(content: bs4) -> dict:
+        clean_value = None
+        if content.h4 and content.h4.text == 'Budget:':
+            content = content.get_text(" sp ")
+            # ['\n', 'Budget:', '$93,000,000\n', '(estimated)', '\n']
+            gross = content.split(" sp ")[2].strip()
+            clean_value = re.sub('[$,]', '', gross)
+        result = {"budget": clean_value} if clean_value else {}
+        return result
+
+    @staticmethod
+    def get_usa_opening_weekend(content: bs4) -> dict:
+        clean_value = None
+        if content.h4 and content.h4.text == 'Opening Weekend USA:':
+            content = content.get_text(" sp ")
+            # ['\n', 'Opening Weekend USA:', ' $47,211,490,\n', '23 December 2001', ' ']
+            gross = content.split(" sp ")[2].strip()
+            clean_value = re.sub('[$,]', '', gross)
+        result = {"usa_opening_weekend": clean_value} if clean_value else {}
+        return result
+
+    @staticmethod
+    def get_ww_gross(content: bs4) -> dict:
+        clean_value = None
+        if content.h4 and content.h4.text == 'Cumulative Worldwide Gross:':
+            content = content.get_text(" sp ")
+            # ['\n', 'Cumulative Worldwide Gross:', '$888,159,092']
+            gross = content.split(" sp ")[2].strip()
+            clean_value = re.sub('[$,]', '', gross)
+        result = {"ww_gross": clean_value} if clean_value else {}
+        return result
+
+    def run_method(self, action: str, content: str):
+        action_class: dict = {
+            "get_country": self.get_country,
+            "get_language": self.get_language,
+            "get_budget": self.get_budget,
+            "get_opening_weekend": self.get_usa_opening_weekend,
+            "get_ww_gross": self.get_ww_gross
+        }
+        action_method: classmethod = action_class[action]
+        return action_method(content=content)
+
+    def split_details(self):
+        result = {}
+        actions = ["get_country", "get_language"]
+        if self.search_type == Movie.type:
+            actions.extend(
+                ["get_box_office", "get_usa_opening_weekend", "get_ww_gross"]
+            )
         css_selection = self.soup_selection(
             self.select_one, selection="#titleDetails"
         )
-        # TODO: titleDetails detayları alınacak
-        result = "country", country.text.strip()
+        for div in css_selection.find_all("div"):
+            for index, action in enumerate(actions):
+                if data := self.run_method(action, div):
+                    actions.pop(index)
+                    result.update(data)
+                if not actions:
+                    break
         return result
 
     def run(self):
@@ -162,12 +225,5 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast):
                 self.get_cast
             ])
         else:
-            result.update([
-                self.get_runtime,
-                self.get_genre,
-                self.get_popularity,
-                self.get_creator,
-                self.get_language,
-                self.get_country,
-            ])
+            self.split_details()
         return result
