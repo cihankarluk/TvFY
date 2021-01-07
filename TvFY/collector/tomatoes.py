@@ -1,6 +1,8 @@
 class TomatoesScrapper:
-    def __init__(self, soup):
+    def __init__(self, soup, url, search_type):
         self.soup = soup
+        self.url = url
+        self.search_type = search_type
 
     @property
     def get_network(self) -> tuple:
@@ -11,14 +13,14 @@ class TomatoesScrapper:
 
     @property
     def get_average_tomatometer(self) -> tuple:
-        css_selector = "#topSection > section > div.mop-ratings-wrap.score_panel.js-mop-ratings-wrap > section > section > div.mop-ratings-wrap__half.critic-score > h2 > span > span.mop-ratings-wrap__percentage"
+        css_selector = "#topSection > section > div.mop-ratings-wrap.score_panel.js-mop-ratings-wrap > section > section > div.mop-ratings-wrap__half.critic-score > h2 > span > span.mop-ratings-wrap__percentage"  # noqa
         tomatometer = self.soup.select_one(css_selector).text
         result = "rotten_tomatoes_rate", tomatometer.strip()
         return result
 
     @property
     def get_average_audience_score(self) -> tuple:
-        css_selector = "#topSection > section > div.mop-ratings-wrap.score_panel.js-mop-ratings-wrap > section > section > div.mop-ratings-wrap__half.audience-score > h2 > span > span.mop-ratings-wrap__percentage"
+        css_selector = "#topSection > section > div.mop-ratings-wrap.score_panel.js-mop-ratings-wrap > section > section > div.mop-ratings-wrap__half.audience-score > h2 > span > span.mop-ratings-wrap__percentage"  # noqa
         audience_score = self.soup.select_one(css_selector).text
         result = "average_audience_score", audience_score.strip()
         return result
