@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class GCrawling:
+class GoogleScrapper:
     def __init__(self, search_key):
         self.search_key = search_key
 
@@ -23,18 +23,15 @@ class GCrawling:
             string = None
         return string
 
-    def is_movie(self):
-        ...
-
     def get_imdb_url(self, content: str) -> dict:
         regex_pattern = r"https://www.imdb.com/title/[^;]*/"
-        imdb_url = self.regex_search(content, regex_pattern)
+        imdb_url = self.regex_search(content=content, pattern=regex_pattern)
         result = {"imdb_url": imdb_url} if imdb_url else {}
         return result
 
     def get_rotten_tomatoes_url(self, content: str) -> dict:
-        regex_patten = r"https://www.rottentomatoes.com/.+?(?=&sa)"
-        rotten_tomatoes_url = self.regex_search(content, regex_patten)
+        regex_pattern = r"https://www.rottentomatoes.com/.+?/.+?(?<=/)"
+        rotten_tomatoes_url = self.regex_search(content=content, pattern=regex_pattern)
         result = (
             {"rotten_tomatoes_url": rotten_tomatoes_url} if rotten_tomatoes_url else {}
         )
@@ -48,7 +45,7 @@ class GCrawling:
 
     def get_rotten_tomatoes_rate(self, content: str) -> dict:
         regex_pattern = r"\d{1,2}%\s.\sRotten\sTomatoes"
-        rotten_tomatoes_rate = self.regex_search(content, regex_pattern)
+        rotten_tomatoes_rate = self.regex_search(content=content, pattern=regex_pattern)
         result = (
             {"rotten_tomatoes_rate": rotten_tomatoes_rate}
             if rotten_tomatoes_rate
@@ -58,13 +55,13 @@ class GCrawling:
 
     def get_tv_com_rate(self, content: str) -> dict:
         regex_pattern = r"(\d.\d|\d)/10\s.\sTV.com"
-        tv_com_rate = self.regex_search(content, regex_pattern)
+        tv_com_rate = self.regex_search(content=content, pattern=regex_pattern)
         result = {"tv_com_rate": tv_com_rate} if tv_com_rate else {}
         return result
 
     def get_dates(self, content: str) -> dict:
-        regex_pattern = r"Original\srelease:\s\w{1,9}\s\d{1,2},\s\d{1,4}\s\W;\s(present|\w{1,9}\s\d{1,2},\s\d{1,4})"
-        reg_search = self.regex_search(content, regex_pattern)
+        regex_pattern = r"Original\srelease:\s\w{1,9}\s\d{1,2},\s\d{1,4}\s\W;\s(present|\w{1,9}\s\d{1,2},\s\d{1,4})"  # noqa
+        reg_search = self.regex_search(content=content, pattern=regex_pattern)
         if not reg_search:
             return {}
 
@@ -82,6 +79,19 @@ class GCrawling:
         }
         return result
 
+    def get_seasons(self, content):
+        regex_pattern = r"(No.\sof\sseasons:\s\d{1,3})|(\d{1,2}\sseasons)"
+        reg_search = self.regex_search(content=content, pattern=regex_pattern)
+        if reg_search:
+            try:
+                _, seasons = reg_search.split(":")
+            except ValueError:
+                seasons, _ = reg_search.split(" ")
+        else:
+            seasons = None
+        result = {"seasons": seasons.strip()} if seasons else {}
+        return result
+
     def run_method(self, action: str, content: str):
         action_class: dict = OrderedDict(
             [
@@ -91,6 +101,7 @@ class GCrawling:
                 ("get_rotten_tomatoes_rate", self.get_rotten_tomatoes_rate),
                 ("get_tv_com_rate", self.get_tv_com_rate),
                 ("get_dates", self.get_dates),
+                ("get_seasons", self.get_seasons)
             ]
         )
         action_method: classmethod = action_class[action]
@@ -102,6 +113,7 @@ class GCrawling:
             "get_rotten_tomatoes_rate",
             "get_tv_com_rate",
             "get_dates",
+            "get_seasons"
         ]
         repeat, result = None, {}
         for div in soup.find_all("div"):
