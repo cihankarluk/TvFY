@@ -96,7 +96,7 @@ class IMDBCast(SoupSelectionMixin):
 
 
 class IMDBScrapper(IMDBEpisodes, IMDBCast):
-    def __init__(self, soup, url, search_type):
+    def __init__(self, soup: bs4, url: str, search_type: str):
         self.soup = soup
         self.url = url
         self.search_type = search_type
@@ -120,10 +120,13 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast):
 
     @property
     def get_genre(self) -> tuple:
+        genres = None
         css_selection = self.soup_selection(
-            self.select_one, selection="#titleStoryLine > div:nth-child(10)"
+            self.select_one, selection="#titleStoryLine"
         )
-        genres = [genre.text.strip() for genre in css_selection.find_all('a')]
+        for data in css_selection.find_all("div", class_="see-more inline canwrap"):
+            if data.h4 and data.h4.text == 'Genres:':
+                genres = [genre.text.strip() for genre in data.find_all('a')]
         result = "genres_imdb", genres
         return result
 
@@ -195,7 +198,10 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast):
         action_method: classmethod = action_class[action]
         return action_method(content=content)
 
-    def split_details(self):
+    def split_details(self) -> dict:
+        """
+        Get data under title details.
+        """
         result = {}
         actions = ["get_country", "get_language"]
         if self.search_type == Movie.type:
@@ -225,5 +231,10 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast):
                 self.get_cast
             ])
         else:
-            self.split_details()
+            result.update(self.split_details())
+            result.update([
+                self.get_popularity,
+                self.get_creator,
+                self.get_genre
+            ])
         return result
