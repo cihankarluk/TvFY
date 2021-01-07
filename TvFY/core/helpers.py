@@ -1,4 +1,5 @@
 import json
+from unittest.mock import Mock
 
 from django.core import validators
 from django.utils.deconstruct import deconstructible
@@ -48,3 +49,18 @@ def custom_exception_handler(exc, context: dict):
     }
 
     return Response(data, status=response.status_code, headers=response._headers)
+
+
+def error_handler(func):
+    def inner(self, method: str, selection: str = None, tag: str = None):
+        result = func(self, method, selection, tag)
+        if not result:
+            mock = Mock()
+            mock.return_value = []
+            mock.text = ""
+            mock.a.text = ""
+            mock.find_all = []
+            return mock
+        return result
+
+    return inner
