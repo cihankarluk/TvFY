@@ -47,12 +47,14 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'TvFY.account',
-    'TvFY.core',
     'TvFY.artist',
-    'TvFY.series',
+    'TvFY.collector',
+    'TvFY.core',
     'TvFY.genre',
+    'TvFY.movies',
+    'TvFY.networks',
     'TvFY.search',
-    'TvFY.movies'
+    'TvFY.series'
 ]
 
 MIDDLEWARE = [
@@ -104,7 +106,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', # noqa
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -145,3 +147,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'account.Account'
+
+IMDB_CAST = "fullcredits"
+IMDB_SEASON = "episodes?season="
