@@ -49,11 +49,11 @@ class Scrapper:
         return cls.run()
 
     async def run(self):
-        results = []
+        results = {}
         tasks = [self.weed_out(url=url) for url in self.urls]
         for task in asyncio.as_completed(tasks):
-            soup = await task
-            results.append(soup)
+            result = await task
+            results.update(result)
         return results
 
     async def main(self):

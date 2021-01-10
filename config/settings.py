@@ -150,3 +150,4 @@ AUTH_USER_MODEL = 'account.Account'
 
 IMDB_CAST = "fullcredits"
 IMDB_SEASON = "episodes?season="
+IMDB_AWARDS = "awards"
