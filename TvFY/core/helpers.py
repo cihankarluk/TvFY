@@ -60,6 +60,7 @@ def error_handler(func):
             mock.text = ""
             mock.a.text = ""
             mock.find_all = []
+            mock.find.text = ""
             return mock
         return result
 
