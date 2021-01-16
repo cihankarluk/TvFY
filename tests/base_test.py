@@ -9,7 +9,7 @@ class BaseTest(TestCase):
         self.series = Series.type
         self.movie = Movie.type
 
-    def control_home_page(self, result):
+    def imdb_control_home_page(self, result):
         self.assertTrue(result["country"])
         self.assertTrue(result["creator"])
         self.assertTrue(result["language"])
@@ -17,3 +17,19 @@ class BaseTest(TestCase):
         self.assertTrue(result["genres_imdb"])
         self.assertTrue(result["wins"])
         self.assertTrue(result["nominations"])
+
+    def rt_control_home_page(self, result):
+        self.assertTrue(result["network"])
+        self.assertTrue(result["rt_genre"])
+        self.assertTrue(result["rt_tomatometer"])
+        self.assertTrue(result["rt_audience_rate"])
+        self.assertTrue(result["storyline"])
+
+    def rt_control_home_page_movie(self, result):
+        self.assertTrue(result["storyline"])
+        self.assertTrue(result["director"])
+        self.assertTrue(result["rt_genre"])
+        self.assertTrue(result["rt_tomatometer"])
+        self.assertTrue(result["rt_tomatometer_count"])
+        self.assertTrue(result["rt_audience_rate"])
+        self.assertTrue(result["rt_audience_rate_count"])
