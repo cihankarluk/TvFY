@@ -42,12 +42,6 @@ class IMDBCast(SoupSelectionMixin):
     search_type: str
 
     @staticmethod
-    def get_actor_name(cast_data: str) -> dict:
-        first_name, *last_name = cast_data.split(" ")
-        result = {"first_name": first_name, "last_name": " ".join(last_name)}
-        return result
-
-    @staticmethod
     def cast_information(cast_data: str) -> Union[bool, dict]:
         # info: '17 episodes, 2019-2022'
         cast_data_list = cast_data.split(" sp ")
@@ -66,7 +60,7 @@ class IMDBCast(SoupSelectionMixin):
             return False
 
         # years 2019 or 2019-2022
-        years = year.split("-")
+        years = year.split("-") # noqa
         result = {
             "character_name": character_name,
             "episode_count": episode_count,
@@ -89,10 +83,10 @@ class IMDBCast(SoupSelectionMixin):
                     cast_information = self.cast_information(character.get_text(" sp "))
                 if not cast_information:
                     continue
-
-                actor = self.get_actor_name(cast.find("td", class_="").a.text.strip())
+                actor = self.get_name(cast.find("td", class_="").a.text.strip())
                 actor.update(cast_information)
                 results.append(actor)
+
         return {"cast": results}
 
 
@@ -110,30 +104,51 @@ class IMDBAwards(SoupSelectionMixin):
         return {"wins": wins, "nominations": nominations}
 
 
-class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards):
+class IMDBMovie(SoupSelectionMixin):
+    @staticmethod
+    def get_budget(content: bs4) -> dict:
+        budget = {}
+        if content.h4 and content.h4.text == 'Budget:':
+            content = content.get_text(" sp ")
+            # ['\n', 'Budget:', '$93,000,000\n', '(estimated)', '\n']
+            gross = content.split(" sp ")[2].strip()
+            budget = {"budget": re.sub('[$,]', '', gross)}
+        return budget
+
+    @staticmethod
+    def get_usa_opening_weekend(content: bs4) -> dict:
+        usa_opening_weekend = {}
+        if content.h4 and content.h4.text == 'Opening Weekend USA:':
+            content = content.get_text(" sp ")
+            # ['\n', 'Opening Weekend USA:', ' $47,211,490,\n', '23 December 2001', ' ']
+            gross = content.split(" sp ")[2].strip()
+            usa_opening_weekend = {"usa_opening_weekend": re.sub('[$,]', '', gross)}
+        return usa_opening_weekend
+
+    @staticmethod
+    def get_ww_gross(content: bs4) -> dict:
+        ww_gross = {}
+        if content.h4 and content.h4.text == 'Cumulative Worldwide Gross:':
+            content = content.get_text(" sp ")
+            # ['\n', 'Cumulative Worldwide Gross:', '$888,159,092']
+            gross = content.split(" sp ")[2].strip()
+            ww_gross = {"ww_gross": re.sub('[$,]', '', gross)}
+        return ww_gross
+
+
+class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
+    episodes = 'episodes'
+    fullcredits = 'fullcredits'
+    awards = 'awards'
+
     def __init__(self, soup: bs4, url: str, search_type: str):
         self.soup = soup
         self.url = url
         self.search_type = search_type
 
     @property
-    def get_popularity(self) -> dict:
-        css_selection = self.soup_selection(
-            self.find, selection="titleReviewBarSubItem", tag="div"
-        )
-        popularity = css_selection.span.text.split("(")
-        return {"popularity": popularity[0].strip()}
-
-    @property
-    def get_creator(self) -> dict:
-        css_selection = self.soup_selection(
-            self.find, selection="credit_summary_item", tag="div"
-        )
-        return {"creator": css_selection.a.text.strip()}
-
-    @property
     def get_genre(self) -> dict:
-        genres = None
+        genres = {}
         css_selection = self.soup_selection(
             self.select_one, selection="#titleStoryLine"
         )
@@ -145,55 +160,40 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards):
         return genres
 
     @property
+    def get_creator(self) -> dict:
+        css_selection = self.soup_selection(
+            self.find, selection="credit_summary_item", tag="div"
+        )
+        return {"creator": css_selection.a.text.strip()}
+
+    @property
     def get_runtime(self) -> dict:
         css_selection = self.soup_selection(
             self.find, tag="time"
         )
         return {"run_time": css_selection.text.strip()}
 
-    @staticmethod
-    def get_language(content) -> dict:
-        language = None
-        if content.h4 and content.h4.text == 'Language:':
-            language = {"language": [a.text for a in content.find_all("a")]}
-        return language
+    @property
+    def get_popularity(self) -> dict:
+        css_selection = self.soup_selection(
+            self.find, selection="titleReviewBarSubItem", tag="div"
+        )
+        popularity = css_selection.span.text.split("(")
+        return {"popularity": popularity[0].strip()}
 
     @staticmethod
     def get_country(content: bs4) -> dict:
-        country = None
+        country = {}
         if content.h4 and content.h4.text == 'Country:':
             country = {"country": [a.text for a in content.find_all("a")]}
         return country
 
     @staticmethod
-    def get_budget(content: bs4) -> dict:
-        budget = None
-        if content.h4 and content.h4.text == 'Budget:':
-            content = content.get_text(" sp ")
-            # ['\n', 'Budget:', '$93,000,000\n', '(estimated)', '\n']
-            gross = content.split(" sp ")[2].strip()
-            budget = {"budget": re.sub('[$,]', '', gross)}
-        return budget
-
-    @staticmethod
-    def get_usa_opening_weekend(content: bs4) -> dict:
-        usa_opening_weekend = None
-        if content.h4 and content.h4.text == 'Opening Weekend USA:':
-            content = content.get_text(" sp ")
-            # ['\n', 'Opening Weekend USA:', ' $47,211,490,\n', '23 December 2001', ' ']
-            gross = content.split(" sp ")[2].strip()
-            usa_opening_weekend = {"usa_opening_weekend": re.sub('[$,]', '', gross)}
-        return usa_opening_weekend
-
-    @staticmethod
-    def get_ww_gross(content: bs4) -> dict:
-        ww_gross = None
-        if content.h4 and content.h4.text == 'Cumulative Worldwide Gross:':
-            content = content.get_text(" sp ")
-            # ['\n', 'Cumulative Worldwide Gross:', '$888,159,092']
-            gross = content.split(" sp ")[2].strip()
-            ww_gross = {"ww_gross": re.sub('[$,]', '', gross)}
-        return ww_gross
+    def get_language(content) -> dict:
+        language = {}
+        if content.h4 and content.h4.text == 'Language:':
+            language = {"language": [a.text for a in content.find_all("a")]}
+        return language
 
     def run_method(self, action: str, content: str):
         action_class: dict = {
@@ -206,17 +206,11 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards):
         action_method: classmethod = action_class[action]
         return action_method(content=content)
 
-    @property
-    def split_details(self) -> dict:
+    def split_details(self, actions) -> dict:
         """
         Get data under title details.
         """
         result = {}
-        actions = ["get_country", "get_language"]
-        if self.search_type == Movie.type:
-            actions.extend(
-                ["get_budget", "get_usa_opening_weekend", "get_ww_gross"]
-            )
         css_selection = self.soup_selection(
             self.select_one, selection="#titleDetails"
         )
@@ -230,17 +224,25 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards):
         return result
 
     def run(self):
-        result = {}
-        if 'episodes' in self.url:
+        result, actions = {}, ["get_country", "get_language"]
+        if self.episodes in self.url:
             result.update(self.get_episodes)
-        elif 'fullcredits' in self.url:
+        elif self.fullcredits in self.url:
             result.update(self.get_cast)
-        elif 'awards' in self.url:
+        elif self.awards in self.url:
             result.update(self.get_awards)
-        else:
-            result.update(self.split_details)
-            result.update(self.get_popularity)
-            result.update(self.get_creator)
+        elif self.search_type == Movie.type:
+            actions.extend(["get_budget", "get_usa_opening_weekend", "get_ww_gross"])
+            result.update(self.split_details(actions=actions))
             result.update(self.get_genre)
+            result.update(self.get_creator)
             result.update(self.get_runtime)
+            result.update(self.get_popularity)
+        else:
+            result.update(self.split_details(actions=actions))
+            result.update(self.get_genre)
+            result.update(self.get_creator)
+            result.update(self.get_runtime)
+            result.update(self.get_popularity)
+
         return result
