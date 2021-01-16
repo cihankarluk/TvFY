@@ -7,6 +7,7 @@ def get_urls(google_data: dict) -> list:
     urls = []
     if imdb_base := google_data.get("imdb_url"):
         urls.append(urljoin(imdb_base, settings.IMDB_CAST))
+        urls.append(urljoin(imdb_base, settings.AWARDS))
         seasons_str = google_data.get("seasons", 0)
         # Add one due to python range
         seasons = int(seasons_str) + 1
