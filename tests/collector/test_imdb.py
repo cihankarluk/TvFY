@@ -36,7 +36,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(episodes)
 
         self.control_cast(cast)
-        self.control_home_page(result)
+        self.imdb_control_home_page(result)
         self.control_episodes(episodes)
 
         self.assertTrue(result["run_time"])
@@ -58,7 +58,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(episodes)
 
         self.control_cast(cast)
-        self.control_home_page(result)
+        self.imdb_control_home_page(result)
         self.control_episodes(episodes)
 
         self.assertTrue(result["run_time"])
@@ -80,7 +80,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(episodes)
 
         self.control_cast(cast)
-        self.control_home_page(result)
+        self.imdb_control_home_page(result)
         self.control_episodes(episodes)
 
         self.assertFalse(result["run_time"])
@@ -102,7 +102,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(episodes)
 
         self.control_cast(cast)
-        self.control_home_page(result)
+        self.imdb_control_home_page(result)
         self.control_episodes(episodes)
 
         self.assertTrue(result["run_time"])
@@ -127,7 +127,7 @@ class IMDBMoviesTestCase(BaseTest):
 
         self.assertTrue(cast)
         self.control_cast(cast)
-        self.control_home_page(result)
+        self.imdb_control_home_page(result)
 
         self.assertTrue(result["budget"])
         self.assertTrue(result["run_time"])
@@ -147,7 +147,7 @@ class IMDBMoviesTestCase(BaseTest):
 
         self.assertTrue(cast)
         self.control_cast(cast)
-        self.control_home_page(result)
+        self.imdb_control_home_page(result)
 
         self.assertTrue(result["budget"])
         self.assertTrue(result["run_time"])
