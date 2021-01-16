@@ -20,3 +20,9 @@ class SoupSelectionMixin:
         else:
             css_selection = None
         return css_selection
+
+    @staticmethod
+    def get_name(cast_data: str) -> dict:
+        first_name, *last_name = cast_data.split(" ")
+        result = {"first_name": first_name, "last_name": " ".join(last_name)}
+        return result
