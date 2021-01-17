@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from unittest.mock import Mock
 
 from django.core import validators
@@ -65,3 +66,7 @@ def error_handler(func):
         return result
 
     return inner
+
+
+def get_date_time(date: str, pattern: str) -> datetime:
+    return datetime.strptime(date, pattern)

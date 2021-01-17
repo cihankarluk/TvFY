@@ -4,6 +4,7 @@ from typing import Union
 import bs4
 
 from TvFY.collector.helpers import SoupSelectionMixin
+from TvFY.core.helpers import get_date_time
 from TvFY.movies.models import Movie
 
 
@@ -23,6 +24,7 @@ class IMDBEpisodes(SoupSelectionMixin):
             self.find_all, selection="info", tag="div"
         )
         for episode_data in css_selection:
+            date = episode_data.find('div', class_='airdate').text.strip()
             data = {
                 "name": episode_data.a['title'],
                 "storyline": episode_data.find(
@@ -31,7 +33,7 @@ class IMDBEpisodes(SoupSelectionMixin):
                     'span', class_='ipl-rating-star__rating').text,
                 "imdb_vote_count": self.get_imdb_vote_count(episode_data),
                 "episode": episode_data.meta['content'],
-                "release_date": episode_data.find('div', class_='airdate').text.strip(),
+                "release_date": get_date_time(date, "%d %b. %Y"),
                 "season": self.url
             }
             result.append(data)
@@ -120,6 +122,7 @@ class IMDBMovie(SoupSelectionMixin):
         usa_opening_weekend = {}
         if content.h4 and content.h4.text == 'Opening Weekend USA:':
             content = content.get_text(" sp ")
+            # TODO: need to add currency control
             # ['\n', 'Opening Weekend USA:', ' $47,211,490,\n', '23 December 2001', ' ']
             gross = content.split(" sp ")[2].strip()
             usa_opening_weekend = {"usa_opening_weekend": re.sub('[$,]', '', gross)}
@@ -195,10 +198,20 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             language = {"language": [a.text for a in content.find_all("a")]}
         return language
 
+    @staticmethod
+    def get_release_date(content) -> dict:
+        release_date = {}
+        if content.h4 and content.h4.text == 'Release Date:':
+            text = content.get_text(" sp ")
+            date = text.split(" sp ")[2].strip().split(" (")[0]
+            release_date = {"release_date": get_date_time(date, "%d %B %Y")}
+        return release_date
+
     def run_method(self, action: str, content: str):
         action_class: dict = {
             "get_country": self.get_country,
             "get_language": self.get_language,
+            "get_release_date": self.get_release_date,
             "get_budget": self.get_budget,
             "get_usa_opening_weekend": self.get_usa_opening_weekend,
             "get_ww_gross": self.get_ww_gross,
@@ -224,7 +237,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         return result
 
     def run(self):
-        result, actions = {}, ["get_country", "get_language"]
+        result, actions = {}, ["get_country", "get_language", "get_release_date"]
         if self.episodes in self.url:
             result.update(self.get_episodes)
         elif self.fullcredits in self.url:
