@@ -1,0 +1,226 @@
+[
+  {
+    "model": "genre.genre",
+    "pk": 1,
+    "fields": {
+      "name": "Action",
+      "detail": "Should contain numerous scenes where action is spectacular and usually destructive. Often includes non-stop motion, high energy physical stunts, chases, battles, and destructive crises (floods, explosions, natural disasters, fires, etc.)"
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 2,
+    "fields": {
+      "name": "Adult",
+      "detail": "Reserved for explicit works of consenting hardcore sex or sexual activity, or strong fetish material involving adults, specifically those created for the purposes of titillation or arousal. Must be used with the plot keywords of 'hardcore' and 'sex' or 'special-sexual-interest'. Documentaries about this type of material do not use the Adult genre. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 3,
+    "fields": {
+      "name": "Adventure",
+      "detail": "Should contain numerous consecutive and inter-related scenes of characters participating in hazardous or exciting experiences for a specific goal. Often include searches or expeditions for lost continents and exotic locales, characters embarking in treasure hunt or heroic journeys, travels, and quests for the unknown. Not to be confused with Action, and should only sometimes be supplied with it. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 4,
+    "fields": {
+      "name": "Animation",
+      "detail": "Over 75% of the title's running time should have scenes that are wholly, or part-animated. Any form of animation is acceptable, e.g., hand-drawn, computer-generated, stop-motion, etc. Puppetry does not count as animation, unless a form of animation such as stop-motion is also applied. Incidental animated sequences should be indicated with the keywords part-animated or animated-sequence instead. Although the overwhelming majority of video games are a form of animation it's okay to forgo this genre when adding them as this is implied by the title type."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 5,
+    "fields": {
+      "name": "Biography",
+      "detail": "Primary focus is on the depiction of activities and personality of a real person or persons, for some or all of their lifetime. Events in their life may be reenacted, or described in a documentary style. If re-enacted, they should generally follow reasonably close to the factual record, within the limitations of dramatic necessity. A real person in a fictional setting would not qualify a production for this genre. If the focus is primarily on events, rather than a person, use History instead. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 6,
+    "fields": {
+      "name": "Comedy",
+      "detail": "Virtually all scenes should contain characters participating in humorous or comedic experiences. The comedy can be exclusively for the viewer, at the expense of the characters in the title, or be shared with them. Please submit qualifying keywords to better describe the humor (i.e. spoof, parody, irony, slapstick, satire, black-comedy etc). If the title does not conform to the 'virtually all scenes' guideline then please do not add the comedy genre; instead, submit the same keyword variations described above to signify the comedic elements of the title."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 7,
+    "fields": {
+      "name": "Crime",
+      "detail": "Whether the protagonists or antagonists are criminals this should contain numerous consecutive and inter-related scenes of characters participating, aiding, abetting, and/or planning criminal behavior or experiences usually for an illicit goal. Not to be confused with Film-Noir, and only sometimes should be supplied with it."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 8,
+    "fields": {
+      "name": "Documentary",
+      "detail": "Should contain numerous consecutive scenes of real personages and not characters portrayed by actors. This does not include fake or spoof documentaries, which should instead have the fake-documentary keyword. A documentary that includes actors re-creating events should include the keyword \"reenactment\" so that those actors are not treated as \"Himself.\" This genre should also be applied to all instances of stand-up comedy and concert performances. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 9,
+    "fields": {
+      "name": "Drama",
+      "detail": "Should contain numerous consecutive scenes of characters portrayed to effect a serious narrative throughout the title, usually involving conflicts and emotions. This can be exaggerated upon to produce melodrama. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 10,
+    "fields": {
+      "name": "Family",
+      "detail": "Should be universally accepted viewing for a younger audience. e.g., aimed specifically for the education and/or entertainment of children or the entire family. Often features children or relates to them in the context of home and family. Note: Usually, but not always, complementary to Animation. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 11,
+    "fields": {
+      "name": "Fantasy",
+      "detail": "Should contain numerous consecutive scenes of characters portrayed to effect a magical and/or mystical narrative throughout the title. Usually has elements of magic, supernatural events, mythology, folklore, or exotic fantasy worlds.Note: not to be confused with Sci-Fi which is not usually based in magic or mysticism. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 12,
+    "fields": {
+      "name": "Film-Noir",
+      "detail": "Typically features dark, brooding characters, corruption, detectives, and the seedy side of the big city. Almost always shot in black and white, American, and set in contemporary times (relative to shooting date). We take the view that this genre began with Underworld (1927) and ended with Touch of Evil (1958). Note: neo-noir should be submitted as a keyword instead of this genre for titles that do not fit all criteria. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 13,
+    "fields": {
+      "name": "Game-Show",
+      "detail": "Competition, other than sports, between, usually, non-professional contestants. The competition can include a physical component, but is usually primarily mental or strategic as opposed to athletic. This also includes what are known as quiz shows. Talent contests staged expressly for the program are considered Game-Shows. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 14,
+    "fields": {
+      "name": "History",
+      "detail": "Primary focus is on real-life events of historical significance featuring real-life characters (allowing for some artistic license); in current terms, the sort of thing that might be expected to dominate the front page of a national newspaper for at least a week; for older times, the sort of thing likely to be included in any major history book. While some characters, incidents, and dialog may be fictional, these should be relatively minor points used primarily to bridge gaps in the record. Use of actual persons in an otherwise fictional setting, or of historic events as a backdrop for a fictional story, would not qualify. If the focus is primarily on one person's life and character, rather than events of historical scope, use Biography instead. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 15,
+    "fields": {
+      "name": "Horror",
+      "detail": "Should contain numerous consecutive scenes of characters effecting a terrifying and/or repugnant narrative throughout the title. Note: not to be confused with Thriller which is not usually based in fear or abhorrence. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 16,
+    "fields": {
+      "name": "Music",
+      "detail": "Contains significant music-related elements while not actually being a Musical; this may mean a concert, or a story about a band (either fictional or documentary). Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 17,
+    "fields": {
+      "name": "Musical",
+      "detail": "Should contain several scenes of characters bursting into song aimed at the viewer (this excludes songs performed for the enjoyment of other characters that may be viewing) while the rest of the time, usually but not exclusively, portraying a narrative that alludes to another Genre. Note: not to be added for titles that are simply music related or have music performances in them; e.g., pop concerts do not apply. Also, classical opera, since it is entirely musical, does not apply and should instead be treated as Music. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 18,
+    "fields": {
+      "name": "Mystery",
+      "detail": "Should contain numerous inter-related scenes of one or more characters endeavoring to widen their knowledge of anything pertaining to themselves or others. Note: Usually, but not always associated with Crime. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 19,
+    "fields": {
+      "name": "News",
+      "detail": "Reports and discussion of current events of public importance or interest. If the events are not current (at the time the title was initially released), use History instead. This generally includes newsreels, newsmagazines, daily news reports, and commentary/discussion programs that focus on news events. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 20,
+    "fields": {
+      "name": "Reality-TV",
+      "detail": "Often, but not always, features non-professionals in an unscripted, but generally staged or manipulated, situation. May or may not use hidden cameras; generally, but not always, in a non-studio setting. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 21,
+    "fields": {
+      "name": "Romance",
+      "detail": "Should contain numerous inter-related scenes of a character and their personal life with emphasis on emotional attachment or involvement with other characters, especially those characterized by a high level of purity and devotion. Note: Reminder, as with all genres if this does not describe the movie wholly, but only certain scenes or a subplot, then it should be submitted as a keyword instead. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 22,
+    "fields": {
+      "name": "Sci-Fi",
+      "detail": "Numerous scenes, and/or the entire background for the setting of the narrative, should be based on speculative scientific discoveries or developments, environmental changes, space travel, or life on other planets. Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 23,
+    "fields": {
+      "name": "Short",
+      "detail": "Any theatrical film or made-for-video title with a running time of less than 45 minutes, i.e., 44 minutes or less, or any TV series or TV movie with a running time of less than 22 minutes, i.e. 21 minutes or less. (A \"half-hour\" television program should not be listed as a Short.) If known, please submit the running time if we do not have one on record. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 24,
+    "fields": {
+      "name": "Sport",
+      "detail": "Focus is on sports or a sporting event, either fictional or actual. This includes fictional stories focused on a particular sport or event, documentaries about sports, and television broadcasts of actual sporting events. In a fictional film, the sport itself can also be fictional, but it should be the primary focus of the film. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 25,
+    "fields": {
+      "name": "Talk-Show",
+      "detail": "Discussion or interviews of or with a series of guests or panelists, generally appearing as themselves in a non-fictional setting (though fictional programs that mimic the form are also included). (aka \"chat show\"). Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 26,
+    "fields": {
+      "name": "Thriller",
+      "detail": "Should contain numerous sensational scenes or a narrative that is sensational or suspenseful. Note: not to be confused with Mystery or Horror, and should only sometimes be accompanied by one (or both). Subjective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 27,
+    "fields": {
+      "name": "War",
+      "detail": "Should contain numerous scenes and/or a narrative that pertains to a real war (i.e., past or current). Note: for titles that portray fictional war, please submit it as a keyword only. Objective."
+    }
+  },
+  {
+    "model": "genre.genre",
+    "pk": 28,
+    "fields": {
+      "name": "Western",
+      "detail": "Should contain numerous scenes and/or a narrative where the portrayal is similar to that of frontier life in the American West during 1600s to contemporary times. Objective."
+    }
+  }
+]
