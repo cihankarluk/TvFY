@@ -44,6 +44,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.control_episodes(season_2)
 
         self.assertTrue(result["run_time"])
+        self.assertTrue(result["is_active"])
 
     def test_breaking_bad(self):
         urls = [
@@ -66,6 +67,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.control_episodes(season_1)
 
         self.assertTrue(result["run_time"])
+        self.assertFalse(result["is_active"])
 
     def test_raised_by_wolves(self):
         urls = [
@@ -88,6 +90,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.control_episodes(season_1)
 
         self.assertFalse(result["run_time"])
+        self.assertTrue(result["is_active"])
 
     def test_seven_deadly_sins(self):
         urls = [
@@ -110,6 +113,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.control_episodes(season_1)
 
         self.assertTrue(result["run_time"])
+        self.assertTrue(result["is_active"])
 
 
 class IMDBMoviesTestCase(BaseTest):

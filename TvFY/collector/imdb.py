@@ -251,6 +251,17 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             title = title.text.strip()
         return {"title": title}
 
+    @property
+    def get_is_active(self) -> dict:
+        is_active = False
+        css_selection = self.soup_selection(
+            soup=self.soup, method="find", tag="a", title="See more release dates"
+        )
+        text = css_selection.text.strip()
+        if re.search(r"\d{4}–\s", text):
+            is_active = True
+        return {"is_active": is_active}
+
     def run_method(self, action: str, content: str):
         action_class: dict = {
             "get_country": self.get_country,
@@ -308,5 +319,5 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             result.update(self.get_popularity)
             result.update(self.get_total_vote_count)
             result.update(self.get_total_imdb_rating)
-
+            result.update(self.get_is_active)
         return result
