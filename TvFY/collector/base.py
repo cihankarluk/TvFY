@@ -3,6 +3,7 @@ import logging
 from urllib.parse import urlparse
 
 import aiohttp
+import backoff
 from bs4 import BeautifulSoup
 
 from TvFY.collector.imdb import IMDBScrapper
@@ -28,14 +29,13 @@ class Scrapper:
             cls = cls(soup=soup[url], url=url, search_type=search_type)
         return cls
 
+    @backoff.on_exception(backoff.expo,
+                          (aiohttp.ClientError, AssertionError),
+                          max_tries=2)
     async def fetch_html(self, url: str):
-        # TODO: infinite loop
         search_response = await self.session.get(url)
-        try:
-            assert search_response.status == 200
-        except (aiohttp.ClientError, AssertionError) as e:
-            logging.exception(e)
-            return await self.fetch_html(url)
+        assert search_response.status == 200
+        logger.warning(f"{url}_{search_response.status}")
         return search_response
 
     async def soup_response(self, url: str) -> dict:
