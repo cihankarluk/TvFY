@@ -37,40 +37,10 @@ class GoogleScrapper:
         )
         return result
 
-    def get_rotten_tomatoes_rate(self, content: str) -> dict:
-        regex_pattern = r"\d{1,2}%\s.\sRotten\sTomatoes"
-        rotten_tomatoes_rate = self.regex_search(content=content, pattern=regex_pattern)
-        result = (
-            {"rotten_tomatoes_rate": rotten_tomatoes_rate}
-            if rotten_tomatoes_rate
-            else {}
-        )
-        return result
-
     def get_tv_com_rate(self, content: str) -> dict:
         regex_pattern = r"(\d.\d|\d)/10\s.\sTV.com"
         tv_com_rate = self.regex_search(content=content, pattern=regex_pattern)
         result = {"tv_com_rate": tv_com_rate} if tv_com_rate else {}
-        return result
-
-    def get_dates(self, content: str) -> dict:
-        regex_pattern = r"Original\srelease:\s\w{1,9}\s\d{1,2},\s\d{1,4}\s\W;\s(present|\w{1,9}\s\d{1,2},\s\d{1,4})"  # noqa
-        reg_search = self.regex_search(content=content, pattern=regex_pattern)
-        if not reg_search:
-            return {}
-
-        # ['Original release: July 26, 2019 –', ' July 26, 2020']
-        date_list = reg_search.split(";")
-
-        release_date = date_list[0].split(":")[-1].replace("–", "").strip()
-        end_date = date_list[-1].strip()
-        is_active = end_date == "present"
-        # 'July 26, 2019'
-        result = {
-            "release_date": release_date,
-            "is_active": is_active,
-            "end_date": end_date if not is_active else None,
-        }
         return result
 
     def get_seasons(self, content):
@@ -91,10 +61,7 @@ class GoogleScrapper:
             [
                 ("get_imdb_url", self.get_imdb_url),
                 ("get_rotten_tomatoes_url", self.get_rotten_tomatoes_url),
-                ("get_imdb_rate", self.get_imdb_rate),
-                ("get_rotten_tomatoes_rate", self.get_rotten_tomatoes_rate),
                 ("get_tv_com_rate", self.get_tv_com_rate),
-                ("get_dates", self.get_dates),
                 ("get_seasons", self.get_seasons)
             ]
         )
@@ -103,10 +70,7 @@ class GoogleScrapper:
 
     def search_divs(self, soup):
         actions = [
-            "get_imdb_rate",
-            "get_rotten_tomatoes_rate",
             "get_tv_com_rate",
-            "get_dates",
             "get_seasons"
         ]
         repeat, result = None, {}
