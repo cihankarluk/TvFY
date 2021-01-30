@@ -35,7 +35,6 @@ class Scrapper:
     async def fetch_html(self, url: str):
         search_response = await self.session.get(url)
         assert search_response.status == 200
-        logger.warning(f"{url}_{search_response.status}")
         return search_response
 
     async def soup_response(self, url: str) -> dict:

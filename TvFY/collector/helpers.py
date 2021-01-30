@@ -10,13 +10,19 @@ class SoupSelectionMixin:
     soup: BeautifulSoup
 
     @error_handler
-    def soup_selection(self, method: str, selection: str = None, tag: str = None):
+    def soup_selection(
+            self,
+            soup: BeautifulSoup,
+            method: str,
+            tag: str = None,
+            **kwargs
+    ) -> BeautifulSoup:
         if method == self.select_one:
-            css_selection = self.soup.select_one(selector=selection)
+            css_selection = soup.select_one(**kwargs)
         elif method == self.find:
-            css_selection = self.soup.find(tag, class_=selection)
+            css_selection = soup.find(tag, **kwargs)
         elif method == self.find_all:
-            css_selection = self.soup.find_all(tag, class_=selection)
+            css_selection = soup.find_all(tag, **kwargs)
         else:
             css_selection = None
         return css_selection

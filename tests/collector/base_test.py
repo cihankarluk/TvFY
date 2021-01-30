@@ -19,6 +19,8 @@ class BaseTest(TestCase):
         self.assertTrue(result["nominations"])
         self.assertTrue(result["release_date"])
         self.assertTrue(result["title"])
+        self.assertTrue(result["total_imdb_rate"])
+        self.assertTrue(result["total_imdb_vote_count"])
 
     def rt_control_home_page(self, result):
         self.assertTrue(result["network"])

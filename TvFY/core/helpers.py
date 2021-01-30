@@ -1,7 +1,10 @@
 import json
+import random
+import string
 from datetime import datetime
 from unittest.mock import Mock
 
+import bs4
 from django.core import validators
 from django.utils.deconstruct import deconstructible
 from rest_framework.exceptions import APIException
@@ -53,8 +56,8 @@ def custom_exception_handler(exc, context: dict):
 
 
 def error_handler(func):
-    def inner(self, method: str, selection: str = None, tag: str = None):
-        result = func(self, method, selection, tag)
+    def inner(self, soup: bs4, method: str, tag: str = None, **kwargs):
+        result = func(self, soup, method, tag, **kwargs)
         if not result:
             mock = Mock()
             mock.return_value = []
@@ -70,3 +73,10 @@ def error_handler(func):
 
 def get_date_time(date: str, pattern: str) -> datetime:
     return datetime.strptime(date, pattern)
+
+
+def get_random_string(length):
+    # Random string with the combination of lower and upper case
+    letters = string.ascii_letters
+    result_str = ''.join(random.choice(letters) for _ in range(length))
+    return result_str

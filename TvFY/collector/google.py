@@ -37,12 +37,6 @@ class GoogleScrapper:
         )
         return result
 
-    def get_imdb_rate(self, content: str) -> dict:
-        regex_pattern = r"(\d.\d|\d)/10\s.\sIMDb"
-        imdb_rate = self.regex_search(content, regex_pattern)
-        result = {"imdb_rate": imdb_rate} if imdb_rate else {}
-        return result
-
     def get_rotten_tomatoes_rate(self, content: str) -> dict:
         regex_pattern = r"\d{1,2}%\s.\sRotten\sTomatoes"
         rotten_tomatoes_rate = self.regex_search(content=content, pattern=regex_pattern)

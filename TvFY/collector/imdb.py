@@ -13,9 +13,13 @@ from TvFY.movies.models import Movie
 class IMDBEpisodes(SoupSelectionMixin):
     url: str
 
-    @staticmethod
-    def get_imdb_vote_count(episode_data):
-        vote_str = episode_data.find('span', class_='ipl-rating-star__total-votes').text
+    def get_imdb_vote_count(self, episode_data):
+        vote_str = self.soup_selection(
+            soup=episode_data,
+            method="find",
+            tag="span",
+            class_='ipl-rating-star__total-votes'
+        ).text
         vote_count = int("".join(re.findall(r'\d+', vote_str)))
         return vote_count
 
@@ -29,10 +33,15 @@ class IMDBEpisodes(SoupSelectionMixin):
     def get_episodes(self) -> dict:
         result = []
         css_selection = self.soup_selection(
-            self.find_all, selection="info", tag="div"
+            soup=self.soup, method=self.find_all, tag="div", class_="info"
         )
         for episode_data in css_selection:
-            date = episode_data.find('div', class_='airdate').text.strip()
+            date = self.soup_selection(
+                soup=episode_data,
+                method="find",
+                tag="div",
+                class_='airdate'
+            ).text.strip()
             data = {
                 "name": episode_data.a['title'],
                 "storyline": episode_data.find(
@@ -83,7 +92,7 @@ class IMDBCast(SoupSelectionMixin):
     def get_cast(self) -> dict:
         results = []
         css_selection = self.soup_selection(
-            self.find, selection="cast_list", tag="table"
+            soup=self.soup, method=self.find, tag="table", class_="cast_list"
         )
         for cast in css_selection.find_all("tr"):
             if character := cast.find('td', class_="character"):
@@ -104,7 +113,7 @@ class IMDBAwards(SoupSelectionMixin):
     @property
     def get_awards(self) -> dict:
         css_selection = self.soup_selection(
-            self.find, selection="desc", tag="div"
+            soup=self.soup, method=self.find, tag="div", class_="desc"
         )
         if text := css_selection.text:
             wins, nominations = re.findall(r'\d+', text)
@@ -161,7 +170,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
     def get_genre(self) -> dict:
         genres = {}
         css_selection = self.soup_selection(
-            self.select_one, selection="#titleStoryLine"
+            soup=self.soup, method=self.select_one, selector="#titleStoryLine"
         )
         for data in css_selection.find_all("div", class_="see-more inline canwrap"):
             if data.h4 and data.h4.text == 'Genres:':
@@ -173,21 +182,39 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
     @property
     def get_creator(self) -> dict:
         css_selection = self.soup_selection(
-            self.find, selection="credit_summary_item", tag="div"
+            soup=self.soup, method=self.find, tag="div", class_="credit_summary_item"
         )
         return {"creator": css_selection.a.text.strip()}
 
     @property
+    def get_total_imdb_rating(self):
+        css_selection = self.soup_selection(
+            soup=self.soup, method="find", tag="span", itemprop="ratingValue"
+        )
+        return {"total_imdb_rate": css_selection.text}
+
+    @property
+    def get_total_vote_count(self):
+        css_selection = self.soup_selection(
+            soup=self.soup,
+            method="find",
+            tag="span",
+            class_="small",
+            itemprop="ratingCount"
+        )
+        return {"total_imdb_vote_count": css_selection.text}
+
+    @property
     def get_runtime(self) -> dict:
         css_selection = self.soup_selection(
-            self.find, tag="time"
+            soup=self.soup, method=self.find, tag="time"
         )
         return {"run_time": css_selection.text.strip()}
 
     @property
     def get_popularity(self) -> dict:
         css_selection = self.soup_selection(
-            self.find, selection="titleReviewBarSubItem", tag="div"
+            soup=self.soup, method=self.find, tag="div", class_="titleReviewBarSubItem"
         )
         popularity = css_selection.span.text.split("(")
         return {"popularity": popularity[0].strip()}
@@ -218,7 +245,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
     @property
     def get_title(self):
         css_selection = self.soup_selection(
-            self.find, selection="title_wrapper", tag="div"
+            soup=self.soup, method=self.find, tag="div", class_="title_wrapper"
         )
         if title := css_selection.h1:
             title = title.text.strip()
@@ -242,7 +269,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         """
         result = {}
         css_selection = self.soup_selection(
-            self.select_one, selection="#titleDetails"
+            soup=self.soup, method=self.select_one, selector="#titleDetails"
         )
         for div in css_selection.find_all("div"):
             for index, action in enumerate(actions):
@@ -277,5 +304,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             result.update(self.get_creator)
             result.update(self.get_runtime)
             result.update(self.get_popularity)
+            result.update(self.get_total_imdb_rating)
+            result.update(self.get_total_vote_count)
 
         return result
