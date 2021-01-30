@@ -1,5 +1,5 @@
 from TvFY.collector.base import Scrapper
-from tests.base_test import BaseTest
+from tests.collector.base_test import BaseTest
 
 
 class IMDBSeriesTestCase(BaseTest):
@@ -9,7 +9,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(episodes[0]["imdb_vote_count"])
         self.assertTrue(episodes[0]["episode"])
         self.assertTrue(episodes[0]["release_date"])
-        self.assertTrue(episodes[0]["season"])
+        self.assertTrue(episodes[0]["season_url"])
 
     def control_cast(self, cast):
         self.assertTrue(cast[0]["first_name"])
@@ -23,6 +23,7 @@ class IMDBSeriesTestCase(BaseTest):
         urls = [
             "https://www.imdb.com/title/tt1190634/",
             "https://www.imdb.com/title/tt1190634/episodes?season=1",
+            "https://www.imdb.com/title/tt1190634/episodes?season=2",
             "https://www.imdb.com/title/tt1190634/fullcredits",
             "https://www.imdb.com/title/tt1190634/awards"
         ]
@@ -30,14 +31,17 @@ class IMDBSeriesTestCase(BaseTest):
         result = cls.handle()
 
         cast = result.get("cast")
-        episodes = result.get("episodes")
+        season_1 = result.get("1")
+        season_2 = result.get("2")
 
         self.assertTrue(cast)
-        self.assertTrue(episodes)
+        self.assertTrue(season_1)
+        self.assertTrue(season_2)
 
         self.control_cast(cast)
         self.imdb_control_home_page(result)
-        self.control_episodes(episodes)
+        self.control_episodes(season_1)
+        self.control_episodes(season_2)
 
         self.assertTrue(result["run_time"])
 
@@ -52,14 +56,14 @@ class IMDBSeriesTestCase(BaseTest):
         result = cls.handle()
 
         cast = result.get("cast")
-        episodes = result.get("episodes")
+        season_1 = result.get("1")
 
         self.assertTrue(cast)
-        self.assertTrue(episodes)
+        self.assertTrue(season_1)
 
         self.control_cast(cast)
         self.imdb_control_home_page(result)
-        self.control_episodes(episodes)
+        self.control_episodes(season_1)
 
         self.assertTrue(result["run_time"])
 
@@ -74,14 +78,14 @@ class IMDBSeriesTestCase(BaseTest):
         result = cls.handle()
 
         cast = result.get("cast")
-        episodes = result.get("episodes")
+        season_1 = result.get("1")
 
         self.assertTrue(cast)
-        self.assertTrue(episodes)
+        self.assertTrue(season_1)
 
         self.control_cast(cast)
         self.imdb_control_home_page(result)
-        self.control_episodes(episodes)
+        self.control_episodes(season_1)
 
         self.assertFalse(result["run_time"])
 
@@ -96,14 +100,14 @@ class IMDBSeriesTestCase(BaseTest):
         result = cls.handle()
 
         cast = result.get("cast")
-        episodes = result.get("episodes")
+        season_1 = result.get("1")
 
         self.assertTrue(cast)
-        self.assertTrue(episodes)
+        self.assertTrue(season_1)
 
         self.control_cast(cast)
         self.imdb_control_home_page(result)
-        self.control_episodes(episodes)
+        self.control_episodes(season_1)
 
         self.assertTrue(result["run_time"])
 

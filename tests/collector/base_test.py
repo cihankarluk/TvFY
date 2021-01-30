@@ -6,8 +6,8 @@ from TvFY.series.models import Series
 
 class BaseTest(TestCase):
     def setUp(self) -> None:
-        self.series = Series.type
-        self.movie = Movie.type
+        self.series = Series.TYPE
+        self.movie = Movie.TYPE
 
     def imdb_control_home_page(self, result):
         self.assertTrue(result["country"])
@@ -18,6 +18,7 @@ class BaseTest(TestCase):
         self.assertTrue(result["wins"])
         self.assertTrue(result["nominations"])
         self.assertTrue(result["release_date"])
+        self.assertTrue(result["title"])
 
     def rt_control_home_page(self, result):
         self.assertTrue(result["network"])

@@ -169,7 +169,7 @@ class TomatoesScrapper(TomatoesMovie, TomatoesSeries):
 
     def run(self):
         result = self.get_storyline
-        if self.search_type == Series.type:
+        if self.search_type == Series.TYPE:
             result.update(self.split_details)
             result.update(self.get_tomatometer)
             result.update(self.get_audience_rate)

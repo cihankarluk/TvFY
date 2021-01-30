@@ -1,5 +1,7 @@
 import re
 from typing import Union
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
 
 import bs4
 
@@ -18,6 +20,12 @@ class IMDBEpisodes(SoupSelectionMixin):
         return vote_count
 
     @property
+    def get_season(self) -> str:
+        parsed = urlparse.urlparse(self.url)
+        season: str = parse_qs(parsed.query)['season'][0]
+        return season
+
+    @property
     def get_episodes(self) -> dict:
         result = []
         css_selection = self.soup_selection(
@@ -34,10 +42,10 @@ class IMDBEpisodes(SoupSelectionMixin):
                 "imdb_vote_count": self.get_imdb_vote_count(episode_data),
                 "episode": episode_data.meta['content'],
                 "release_date": get_date_time(date, "%d %b. %Y"),
-                "season": self.url
+                "season_url": self.url
             }
             result.append(data)
-        return {"episodes": result}
+        return {self.get_season: result}
 
 
 class IMDBCast(SoupSelectionMixin):
@@ -79,7 +87,7 @@ class IMDBCast(SoupSelectionMixin):
         )
         for cast in css_selection.find_all("tr"):
             if character := cast.find('td', class_="character"):
-                if self.search_type == Movie.type:
+                if self.search_type == Movie.TYPE:
                     cast_information = {"character_name": character.a.text}
                 else:
                     cast_information = self.cast_information(character.get_text(" sp "))
@@ -207,6 +215,15 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             release_date = {"release_date": get_date_time(date, "%d %B %Y")}
         return release_date
 
+    @property
+    def get_title(self):
+        css_selection = self.soup_selection(
+            self.find, selection="title_wrapper", tag="div"
+        )
+        if title := css_selection.h1:
+            title = title.text.strip()
+        return {"title": title}
+
     def run_method(self, action: str, content: str):
         action_class: dict = {
             "get_country": self.get_country,
@@ -237,23 +254,26 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         return result
 
     def run(self):
-        result, actions = {}, ["get_country", "get_language", "get_release_date"]
+        result = {}
+        actions = ["get_country", "get_language", "get_release_date"]
         if self.episodes in self.url:
             result.update(self.get_episodes)
         elif self.fullcredits in self.url:
             result.update(self.get_cast)
         elif self.awards in self.url:
             result.update(self.get_awards)
-        elif self.search_type == Movie.type:
+        elif self.search_type == Movie.TYPE:
             actions.extend(["get_budget", "get_usa_opening_weekend", "get_ww_gross"])
             result.update(self.split_details(actions=actions))
             result.update(self.get_genre)
+            result.update(self.get_title)
             result.update(self.get_creator)
             result.update(self.get_runtime)
             result.update(self.get_popularity)
         else:
             result.update(self.split_details(actions=actions))
             result.update(self.get_genre)
+            result.update(self.get_title)
             result.update(self.get_creator)
             result.update(self.get_runtime)
             result.update(self.get_popularity)

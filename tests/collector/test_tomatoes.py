@@ -1,5 +1,5 @@
 from TvFY.collector.base import Scrapper
-from tests.base_test import BaseTest
+from tests.collector.base_test import BaseTest
 
 
 class RTSeriesTestCase(BaseTest):

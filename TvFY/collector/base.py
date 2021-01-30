@@ -29,6 +29,7 @@ class Scrapper:
         return cls
 
     async def fetch_html(self, url: str):
+        # TODO: infinite loop
         search_response = await self.session.get(url)
         try:
             assert search_response.status == 200
