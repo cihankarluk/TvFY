@@ -187,13 +187,6 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         return {"creator": css_selection.a.text.strip()}
 
     @property
-    def get_total_imdb_rating(self):
-        css_selection = self.soup_selection(
-            soup=self.soup, method="find", tag="span", itemprop="ratingValue"
-        )
-        return {"total_imdb_rate": css_selection.text}
-
-    @property
     def get_total_vote_count(self):
         css_selection = self.soup_selection(
             soup=self.soup,
@@ -203,6 +196,13 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             itemprop="ratingCount"
         )
         return {"total_imdb_vote_count": css_selection.text}
+
+    @property
+    def get_total_imdb_rating(self):
+        css_selection = self.soup_selection(
+            soup=self.soup, method="find", tag="span", itemprop="ratingValue"
+        )
+        return {"total_imdb_rate": css_selection.text}
 
     @property
     def get_runtime(self) -> dict:
@@ -297,6 +297,8 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             result.update(self.get_creator)
             result.update(self.get_runtime)
             result.update(self.get_popularity)
+            result.update(self.get_total_vote_count)
+            result.update(self.get_total_imdb_rating)
         else:
             result.update(self.split_details(actions=actions))
             result.update(self.get_genre)
@@ -304,7 +306,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             result.update(self.get_creator)
             result.update(self.get_runtime)
             result.update(self.get_popularity)
-            result.update(self.get_total_imdb_rating)
             result.update(self.get_total_vote_count)
+            result.update(self.get_total_imdb_rating)
 
         return result
