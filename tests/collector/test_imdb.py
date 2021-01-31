@@ -1,5 +1,5 @@
-from TvFY.collector.base import Scrapper
 from tests.collector.base_test import BaseTest
+from TvFY.collector.base import Scrapper
 
 
 class IMDBSeriesTestCase(BaseTest):
@@ -45,6 +45,7 @@ class IMDBSeriesTestCase(BaseTest):
 
         self.assertTrue(result["run_time"])
         self.assertTrue(result["is_active"])
+        self.assertTrue(result["wins"])
 
     def test_breaking_bad(self):
         urls = [
@@ -68,6 +69,8 @@ class IMDBSeriesTestCase(BaseTest):
 
         self.assertTrue(result["run_time"])
         self.assertFalse(result["is_active"])
+        self.assertTrue(result["wins"])
+
 
     def test_raised_by_wolves(self):
         urls = [
@@ -91,6 +94,7 @@ class IMDBSeriesTestCase(BaseTest):
 
         self.assertFalse(result["run_time"])
         self.assertTrue(result["is_active"])
+        self.assertFalse(result["wins"])
 
     def test_seven_deadly_sins(self):
         urls = [
@@ -114,6 +118,7 @@ class IMDBSeriesTestCase(BaseTest):
 
         self.assertTrue(result["run_time"])
         self.assertTrue(result["is_active"])
+        self.assertFalse(result["wins"])
 
 
 class IMDBMoviesTestCase(BaseTest):

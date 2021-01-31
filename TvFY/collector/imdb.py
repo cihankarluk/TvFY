@@ -1,6 +1,6 @@
 import re
-from typing import Union
 import urllib.parse as urlparse
+from typing import Union
 from urllib.parse import parse_qs
 
 import bs4
@@ -120,7 +120,7 @@ class IMDBAwards(SoupSelectionMixin):
         else:
             wins, nominations = 0, 0
 
-        return {"wins": wins, "nominations": nominations}
+        return {"wins": int(wins), "nominations": int(nominations)}
 
 
 class IMDBMovie(SoupSelectionMixin):
@@ -175,7 +175,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         for data in css_selection.find_all("div", class_="see-more inline canwrap"):
             if data.h4 and data.h4.text == 'Genres:':
                 genres = {
-                    "genres_imdb": [genre.text.strip() for genre in data.find_all('a')]
+                    "imdb_genre": [genre.text.strip() for genre in data.find_all('a')]
                 }
         return genres
 
@@ -209,7 +209,18 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="time"
         )
-        return {"run_time": css_selection.text.strip()}
+        # '2h 58min' or '1h' or '24min'
+        run_time_list = css_selection.text.strip().split("h")
+        if len(run_time_list) > 1:
+            hour = int(run_time_list[0]) * 60
+            if minute := run_time_list[-1].strip("min"):
+                minute = int(minute)
+            run_time = hour + (minute or 0)
+        elif run_time_list[0]:
+            run_time = int(run_time_list[0].strip("min"))
+        else:
+            run_time = 0
+        return {"run_time": run_time}
 
     @property
     def get_popularity(self) -> dict:
