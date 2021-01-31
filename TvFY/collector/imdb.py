@@ -195,14 +195,15 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             class_="small",
             itemprop="ratingCount"
         )
-        return {"total_imdb_vote_count": css_selection.text}
+        vote_count = css_selection.text.replace(",", "")
+        return {"total_imdb_vote_count": int(vote_count)}
 
     @property
     def get_total_imdb_rating(self):
         css_selection = self.soup_selection(
             soup=self.soup, method="find", tag="span", itemprop="ratingValue"
         )
-        return {"total_imdb_rate": css_selection.text}
+        return {"total_imdb_rate": float(css_selection.text)}
 
     @property
     def get_runtime(self) -> dict:
