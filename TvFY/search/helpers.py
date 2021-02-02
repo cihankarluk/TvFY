@@ -2,9 +2,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 
-from TvFY.artist.models import Artist
-from TvFY.genre.models import Genre
-from TvFY.series.models import SeriesArtist, Series, Season, Episode
+from TvFY.series.models import Series, Episode, SeriesCast, Season
 
 
 def get_urls(google_data: dict) -> list:
@@ -28,23 +26,7 @@ class SaveData:
     def __init__(self, search_data):
         self.search_data = search_data
 
-    @staticmethod
-    def get_or_create_artist(cast):
-        artist = Artist.objects.get_or_create(
-            first_name=cast["first_name"],
-            last_name=cast["last_name"]
-        )
-        return artist
-
-
-
     def save_data(self):
-        # Out[1]: dict_keys(['', '', '',
-        # '', '', '', '',
-        # '1', '2', '', '', '', '',
-        # '', '', '', '', '',
-        # '', '', 'cast'])
-
         # TODO: country, language
         series_data = {
             "name": self.search_data["title"],
@@ -64,26 +46,31 @@ class SaveData:
             "end_date": self.search_data.get("end_date"),
             "imdb_rate": self.search_data.get("total_imdb_rate"),
             "imdb_vote_count": self.search_data.get("total_imdb_vote_count"),
+            "season_count": self.search_data.get("seasons"),
             "rt_genre": self.search_data.get("rt_genre"),
             "imdb_genre": self.search_data.get("imdb_genre")
         }
 
         series = Series.objects.save_series(**series_data)
+        cast_data = self.search_data.get("cast", [])
+        SeriesCast.objects.save_series_cast(cast_data=cast_data, series=series)
 
-        for cast in self.search_data.get('casts', []):
-            series = SeriesArtist.objects.create(
-                character_name=cast["character_name"],
-                episode_count=cast["episode_count"],
-                start_acting=cast["start_acting"],
-                end_acting=cast["end_acting"]
+        for season in range(1, self.search_data.get("seasons", 0) + 1):
+            season_data = self.search_data[season]
+            season = Season.objects.create(
+                season=season,
+                imdb_url=season_data[0]["imdb_url"],
+                series=series
             )
-            series.artists.add(self.get_or_create_artist(cast))
+            for episode in season_data:
+                Episode.objects.create(
+                    name=episode["name"],
+                    storyline=episode.get("storyline"),
+                    release_date=episode.get("release_date"),
+                    imdb_rate=episode.get("imdb_rate"),
+                    imdb_vote_count=episode.get("imdb_vote_count"),
+                    episode=episode.get("episode"),
+                    season=season
+                )
 
-        for episode in self.search_data.get("episodes", []):
-            Episode.objects.create(
-                name=episode["name"],
-                storyline=episode.get("storyline"),
-                imdb_rate=episode.get("imdb_rate"),
-                imdb_vote_count=episode.get("imdb_vote_count"),
-                episode=episode.get("episode"),
-            )
+        x = 2

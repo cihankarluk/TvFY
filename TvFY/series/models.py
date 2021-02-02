@@ -1,37 +1,9 @@
 from django.db import models
 
-from TvFY.artist.models import Artist
-from TvFY.core.helpers import get_random_string
+from TvFY.actor.models import Actor
 from TvFY.core.models import Country, Language
 from TvFY.genre.models import Genre
-
-
-class SeriesManager(models.Manager):
-    @staticmethod
-    def get_genres(series_data):
-        genres = set(series_data.pop("rt_genre", {}))
-        genres.update(set(series_data.pop("imdb_genre", {})))
-        genre_ids = Genre.objects.filter(
-            name__in=genres
-        ).values_list(
-            'id', flat=True
-        )
-        return genre_ids
-
-    def create_series_code(self):
-        code = get_random_string(8)
-        series_code = f'{Series.PREFIX}{code}'
-        if super().get_queryset().filter(tvfy_code=series_code).exists():
-            return self.create_series_code()
-        return series_code
-
-    def save_series(self, **series_data):
-        series_data.update({'tvfy_code': self.create_series_code()})
-        genres = self.get_genres(series_data)
-        series = self.create(**series_data)
-        for genre in genres:
-            series.genres.add(genre)
-        return series
+from TvFY.series.managers import SeriesManager, SeriesCastManager
 
 
 class Series(models.Model):
@@ -82,14 +54,19 @@ class Series(models.Model):
         return self.name
 
 
-class SeriesArtist(models.Model):
-    artists = models.ManyToManyField(Artist)
+class SeriesCast(models.Model):
     character_name = models.CharField(max_length=255, default="John Doe")
     episode_count = models.IntegerField(default=0)
     start_acting = models.DateField(blank=True, null=True)
     end_acting = models.DateField(blank=True, null=True)
 
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
+    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+
+    objects = SeriesCastManager()
+
+    def __str__(self):
+        return f"{self.character_name} ({self.actor.first_name} {self.actor.last_name})"
 
 
 class Season(models.Model):
@@ -99,6 +76,9 @@ class Season(models.Model):
     tvfy_rate = models.FloatField(blank=True, null=True)
 
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.series.name}_{self.season}"
 
 
 class Episode(models.Model):
@@ -112,3 +92,6 @@ class Episode(models.Model):
     episode = models.IntegerField(default=0)
 
     season = models.ForeignKey(Season, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
