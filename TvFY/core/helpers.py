@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import string
 from datetime import datetime
@@ -80,3 +81,12 @@ def get_random_string(length):
     letters = string.ascii_letters
     result_str = ''.join(random.choice(letters) for _ in range(length))
     return result_str
+
+
+def read_file(path, is_json=False):
+    root = os.getcwd()
+    with open(os.path.join(root, path)) as f:
+        file = f.read()
+        if is_json:
+            file = json.loads(file)
+        return file
