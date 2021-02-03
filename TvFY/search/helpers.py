@@ -2,7 +2,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 
-from TvFY.series.models import Series, Episode, SeriesCast, Season
+from TvFY.series.models import Episode, Season, Series, SeriesCast
 
 
 def get_urls(google_data: dict) -> list:
@@ -27,7 +27,6 @@ class SaveData:
         self.search_data = search_data
 
     def save_data(self):
-        # TODO: country, language
         series_data = {
             "name": self.search_data["title"],
             "creator": self.search_data.get("creator"),
@@ -48,7 +47,9 @@ class SaveData:
             "imdb_vote_count": self.search_data.get("total_imdb_vote_count"),
             "season_count": self.search_data.get("seasons"),
             "rt_genre": self.search_data.get("rt_genre"),
-            "imdb_genre": self.search_data.get("imdb_genre")
+            "imdb_genre": self.search_data.get("imdb_genre"),
+            "language": self.search_data.get("language"),
+            "country": self.search_data.get("country")
         }
 
         series = Series.objects.save_series(**series_data)
@@ -72,5 +73,3 @@ class SaveData:
                     episode=episode.get("episode"),
                     season=season
                 )
-
-        x = 2

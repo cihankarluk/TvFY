@@ -3,7 +3,7 @@ from django.db import models
 from TvFY.actor.models import Actor
 from TvFY.core.models import Country, Language
 from TvFY.genre.models import Genre
-from TvFY.series.managers import SeriesManager, SeriesCastManager
+from TvFY.series.managers import SeriesCastManager, SeriesManager
 
 
 class Series(models.Model):
