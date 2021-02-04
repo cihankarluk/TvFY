@@ -1,1 +1,1 @@
-default_app_config = 'TvFY.series.apps.SeriesConfig'
+default_app_config = "TvFY.series.apps.SeriesConfig"

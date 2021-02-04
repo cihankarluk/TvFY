@@ -1,13 +1,13 @@
+from TvFY.series.helpers import SaveSeriesData
 from TvFY.series.models import Series, Episode, SeriesCast, Season
 from TvFY.collector.base import Scrapper
 from TvFY.collector.google import GoogleScrapper
 
-from TvFY.search.helpers import SaveData
 from tests.collector.base_test import BaseTest
 
 
 class TestHelpers(BaseTest):
-    def test_save_data(self):
+    def test_save_series_data(self):
         cls = GoogleScrapper(search_key="the boys")
         google_result = cls.run()
         urls = [
@@ -21,7 +21,7 @@ class TestHelpers(BaseTest):
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
         result.update(google_result)
-        save = SaveData(search_data=result)
+        save = SaveSeriesData(search_data=result)
         save.save_data()
 
         series = Series.objects.prefetch_related("genres", "country", "language")

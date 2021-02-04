@@ -11,11 +11,7 @@ class SeriesManager(models.Manager):
     def get_genres(series_data):
         genres = set(series_data.pop("rt_genre", {}))
         genres.update(set(series_data.pop("imdb_genre", {})))
-        genre_ids = Genre.objects.filter(
-            name__in=genres
-        ).values_list(
-            'id', flat=True
-        )
+        genre_ids = Genre.objects.filter(name__in=genres).values_list("id", flat=True)
         return genre_ids
 
     @staticmethod
@@ -40,13 +36,13 @@ class SeriesManager(models.Manager):
         from TvFY.series.models import Series
 
         code = get_random_string(8)
-        series_code = f'{Series.PREFIX}{code}'
+        series_code = f"{Series.PREFIX}{code}"
         if super().get_queryset().filter(tvfy_code=series_code).exists():
             return self.create_series_code()
         return series_code
 
     def save_series(self, **series_data):
-        series_data.update({'tvfy_code': self.create_series_code()})
+        series_data.update({"tvfy_code": self.create_series_code()})
         genres = self.get_genres(series_data)
         languages = self.get_or_create_language(series_data)
         countries = self.get_or_create_country(series_data)
@@ -62,10 +58,9 @@ class SeriesManager(models.Manager):
 
 class SeriesCastManager(models.Manager):
     @staticmethod
-    def get_or_create_actor(artist_data):
+    def get_or_create_actor(actor_data):
         actor, _ = Actor.objects.get_or_create(
-            first_name=artist_data["first_name"],
-            last_name=artist_data["last_name"]
+            first_name=actor_data["first_name"], last_name=actor_data["last_name"]
         )
         return actor
 
@@ -75,12 +70,14 @@ class SeriesCastManager(models.Manager):
         series_cast = []
         for cast in cast_data:
             actor = self.get_or_create_actor(cast)
-            series_cast.append(SeriesCast(
-                character_name=cast["character_name"],
-                episode_count=cast["episode_count"],
-                start_acting=cast["start_acting"],
-                end_acting=cast["end_acting"],
-                series=series,
-                actor=actor
-            ))
+            series_cast.append(
+                SeriesCast(
+                    character_name=cast["character_name"],
+                    episode_count=cast["episode_count"],
+                    start_acting=cast["start_acting"],
+                    end_acting=cast["end_acting"],
+                    series=series,
+                    actor=actor,
+                )
+            )
         self.bulk_create(series_cast)
