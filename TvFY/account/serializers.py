@@ -9,11 +9,11 @@ class CreateAccountSerializer(BaseSerializer, serializers.Serializer):
     def create(self, validated_data):
         try:
             Account.objects.get(username=validated_data["username"])
-            raise UsernameAlreadyExists('Please try another username.')
+            raise UsernameAlreadyExists("Please try another username.")
         except Account.DoesNotExist:
             account = Account.objects.create(
                 username=validated_data["username"],
-                email=validated_data['email'],
+                email=validated_data["email"],
             )
             account.set_password(validated_data["password"])
             account.save()

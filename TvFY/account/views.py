@@ -1,7 +1,7 @@
 from rest_framework import generics, permissions
 
 from TvFY.account.models import Account
-from TvFY.account.serializers import CreateAccountSerializer, AccountSerializer
+from TvFY.account.serializers import AccountSerializer, CreateAccountSerializer
 
 
 class UserSignUp(generics.CreateAPIView):

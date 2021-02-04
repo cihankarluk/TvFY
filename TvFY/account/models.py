@@ -19,6 +19,6 @@ class Account(AbstractBaseUser):
     )
     email = models.CharField(max_length=100)
 
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = "username"
 
     objects = AccountManager()
