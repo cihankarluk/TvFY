@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
+import requests
 from bs4 import BeautifulSoup
 
 from TvFY.core.helpers import regex_search
-import requests
 
 
 class GoogleScrapper:
