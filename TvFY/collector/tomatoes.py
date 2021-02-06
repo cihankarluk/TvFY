@@ -1,62 +1,51 @@
 import bs4
 
 from TvFY.collector.helpers import SoupSelectionMixin
+from TvFY.core.helpers import regex_search
 from TvFY.series.models import Series
 
 
 class TomatoesMovie(SoupSelectionMixin):
     run_method: classmethod
-    director = 'Director:'
+    director = "Director:"
 
     @property
     def get_tomatometer_movie(self) -> dict:
-        rating = {}
         soup = self.soup_selection(
             soup=self.soup,
             method=self.find,
-            tag="div",
-            class_="mop-ratings-wrap__half",
+            tag="score-board",
         )
-        selection = self.soup_selection(
-            soup=soup,
-            method="find",
-            tag="span",
-            class_="mop-ratings-wrap__percentage"
-        )
-        if selection:
-            rating.update(
-                {"rt_tomatometer": int(selection.text.strip().replace("%", ""))}
-            )
+        str_soup = str(soup)
+        regex_pattern = r'tomatometerscore="\d{1,2}"'
+        score = regex_search(content=str_soup, pattern=regex_pattern)
+        score_int = int(regex_search(content=score, pattern=r"\d{1,2}"))
+        regex_pattern = r'critics-count">\d{1,3}'
+        rate_count = regex_search(content=str_soup, pattern=regex_pattern)
+        rate_count_int = int(rate_count.strip('critics-count">').replace(",", ""))
 
-        count_selection = soup.find("small")
-        if count_selection:
-            rating.update(
-                {"rt_tomatometer_count": int(count_selection.text.strip())}
-            )
+        rating = {"rt_tomatometer": score_int, "rt_tomatometer_count": rate_count_int}
         return rating
 
     @property
     def get_audience_rate_movie(self) -> dict:
-        rating = {}
-        css_selection = self.soup_selection(
+        soup = self.soup_selection(
             soup=self.soup,
             method=self.find,
-            tag="div",
-            class_="mop-ratings-wrap__half audience-score"
+            tag="score-board",
         )
-        selection = css_selection.find("span", class_="mop-ratings-wrap__percentage")
-        if selection:
-            rating.update(
-                {"rt_audience_rate": int(selection.text.strip().replace("%", ""))}
-            )
+        str_soup = str(soup)
+        regex_pattern = r'audiencescore="\d{1,2}"'
+        score = regex_search(content=str_soup, pattern=regex_pattern)
+        score_int = int(regex_search(content=score, pattern=r"\d{1,2}"))
+        regex_pattern = r'audience-count">\d{1,3},\d{1,3}'
+        rate_count = regex_search(content=str_soup, pattern=regex_pattern)
+        rate_count_int = int(rate_count.strip('audience-count">').replace(",", ""))
 
-        count_selection = css_selection.find("strong")
-        if count_selection:
-            # User Ratings: 1,057,449
-            count = count_selection.text.strip().split(": ")[1].replace(",", "")
-            rating.update(
-                {"rt_audience_rate_count": int(count)}
-            )
+        rating = {
+            "rt_audience_rate": score_int,
+            "rt_audience_rate_count": rate_count_int,
+        }
         return rating
 
     def get_director(self, content: bs4) -> dict:
@@ -64,9 +53,7 @@ class TomatoesMovie(SoupSelectionMixin):
         selection = content.find("div", class_="meta-label subtle")
         if selection and selection.text == self.director:
             director_name = content.find("div", class_="meta-value").text.strip()
-            director = {
-                "director": self.get_name(director_name)
-            }
+            director = {"director": self.get_name(director_name)}
         return director
 
     @staticmethod
@@ -74,7 +61,9 @@ class TomatoesMovie(SoupSelectionMixin):
         genres = {}
         selection = content.find("div", class_="meta-value genre")
         if selection:
-            genres = {"rt_genre": [genre.strip() for genre in selection.text.split(",")]}
+            genres = {
+                "rt_genre": [genre.strip() for genre in selection.text.split(",")]
+            }
         return genres
 
     @property
@@ -85,7 +74,7 @@ class TomatoesMovie(SoupSelectionMixin):
             soup=self.soup,
             method=self.find,
             tag="div",
-            class_="panel-body content_body"
+            class_="panel-body content_body",
         )
         for div in css_sub_selection.find_all("li"):
             for index, action in enumerate(actions):
@@ -99,8 +88,8 @@ class TomatoesMovie(SoupSelectionMixin):
 
 class TomatoesSeries(SoupSelectionMixin):
     run_method: classmethod
-    genre = 'Genre:'
-    network = 'TV Network:'
+    genre = "Genre:"
+    network = "TV Network:"
 
     @property
     def get_tomatometer(self) -> dict:
@@ -109,7 +98,7 @@ class TomatoesSeries(SoupSelectionMixin):
             soup=self.soup,
             method=self.find,
             tag="div",
-            class_="mop-ratings-wrap__half critic-score"
+            class_="mop-ratings-wrap__half critic-score",
         )
         selection = css_selection.find("span", class_="mop-ratings-wrap__percentage")
         if selection:
@@ -124,7 +113,7 @@ class TomatoesSeries(SoupSelectionMixin):
             soup=self.soup,
             method=self.find,
             tag="div",
-            class_="mop-ratings-wrap__half audience-score"
+            class_="mop-ratings-wrap__half audience-score",
         )
         selection = css_selection.find("span", class_="mop-ratings-wrap__percentage")
         if selection:
@@ -174,7 +163,7 @@ class TomatoesScrapper(TomatoesMovie, TomatoesSeries):
             "get_rt_genre": self.get_rt_genre,
             "get_network": self.get_network,
             "get_rt_genre_movie": self.get_rt_genre_movie,
-            "get_director": self.get_director
+            "get_director": self.get_director,
         }
         action_method: classmethod = action_class[action]
         return action_method(content=content)
