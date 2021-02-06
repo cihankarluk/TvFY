@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from TvFY.collector.imdb import IMDBScrapper
 from TvFY.collector.tomatoes import TomatoesScrapper
 
-logger = logging.getLogger('main')
+logger = logging.getLogger("main")
 
 
 class Scrapper:
@@ -22,16 +22,16 @@ class Scrapper:
     def scrapper_class(url, soup, search_type):
         scrapper_map = {
             "www.rottentomatoes.com": TomatoesScrapper,
-            "www.imdb.com": IMDBScrapper
+            "www.imdb.com": IMDBScrapper,
         }
         base_url = urlparse(url).netloc
         if cls := scrapper_map.get(base_url):
             cls = cls(soup=soup[url], url=url, search_type=search_type)
         return cls
 
-    @backoff.on_exception(backoff.expo,
-                          (aiohttp.ClientError, AssertionError),
-                          max_tries=2)
+    @backoff.on_exception(
+        backoff.expo, (aiohttp.ClientError, AssertionError), max_tries=2
+    )
     async def fetch_html(self, url: str):
         search_response = await self.session.get(url)
         assert search_response.status == 200
@@ -58,7 +58,7 @@ class Scrapper:
 
     async def main(self):
         async with aiohttp.ClientSession(
-                connector=aiohttp.TCPConnector(ssl=False),
+            connector=aiohttp.TCPConnector(ssl=False),
         ) as session:
             self.session = session
             response = await self.run()

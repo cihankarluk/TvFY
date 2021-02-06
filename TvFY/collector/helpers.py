@@ -11,11 +11,7 @@ class SoupSelectionMixin:
 
     @error_handler
     def soup_selection(
-            self,
-            soup: BeautifulSoup,
-            method: str,
-            tag: str = None,
-            **kwargs
+        self, soup: BeautifulSoup, method: str, tag: str = None, **kwargs
     ) -> BeautifulSoup:
         if method == self.select_one:
             css_selection = soup.select_one(**kwargs)
