@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
-import requests
 from bs4 import BeautifulSoup
 
 from TvFY.core.helpers import regex_search
+import requests
 
 
 class GoogleScrapper:
@@ -17,14 +17,14 @@ class GoogleScrapper:
         return soup
 
     @staticmethod
-    def get_imdb_url(self, content: str) -> dict:
+    def get_imdb_url(content: str) -> dict:
         regex_pattern = r"https://www.imdb.com/title/[^;]*/"
         imdb_url = regex_search(content=content, pattern=regex_pattern)
         result = {"imdb_url": imdb_url} if imdb_url else {}
         return result
 
     @staticmethod
-    def get_rotten_tomatoes_url(self, content: str) -> dict:
+    def get_rotten_tomatoes_url(content: str) -> dict:
         regex_pattern = r"https://www.rottentomatoes.com/.+?/.+?(?<=/)"
         rotten_tomatoes_url = regex_search(content=content, pattern=regex_pattern)
         result = (
@@ -33,14 +33,14 @@ class GoogleScrapper:
         return result
 
     @staticmethod
-    def get_tv_com_rate(self, content: str) -> dict:
+    def get_tv_com_rate(content: str) -> dict:
         regex_pattern = r"(\d.\d|\d)/10\s.\sTV.com"
         tv_com_rate = regex_search(content=content, pattern=regex_pattern)
         result = {"tv_com_rate": tv_com_rate} if tv_com_rate else {}
         return result
 
     @staticmethod
-    def get_seasons(self, content):
+    def get_seasons(content):
         regex_pattern = r"(No.\sof\sseasons:\s\d{1,3})|(\d{1,2}\sseasons)"
         reg_search = regex_search(content=content, pattern=regex_pattern)
         if reg_search:
