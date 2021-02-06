@@ -1,5 +1,6 @@
 import re
 import urllib.parse as urlparse
+from datetime import datetime
 from typing import Union
 from urllib.parse import parse_qs
 
@@ -13,21 +14,21 @@ from TvFY.movies.models import Movie
 class IMDBEpisodes(SoupSelectionMixin):
     url: str
 
-    def get_imdb_vote_count(self, episode_data):
+    def get_imdb_vote_count(self, episode_data: bs4) -> int:
         vote_str = self.soup_selection(
             soup=episode_data,
             method="find",
             tag="span",
-            class_='ipl-rating-star__total-votes'
+            class_="ipl-rating-star__total-votes",
         ).text
-        vote_count = int("".join(re.findall(r'\d+', vote_str)))
+        vote_count = int("".join(re.findall(r"\d+", vote_str)))
         return vote_count
 
     @property
-    def get_season(self) -> str:
+    def get_season(self) -> int:
         parsed = urlparse.urlparse(self.url)
-        season: str = parse_qs(parsed.query)['season'][0]
-        return season
+        season: str = parse_qs(parsed.query)["season"][0]
+        return int(season)
 
     @property
     def get_episodes(self) -> dict:
@@ -37,21 +38,20 @@ class IMDBEpisodes(SoupSelectionMixin):
         )
         for episode_data in css_selection:
             date = self.soup_selection(
-                soup=episode_data,
-                method="find",
-                tag="div",
-                class_='airdate'
+                soup=episode_data, method="find", tag="div", class_="airdate"
             ).text.strip()
             data = {
-                "name": episode_data.a['title'],
+                "name": episode_data.a["title"],
                 "storyline": episode_data.find(
-                    'div', class_='item_description').text.strip(),
-                "imdb_rate": episode_data.find(
-                    'span', class_='ipl-rating-star__rating').text,
+                    "div", class_="item_description"
+                ).text.strip(),
+                "imdb_rate": float(
+                    episode_data.find("span", class_="ipl-rating-star__rating").text
+                ),
                 "imdb_vote_count": self.get_imdb_vote_count(episode_data),
-                "episode": episode_data.meta['content'],
+                "episode": int(episode_data.meta["content"]),
                 "release_date": get_date_time(date, "%d %b. %Y"),
-                "season_url": self.url
+                "imdb_url": self.url,
             }
             result.append(data)
         return {self.get_season: result}
@@ -79,12 +79,12 @@ class IMDBCast(SoupSelectionMixin):
             return False
 
         # years 2019 or 2019-2022
-        years = year.split("-") # noqa
+        years = year.split("-")  # noqa
         result = {
             "character_name": character_name,
-            "episode_count": episode_count,
-            "start_acting": years[0],
-            "end_acting": years[~0]
+            "episode_count": int(episode_count),
+            "start_acting": datetime.strptime(years[0], "%Y"),
+            "end_acting": datetime.strptime(years[~0], "%Y"),
         }
         return result
 
@@ -95,7 +95,7 @@ class IMDBCast(SoupSelectionMixin):
             soup=self.soup, method=self.find, tag="table", class_="cast_list"
         )
         for cast in css_selection.find_all("tr"):
-            if character := cast.find('td', class_="character"):
+            if character := cast.find("td", class_="character"):
                 if self.search_type == Movie.TYPE:
                     cast_information = {"character_name": character.a.text}
                 else:
@@ -116,7 +116,7 @@ class IMDBAwards(SoupSelectionMixin):
             soup=self.soup, method=self.find, tag="div", class_="desc"
         )
         if text := css_selection.text:
-            wins, nominations = re.findall(r'\d+', text)
+            wins, nominations = re.findall(r"\d+", text)
         else:
             wins, nominations = 0, 0
 
@@ -127,39 +127,39 @@ class IMDBMovie(SoupSelectionMixin):
     @staticmethod
     def get_budget(content: bs4) -> dict:
         budget = {}
-        if content.h4 and content.h4.text == 'Budget:':
+        if content.h4 and content.h4.text == "Budget:":
             content = content.get_text(" sp ")
             # ['\n', 'Budget:', '$93,000,000\n', '(estimated)', '\n']
             gross = content.split(" sp ")[2].strip()
-            budget = {"budget": re.sub('[$,]', '', gross)}
+            budget = {"budget": re.sub("[$,]", "", gross)}
         return budget
 
     @staticmethod
     def get_usa_opening_weekend(content: bs4) -> dict:
         usa_opening_weekend = {}
-        if content.h4 and content.h4.text == 'Opening Weekend USA:':
+        if content.h4 and content.h4.text == "Opening Weekend USA:":
             content = content.get_text(" sp ")
             # TODO: need to add currency control
             # ['\n', 'Opening Weekend USA:', ' $47,211,490,\n', '23 December 2001', ' ']
             gross = content.split(" sp ")[2].strip()
-            usa_opening_weekend = {"usa_opening_weekend": re.sub('[$,]', '', gross)}
+            usa_opening_weekend = {"usa_opening_weekend": re.sub("[$,]", "", gross)}
         return usa_opening_weekend
 
     @staticmethod
     def get_ww_gross(content: bs4) -> dict:
         ww_gross = {}
-        if content.h4 and content.h4.text == 'Cumulative Worldwide Gross:':
+        if content.h4 and content.h4.text == "Cumulative Worldwide Gross:":
             content = content.get_text(" sp ")
             # ['\n', 'Cumulative Worldwide Gross:', '$888,159,092']
             gross = content.split(" sp ")[2].strip()
-            ww_gross = {"ww_gross": re.sub('[$,]', '', gross)}
+            ww_gross = {"ww_gross": re.sub("[$,]", "", gross)}
         return ww_gross
 
 
 class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
-    episodes = 'episodes'
-    fullcredits = 'fullcredits'
-    awards = 'awards'
+    episodes = "episodes"
+    fullcredits = "fullcredits"
+    awards = "awards"
 
     def __init__(self, soup: bs4, url: str, search_type: str):
         self.soup = soup
@@ -173,9 +173,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             soup=self.soup, method=self.select_one, selector="#titleStoryLine"
         )
         for data in css_selection.find_all("div", class_="see-more inline canwrap"):
-            if data.h4 and data.h4.text == 'Genres:':
+            if data.h4 and data.h4.text == "Genres:":
                 genres = {
-                    "imdb_genre": [genre.text.strip() for genre in data.find_all('a')]
+                    "imdb_genre": [genre.text.strip() for genre in data.find_all("a")]
                 }
         return genres
 
@@ -193,7 +193,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             method="find",
             tag="span",
             class_="small",
-            itemprop="ratingCount"
+            itemprop="ratingCount",
         )
         vote_count = css_selection.text.replace(",", "")
         return {"total_imdb_vote_count": int(vote_count)}
@@ -234,21 +234,21 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
     @staticmethod
     def get_country(content: bs4) -> dict:
         country = {}
-        if content.h4 and content.h4.text == 'Country:':
+        if content.h4 and content.h4.text == "Country:":
             country = {"country": [a.text for a in content.find_all("a")]}
         return country
 
     @staticmethod
     def get_language(content) -> dict:
         language = {}
-        if content.h4 and content.h4.text == 'Language:':
+        if content.h4 and content.h4.text == "Language:":
             language = {"language": [a.text for a in content.find_all("a")]}
         return language
 
     @staticmethod
     def get_release_date(content) -> dict:
         release_date = {}
-        if content.h4 and content.h4.text == 'Release Date:':
+        if content.h4 and content.h4.text == "Release Date:":
             text = content.get_text(" sp ")
             date = text.split(" sp ")[2].strip().split(" (")[0]
             release_date = {"release_date": get_date_time(date, "%d %B %Y")}
