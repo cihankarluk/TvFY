@@ -1,8 +1,9 @@
-import re
 from collections import OrderedDict
 
 import requests
 from bs4 import BeautifulSoup
+
+from TvFY.core.helpers import regex_search
 
 
 class GoogleScrapper:
@@ -16,36 +17,32 @@ class GoogleScrapper:
         return soup
 
     @staticmethod
-    def regex_search(content: str, pattern: str) -> str:
-        try:
-            string = re.search(pattern, content).group()
-        except AttributeError:
-            string = None
-        return string
-
     def get_imdb_url(self, content: str) -> dict:
         regex_pattern = r"https://www.imdb.com/title/[^;]*/"
-        imdb_url = self.regex_search(content=content, pattern=regex_pattern)
+        imdb_url = regex_search(content=content, pattern=regex_pattern)
         result = {"imdb_url": imdb_url} if imdb_url else {}
         return result
 
+    @staticmethod
     def get_rotten_tomatoes_url(self, content: str) -> dict:
         regex_pattern = r"https://www.rottentomatoes.com/.+?/.+?(?<=/)"
-        rotten_tomatoes_url = self.regex_search(content=content, pattern=regex_pattern)
+        rotten_tomatoes_url = regex_search(content=content, pattern=regex_pattern)
         result = (
             {"rotten_tomatoes_url": rotten_tomatoes_url} if rotten_tomatoes_url else {}
         )
         return result
 
+    @staticmethod
     def get_tv_com_rate(self, content: str) -> dict:
         regex_pattern = r"(\d.\d|\d)/10\s.\sTV.com"
-        tv_com_rate = self.regex_search(content=content, pattern=regex_pattern)
+        tv_com_rate = regex_search(content=content, pattern=regex_pattern)
         result = {"tv_com_rate": tv_com_rate} if tv_com_rate else {}
         return result
 
+    @staticmethod
     def get_seasons(self, content):
         regex_pattern = r"(No.\sof\sseasons:\s\d{1,3})|(\d{1,2}\sseasons)"
-        reg_search = self.regex_search(content=content, pattern=regex_pattern)
+        reg_search = regex_search(content=content, pattern=regex_pattern)
         if reg_search:
             try:
                 _, seasons = reg_search.split(":")
@@ -53,7 +50,7 @@ class GoogleScrapper:
                 seasons, _ = reg_search.split(" ")
         else:
             seasons = None
-        result = {"seasons": seasons.strip()} if seasons else {}
+        result = {"seasons": int(seasons.strip())} if seasons else {}
         return result
 
     def run_method(self, action: str, content: str):
@@ -62,17 +59,14 @@ class GoogleScrapper:
                 ("get_imdb_url", self.get_imdb_url),
                 ("get_rotten_tomatoes_url", self.get_rotten_tomatoes_url),
                 ("get_tv_com_rate", self.get_tv_com_rate),
-                ("get_seasons", self.get_seasons)
+                ("get_seasons", self.get_seasons),
             ]
         )
         action_method: classmethod = action_class[action]
         return action_method(content=content)
 
     def search_divs(self, soup):
-        actions = [
-            "get_tv_com_rate",
-            "get_seasons"
-        ]
+        actions = ["get_tv_com_rate", "get_seasons"]
         repeat, result = None, {}
         for div in soup.find_all("div"):
             if (content := div.text) == repeat or not content:

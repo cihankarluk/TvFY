@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import re
 import string
 from datetime import datetime
 from unittest.mock import Mock
@@ -15,9 +16,11 @@ from rest_framework.views import exception_handler
 
 @deconstructible
 class UnicodeUsernameValidator(validators.RegexValidator):
-    regex = r'^[\w.@+-]+$'
-    message = ("Enter a valid username. This value may contain only letters, "
-               "numbers, and @/./+/-/_ characters.")
+    regex = r"^[\w.@+-]+$"
+    message = (
+        "Enter a valid username. This value may contain only letters, "
+        "numbers, and @/./+/-/_ characters."
+    )
 
     flags = 0
 
@@ -37,9 +40,9 @@ def custom_exception_handler(exc, context: dict):
     elif isinstance(response.data, dict):
         error_message = response.data
 
-    code = getattr(exc, 'code', None)
+    code = getattr(exc, "code", None)
     if code is None:
-        code = 'VALIDATION_ERROR'
+        code = "VALIDATION_ERROR"
 
     if not isinstance(error_message, dict):
         try:
@@ -48,9 +51,9 @@ def custom_exception_handler(exc, context: dict):
             pass
 
     data = {
-        'status_code': response.status_code,
-        'code': code,
-        'error_message': error_message
+        "status_code": response.status_code,
+        "code": code,
+        "error_message": error_message,
     }
 
     return Response(data, status=response.status_code, headers=response._headers)
@@ -79,7 +82,7 @@ def get_date_time(date: str, pattern: str) -> datetime:
 def get_random_string(length):
     # Random string with the combination of lower and upper case
     letters = string.ascii_letters
-    result_str = ''.join(random.choice(letters) for _ in range(length))
+    result_str = "".join(random.choice(letters) for _ in range(length))
     return result_str
 
 
@@ -90,3 +93,11 @@ def read_file(path, is_json=False):
         if is_json:
             file = json.loads(file)
         return file
+
+
+def regex_search(content: str, pattern: str) -> str:
+    try:
+        search_string = re.search(pattern, content).group()
+    except AttributeError:
+        search_string = None
+    return search_string
