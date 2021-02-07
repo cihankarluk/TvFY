@@ -13,9 +13,7 @@ def create_genre_data(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('genre', '0001_initial'),
+        ("genre", "0001_initial"),
     ]
 
-    operations = [
-        migrations.RunPython(create_genre_data)
-    ]
+    operations = [migrations.RunPython(create_genre_data)]
