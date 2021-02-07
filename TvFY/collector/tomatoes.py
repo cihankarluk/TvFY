@@ -17,9 +17,7 @@ class TomatoesMovie(SoupSelectionMixin):
             tag="score-board",
         )
         str_soup = str(soup)
-        regex_pattern = r'tomatometerscore="\d{1,2}"'
-        score = regex_search(content=str_soup, pattern=regex_pattern)
-        score_int = int(regex_search(content=score, pattern=r"\d{1,2}"))
+        score_int = int(soup["tomatometerscore"])
         regex_pattern = r'critics-count">\d{1,3}'
         rate_count = regex_search(content=str_soup, pattern=regex_pattern)
         rate_count_int = int(rate_count.strip('critics-count">').replace(",", ""))
@@ -35,9 +33,7 @@ class TomatoesMovie(SoupSelectionMixin):
             tag="score-board",
         )
         str_soup = str(soup)
-        regex_pattern = r'audiencescore="\d{1,2}"'
-        score = regex_search(content=str_soup, pattern=regex_pattern)
-        score_int = int(regex_search(content=score, pattern=r"\d{1,2}"))
+        score_int = int(soup["audiencescore"])
         regex_pattern = r'audience-count">\d{1,3},\d{1,3}'
         rate_count = regex_search(content=str_soup, pattern=regex_pattern)
         rate_count_int = int(rate_count.strip('audience-count">').replace(",", ""))
@@ -62,7 +58,9 @@ class TomatoesMovie(SoupSelectionMixin):
         selection = content.find("div", class_="meta-value genre")
         if selection:
             genres = {
-                "rt_genre": [genre.strip() for genre in selection.text.split(",")]
+                "rt_genre": [
+                    genre.strip().capitalize() for genre in selection.text.split(",")
+                ]
             }
         return genres
 
@@ -125,7 +123,7 @@ class TomatoesSeries(SoupSelectionMixin):
         genres = {}
         if content.td and content.td.text == self.genre:
             css_selection = content.find_all("td")[-1]
-            genres = {"rt_genre": css_selection.text.split(" & ")}
+            genres = {"rt_genre": css_selection.text.split(" & ").capitalize()}
         return genres
 
     def get_network(self, content: bs4) -> dict:
