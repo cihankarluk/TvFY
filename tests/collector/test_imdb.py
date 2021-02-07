@@ -9,7 +9,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(episodes[0]["imdb_vote_count"])
         self.assertTrue(episodes[0]["episode"])
         self.assertTrue(episodes[0]["release_date"])
-        self.assertTrue(episodes[0]["season_url"])
+        self.assertTrue(episodes[0]["imdb_url"])
 
     def control_cast(self, cast):
         self.assertTrue(cast[0]["first_name"])
@@ -25,14 +25,14 @@ class IMDBSeriesTestCase(BaseTest):
             "https://www.imdb.com/title/tt1190634/episodes?season=1",
             "https://www.imdb.com/title/tt1190634/episodes?season=2",
             "https://www.imdb.com/title/tt1190634/fullcredits",
-            "https://www.imdb.com/title/tt1190634/awards"
+            "https://www.imdb.com/title/tt1190634/awards",
         ]
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
 
         cast = result.get("cast")
-        season_1 = result.get("1")
-        season_2 = result.get("2")
+        season_1 = result.get(1)
+        season_2 = result.get(2)
 
         self.assertTrue(cast)
         self.assertTrue(season_1)
@@ -52,13 +52,13 @@ class IMDBSeriesTestCase(BaseTest):
             "https://www.imdb.com/title/tt0903747/",
             "https://www.imdb.com/title/tt0903747/episodes?season=1",
             "https://www.imdb.com/title/tt0903747/fullcredits",
-            "https://www.imdb.com/title/tt0903747/awards"
+            "https://www.imdb.com/title/tt0903747/awards",
         ]
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
 
         cast = result.get("cast")
-        season_1 = result.get("1")
+        season_1 = result.get(1)
 
         self.assertTrue(cast)
         self.assertTrue(season_1)
@@ -71,19 +71,18 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertFalse(result["is_active"])
         self.assertTrue(result["wins"])
 
-
     def test_raised_by_wolves(self):
         urls = [
             "https://www.imdb.com/title/tt9170108/",
             "https://www.imdb.com/title/tt9170108/episodes?season=1",
             "https://www.imdb.com/title/tt9170108/fullcredits",
-            "https://www.imdb.com/title/tt9170108/awards"
+            "https://www.imdb.com/title/tt9170108/awards",
         ]
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
 
         cast = result.get("cast")
-        season_1 = result.get("1")
+        season_1 = result.get(1)
 
         self.assertTrue(cast)
         self.assertTrue(season_1)
@@ -101,13 +100,13 @@ class IMDBSeriesTestCase(BaseTest):
             "https://www.imdb.com/title/tt3909224/",
             "https://www.imdb.com/title/tt3909224/episodes?season=1",
             "https://www.imdb.com/title/tt3909224/fullcredits",
-            "https://www.imdb.com/title/tt3909224/awards"
+            "https://www.imdb.com/title/tt3909224/awards",
         ]
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
 
         cast = result.get("cast")
-        season_1 = result.get("1")
+        season_1 = result.get(1)
 
         self.assertTrue(cast)
         self.assertTrue(season_1)
@@ -131,7 +130,7 @@ class IMDBMoviesTestCase(BaseTest):
         urls = [
             "https://www.imdb.com/title/tt0120737/",
             "https://www.imdb.com/title/tt0120737/fullcredits",
-            "https://www.imdb.com/title/tt0120737/awards"
+            "https://www.imdb.com/title/tt0120737/awards",
         ]
         cls = Scrapper(urls=urls, search_type=self.movie)
         result = cls.handle()
@@ -151,7 +150,7 @@ class IMDBMoviesTestCase(BaseTest):
         urls = [
             "https://www.imdb.com/title/tt0468569/",
             "https://www.imdb.com/title/tt0468569/fullcredits",
-            "https://www.imdb.com/title/tt0468569/awards"
+            "https://www.imdb.com/title/tt0468569/awards",
         ]
         cls = Scrapper(urls=urls, search_type=self.movie)
         result = cls.handle()
