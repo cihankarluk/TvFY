@@ -123,7 +123,8 @@ class TomatoesSeries(SoupSelectionMixin):
         genres = {}
         if content.td and content.td.text == self.genre:
             css_selection = content.find_all("td")[-1]
-            genres = {"rt_genre": css_selection.text.split(" & ").capitalize()}
+            genres = [genre.capitalize() for genre in css_selection.text.split(" & ")]
+            genres = {"rt_genre": genres}
         return genres
 
     def get_network(self, content: bs4) -> dict:
