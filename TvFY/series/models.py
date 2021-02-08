@@ -3,7 +3,7 @@ from django.db import models
 from TvFY.actor.models import Actor
 from TvFY.core.models import Country, Language
 from TvFY.genre.models import Genre
-from TvFY.series.managers import SeriesCastManager, SeriesManager
+from TvFY.series.managers import SeriesManager
 
 
 class Series(models.Model):
@@ -39,7 +39,6 @@ class Series(models.Model):
     tvfy_rate = models.FloatField(blank=True, null=True)
     tvfy_popularity = models.FloatField(blank=True, null=True)
 
-    image = models.URLField(blank=True, null=True)
     imdb_url = models.URLField(blank=True, null=True)
     tv_network_url = models.URLField(blank=True, null=True)
     rotten_tomatoes_url = models.URLField(blank=True, null=True)
@@ -62,8 +61,6 @@ class SeriesCast(models.Model):
 
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
-
-    objects = SeriesCastManager()
 
     def __str__(self):
         return f"{self.character_name} ({self.actor.first_name} {self.actor.last_name})"

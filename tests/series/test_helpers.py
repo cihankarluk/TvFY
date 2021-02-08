@@ -1,9 +1,8 @@
-from TvFY.series.helpers import SaveSeriesData
-from TvFY.series.models import Series, Episode, SeriesCast, Season
+from tests.collector.base_test import BaseTest
 from TvFY.collector.base import Scrapper
 from TvFY.collector.google import GoogleScrapper
-
-from tests.collector.base_test import BaseTest
+from TvFY.series.helpers import save_data
+from TvFY.series.models import Episode, Season, Series, SeriesCast
 
 
 class TestHelpers(BaseTest):
@@ -16,13 +15,12 @@ class TestHelpers(BaseTest):
             "https://www.imdb.com/title/tt1190634/episodes?season=2",
             "https://www.imdb.com/title/tt1190634/fullcredits",
             "https://www.imdb.com/title/tt1190634/awards",
-            "https://www.rottentomatoes.com/tv/the_boys_2019"
+            "https://www.rottentomatoes.com/tv/the_boys_2019",
         ]
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
         result.update(google_result)
-        save = SaveSeriesData(search_data=result)
-        save.save_data()
+        save_data(result)
 
         series = Series.objects.prefetch_related("genres", "country", "language")
         series_cast = SeriesCast.objects.select_related("series", "actor")
