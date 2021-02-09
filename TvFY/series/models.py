@@ -40,6 +40,7 @@ class Series(models.Model):
     tvfy_popularity = models.FloatField(blank=True, null=True)
 
     imdb_url = models.URLField(blank=True, null=True)
+    imdb_creator_url = models.URLField(blank=True, null=True)
     tv_network_url = models.URLField(blank=True, null=True)
     rotten_tomatoes_url = models.URLField(blank=True, null=True)
 

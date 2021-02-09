@@ -52,6 +52,7 @@ class SeriesService:
             "imdb_rate": self.search_data.get("total_imdb_rate"),
             "imdb_vote_count": self.search_data.get("total_imdb_vote_count"),
             "season_count": self.search_data.get("seasons"),
+            "imdb_creator_url": self.search_data.get("imdb_creator_url"),
         }
 
         series = Series.objects.create(**series_data)
