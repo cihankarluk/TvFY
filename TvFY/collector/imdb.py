@@ -160,6 +160,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
     episodes = "episodes"
     fullcredits = "fullcredits"
     awards = "awards"
+    BASE_URL = "https://www.imdb.com"
 
     def __init__(self, soup: bs4, url: str, search_type: str):
         self.soup = soup
@@ -184,7 +185,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="credit_summary_item"
         )
-        return {"creator": css_selection.a.text.strip()}
+        creator_name = css_selection.a.text.strip()
+        creator_url = css_selection.a["href"]
+        return {"creator": creator_name, "imdb_creator_url": creator_url}
 
     @property
     def get_total_vote_count(self):
@@ -207,9 +210,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
 
     @property
     def get_runtime(self) -> dict:
-        css_selection = self.soup_selection(
-            soup=self.soup, method=self.find, tag="time"
-        )
+        css_selection = self.soup_selection(soup=self.soup, method=self.find, tag="time")
         # '2h 58min' or '1h' or '24min'
         run_time_list = css_selection.text.strip().split("h")
         if len(run_time_list) > 1:
