@@ -1,4 +1,6 @@
 from TvFY.actor.models import Actor
+from TvFY.collector.imdb import IMDBScrapper
+from TvFY.collector.tomatoes import TomatoesScrapper
 from TvFY.core.models import Country, Language
 from TvFY.director.models import Director
 from TvFY.genre.models import Genre
@@ -34,16 +36,19 @@ class MovieService:
 
     @property
     def get_or_create_director(self):
+        imdb_url = f'{IMDBScrapper.BASE_URL}{self.search_data["imdb_creator_url"]}'
+        rt_url = f'{TomatoesScrapper.BASE_URL}{self.search_data["rt_creator_url"]}'
         director, _ = Director.objects.get_or_create(
             first_name=self.search_data["director"]["first_name"],
             last_name=self.search_data["director"]["last_name"],
+            imdb_url=imdb_url,
+            rt_url=rt_url,
         )
         return director
 
     def create_movie(self) -> Movie:
         movie_data = {
             "name": self.search_data["title"],
-            "creator": self.search_data.get("creator"),
             "storyline": self.search_data.get("storyline"),
             "release_date": self.search_data.get("release_date"),
             "run_time": self.search_data.get("run_time"),
