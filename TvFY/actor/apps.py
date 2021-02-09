@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ArtistConfig(AppConfig):
-    name = 'TvFY.artist'
+class ActorConfig(AppConfig):
+    name = "TvFY.actor"
