@@ -36,6 +36,7 @@ class TestHelpers(BaseTest):
         self.assertEqual(series.name, "The Boys")
         self.assertEqual(series.run_time, 60)
         self.assertTrue(series.storyline)
+        self.assertTrue(series.imdb_creator_url)
         self.assertTrue(series.genres.first())
         self.assertTrue(series.country.first())
         self.assertTrue(series.language.first())

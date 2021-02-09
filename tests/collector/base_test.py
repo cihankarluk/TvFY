@@ -20,6 +20,7 @@ class BaseTest(TestCase):
         self.assertTrue(result["title"])
         self.assertTrue(result["total_imdb_rate"])
         self.assertTrue(result["total_imdb_vote_count"])
+        self.assertTrue(result["imdb_creator_url"])
 
     def rt_control_home_page(self, result):
         self.assertTrue(result["network"])
@@ -36,3 +37,4 @@ class BaseTest(TestCase):
         self.assertTrue(result["rt_tomatometer_count"])
         self.assertTrue(result["rt_audience_rate"])
         self.assertTrue(result["rt_audience_rate_count"])
+        self.assertTrue(result["rt_creator_url"])

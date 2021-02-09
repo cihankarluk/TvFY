@@ -7,7 +7,7 @@ from TvFY.movies.service import MovieCastService, MovieService
 
 class TestMovieServices(BaseTest):
     def test_complete_movie(self):
-        cls = GoogleScrapper(search_key="lotr")
+        cls = GoogleScrapper(search_key="the dark knight")
         google_result = cls.run()
         urls = [
             "https://www.imdb.com/title/tt0120737/",
@@ -25,7 +25,9 @@ class TestMovieServices(BaseTest):
         movie_cast_cls = MovieCastService(search_data=result, movie=movie)
         movie_cast_cls.create_movie_cast()
 
-        movie = Movie.objects.prefetch_related("genres", "country", "language")
+        movie = Movie.objects.prefetch_related(
+            "genres", "country", "language"
+        ).select_related("director")
         movie_cast = MovieCast.objects.select_related("movie", "actor")
 
         self.assertTrue(movie)
@@ -35,6 +37,9 @@ class TestMovieServices(BaseTest):
         self.assertTrue(movie.name)
         self.assertEqual(movie.run_time, 178)
         self.assertTrue(movie.storyline)
+        self.assertTrue(movie.director.get_full_name)
+        self.assertTrue(movie.director.imdb_url)
+        self.assertTrue(movie.director.rt_url)
         self.assertTrue(movie.genres.first())
         self.assertTrue(movie.country.first())
         self.assertTrue(movie.language.first())
