@@ -7,7 +7,6 @@ from TvFY.series.models import Series
 
 class TomatoesMovie(SoupSelectionMixin):
     run_method: classmethod
-    director = "Director:"
 
     @property
     def get_tomatometer_movie(self) -> dict:
@@ -44,44 +43,31 @@ class TomatoesMovie(SoupSelectionMixin):
         }
         return rating
 
-    def get_director(self, content: bs4) -> dict:
-        director = {}
-        selection = content.find("div", class_="meta-label subtle")
-        if selection and selection.text == self.director:
-            director_name = content.find("div", class_="meta-value").text.strip()
-            director = {"director": self.get_name(director_name)}
-        return director
-
-    @staticmethod
-    def get_rt_genre_movie(content: bs4) -> dict:
-        genres = {}
-        selection = content.find("div", class_="meta-value genre")
-        if selection:
-            genres = {
-                "rt_genre": [
-                    genre.strip().capitalize() for genre in selection.text.split(",")
-                ]
-            }
-        return genres
-
     @property
-    def split_details_movie(self) -> dict:
-        result = {}
-        actions = ["get_director", "get_rt_genre_movie"]
-        css_sub_selection = self.soup_selection(
+    def get_director(self) -> dict:
+        soup_selection = self.soup_selection(
             soup=self.soup,
             method=self.find,
-            tag="div",
-            class_="panel-body content_body",
+            tag="a",
+            **{"data-qa": "movie-info-director"},
         )
-        for div in css_sub_selection.find_all("li"):
-            for index, action in enumerate(actions):
-                if data := self.run_method(action, div):
-                    actions.pop(index)
-                    result.update(data)
-            if not actions:
-                break
-        return result
+        director = {
+            "director": self.get_name(soup_selection.text),
+            "rt_creator_url": soup_selection["href"],
+        }
+        return director
+
+    @property
+    def get_rt_genre_movie(self) -> dict:
+        soup_selection = self.soup_selection(
+            soup=self.soup, method=self.find, tag="div", class_="meta-value genre"
+        )
+        genres = {
+            "rt_genre": [
+                genre.strip().capitalize() for genre in soup_selection.text.split(",")
+            ]
+        }
+        return genres
 
 
 class TomatoesSeries(SoupSelectionMixin):
@@ -152,6 +138,8 @@ class TomatoesSeries(SoupSelectionMixin):
 
 
 class TomatoesScrapper(TomatoesMovie, TomatoesSeries):
+    BASE_URL = "https://www.rottentomatoes.com"
+
     def __init__(self, soup, url, search_type):
         self.soup = soup
         self.url = url
@@ -162,7 +150,6 @@ class TomatoesScrapper(TomatoesMovie, TomatoesSeries):
             "get_rt_genre": self.get_rt_genre,
             "get_network": self.get_network,
             "get_rt_genre_movie": self.get_rt_genre_movie,
-            "get_director": self.get_director,
         }
         action_method: classmethod = action_class[action]
         return action_method(content=content)
@@ -182,7 +169,8 @@ class TomatoesScrapper(TomatoesMovie, TomatoesSeries):
             result.update(self.get_tomatometer)
             result.update(self.get_audience_rate)
         else:
-            result.update(self.split_details_movie)
+            result.update(self.get_director)
+            result.update(self.get_rt_genre_movie)
             result.update(self.get_tomatometer_movie)
             result.update(self.get_audience_rate_movie)
         return result
