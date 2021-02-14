@@ -10,13 +10,16 @@ class TomatoesMovie(SoupSelectionMixin):
 
     @property
     def get_tomatometer_movie(self) -> dict:
-        soup = self.soup_selection(
+        css_selection = self.soup_selection(
             soup=self.soup,
             method=self.find,
             tag="score-board",
         )
-        str_soup = str(soup)
-        score_int = int(soup["tomatometerscore"])
+        if not css_selection:
+            return {}
+
+        str_soup = str(css_selection)
+        score_int = int(css_selection["tomatometerscore"])
         regex_pattern = r'critics-count">\d{1,3}'
         rate_count = regex_search(content=str_soup, pattern=regex_pattern)
         rate_count_int = int(rate_count.strip('critics-count">').replace(",", ""))
@@ -26,13 +29,16 @@ class TomatoesMovie(SoupSelectionMixin):
 
     @property
     def get_audience_rate_movie(self) -> dict:
-        soup = self.soup_selection(
+        css_selection = self.soup_selection(
             soup=self.soup,
             method=self.find,
             tag="score-board",
         )
-        str_soup = str(soup)
-        score_int = int(soup["audiencescore"])
+        if not css_selection:
+            return {}
+
+        str_soup = str(css_selection)
+        score_int = int(css_selection["audiencescore"])
         regex_pattern = r'audience-count">\d{1,3},\d{1,3}'
         rate_count = regex_search(content=str_soup, pattern=regex_pattern)
         rate_count_int = int(rate_count.strip('audience-count">').replace(",", ""))
@@ -45,26 +51,32 @@ class TomatoesMovie(SoupSelectionMixin):
 
     @property
     def get_director(self) -> dict:
-        soup_selection = self.soup_selection(
+        css_selection = self.soup_selection(
             soup=self.soup,
             method=self.find,
             tag="a",
             **{"data-qa": "movie-info-director"},
         )
+        if not css_selection:
+            return {}
+
         director = {
-            "director": self.get_name(soup_selection.text),
-            "rt_creator_url": soup_selection["href"],
+            "director": self.get_name(css_selection.text),
+            "rt_creator_url": css_selection["href"],
         }
         return director
 
     @property
     def get_rt_genre_movie(self) -> dict:
-        soup_selection = self.soup_selection(
+        css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="meta-value genre"
         )
+        if not css_selection:
+            return {}
+
         genres = {
             "rt_genre": [
-                genre.strip().capitalize() for genre in soup_selection.text.split(",")
+                genre.strip().capitalize() for genre in css_selection.text.split(",")
             ]
         }
         return genres
@@ -84,6 +96,9 @@ class TomatoesSeries(SoupSelectionMixin):
             tag="div",
             class_="mop-ratings-wrap__half critic-score",
         )
+        if not css_selection:
+            return {}
+
         selection = css_selection.find("span", class_="mop-ratings-wrap__percentage")
         if selection:
             # 90%
@@ -99,10 +114,12 @@ class TomatoesSeries(SoupSelectionMixin):
             tag="div",
             class_="mop-ratings-wrap__half audience-score",
         )
-        selection = css_selection.find("span", class_="mop-ratings-wrap__percentage")
-        if selection:
+        if not css_selection:
+            return {}
+
+        if rate := css_selection.find("span", class_="mop-ratings-wrap__percentage"):
             # 90%
-            rating = {"rt_audience_rate": int(selection.text.strip().replace("%", ""))}
+            rating = {"rt_audience_rate": int(rate.text.strip().replace("%", ""))}
         return rating
 
     def get_rt_genre(self, content: bs4) -> dict:
@@ -124,10 +141,13 @@ class TomatoesSeries(SoupSelectionMixin):
     def split_details(self) -> dict:
         result = {}
         actions = ["get_rt_genre", "get_network"]
-        css_sub_selection = self.soup_selection(
+        css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="section", id="detail_panel"
         )
-        for div in css_sub_selection.find_all("tr"):
+        if not css_selection:
+            return {}
+
+        for div in css_selection.find_all("tr"):
             for index, action in enumerate(actions):
                 if data := self.run_method(action, div):
                     actions.pop(index)
@@ -159,6 +179,9 @@ class TomatoesScrapper(TomatoesMovie, TomatoesSeries):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.select_one, selector="#movieSynopsis"
         )
+        if not css_selection:
+            return {}
+
         result = {"storyline": css_selection.text.strip()}
         return result
 
