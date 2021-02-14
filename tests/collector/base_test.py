@@ -22,6 +22,13 @@ class BaseTest(TestCase):
         self.assertTrue(result["total_imdb_vote_count"])
         self.assertTrue(result["imdb_creator_url"])
 
+    def imdb_control_personal_data(self, result):
+        self.assertTrue(result["born"])
+        self.assertTrue(result["born_at"])
+        self.assertTrue(result["wins"])
+        self.assertTrue(result["nominations"])
+        self.assertTrue(result["perks"])
+
     def rt_control_home_page(self, result):
         self.assertTrue(result["network"])
         self.assertTrue(result["rt_genre"])

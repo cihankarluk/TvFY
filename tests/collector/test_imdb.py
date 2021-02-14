@@ -165,3 +165,23 @@ class IMDBMoviesTestCase(BaseTest):
         self.assertTrue(result["run_time"])
         self.assertTrue(result["ww_gross"])
         self.assertTrue(result["usa_opening_weekend"])
+
+
+class IMDBPersonalDataTestCase(BaseTest):
+    def test_quentin_tarantino(self):
+        urls = ["https://www.imdb.com/name/nm0000233/"]
+        cls = Scrapper(urls=urls)
+        result = cls.handle()
+
+        self.imdb_control_personal_data(result)
+
+        self.assertTrue("oscar")
+
+    def test_alfred_hitchcock(self):
+        urls = ["https://www.imdb.com/name/nm0000033/"]
+        cls = Scrapper(urls=urls)
+        result = cls.handle()
+
+        self.imdb_control_personal_data(result)
+
+        self.assertTrue("oscar_nominations")
