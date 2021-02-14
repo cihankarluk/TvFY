@@ -2,8 +2,6 @@ from typing import Optional
 
 from bs4 import BeautifulSoup
 
-from TvFY.core.helpers import error_handler
-
 
 class SoupSelectionMixin:
     select_one = "select_one"
