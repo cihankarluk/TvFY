@@ -2,7 +2,7 @@ import re
 import urllib.parse as urlparse
 from collections import defaultdict
 from datetime import datetime
-from typing import Optional, Union
+from typing import Union
 from urllib.parse import parse_qs
 
 import bs4
@@ -41,6 +41,9 @@ class IMDBEpisodes(SoupSelectionMixin):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find_all, tag="div", class_="info"
         )
+        if not css_selection:
+            return {}
+
         for episode_data in css_selection:
             date = self.soup_selection(
                 soup=episode_data, method="find", tag="div", class_="airdate"
@@ -99,6 +102,9 @@ class IMDBCast(SoupSelectionMixin):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="table", class_="cast_list"
         )
+        if not css_selection:
+            return {}
+
         for cast in css_selection.find_all("tr"):
             if character := cast.find("td", class_="character"):
                 if self.search_type == Movie.TYPE:
@@ -120,11 +126,10 @@ class IMDBAwards(SoupSelectionMixin):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="desc"
         )
-        if text := css_selection.text:
-            wins, nominations = re.findall(r"\d+", text)
-        else:
-            wins, nominations = 0, 0
+        if not css_selection:
+            return {}
 
+        wins, nominations = re.findall(r"\d+", css_selection.text)
         return {"wins": int(wins), "nominations": int(nominations)}
 
 
@@ -167,8 +172,10 @@ class IMDBPersonalData(SoupSelectionMixin):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", id="name-born-info"
         )
-        born_date = css_selection.time["datetime"]
+        if not css_selection:
+            return {}
 
+        born_date = css_selection.time["datetime"]
         return {"born": datetime.strptime(born_date, "%Y-%m-%d")}
 
     @property
@@ -176,6 +183,9 @@ class IMDBPersonalData(SoupSelectionMixin):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", id="name-born-info"
         )
+        if not css_selection:
+            return {}
+
         selection: list = css_selection.find_all("a")
         return {"born_at": selection[-1].text}
 
@@ -227,9 +237,10 @@ class IMDBPersonalData(SoupSelectionMixin):
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="infobar"
         )
+        if not css_selection:
+            return {}
 
         selection = css_selection.find_all("a")
-
         for perk in selection:
             perk = perk["href"].replace("#", "")
             perks["perks"].append(perk)
@@ -254,6 +265,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method=self.select_one, selector="#titleStoryLine"
         )
+        if not css_selection:
+            return {}
+
         for data in css_selection.find_all("div", class_="see-more inline canwrap"):
             if data.h4 and data.h4.text == "Genres:":
                 genres = {
@@ -266,6 +280,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="credit_summary_item"
         )
+        if not css_selection:
+            return {}
+
         creator_name = css_selection.a.text.strip()
         creator_url = css_selection.a["href"]
         return {"creator": creator_name, "imdb_creator_url": creator_url}
@@ -279,6 +296,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
             class_="small",
             itemprop="ratingCount",
         )
+        if not css_selection:
+            return {}
+
         vote_count = css_selection.text.replace(",", "")
         return {"total_imdb_vote_count": int(vote_count)}
 
@@ -287,11 +307,17 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method="find", tag="span", itemprop="ratingValue"
         )
+        if not css_selection:
+            return {}
+
         return {"total_imdb_rate": float(css_selection.text)}
 
     @property
     def get_runtime(self) -> dict:
         css_selection = self.soup_selection(soup=self.soup, method=self.find, tag="time")
+        if not css_selection:
+            return {}
+
         # '2h 58min' or '1h' or '24min'
         run_time_list = css_selection.text.strip().split("h")
         if len(run_time_list) > 1:
@@ -310,6 +336,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="titleReviewBarSubItem"
         )
+        if not css_selection:
+            return {}
+
         popularity = css_selection.span.text.split("(")
         return {"popularity": popularity[0].strip()}
 
@@ -341,6 +370,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method=self.find, tag="div", class_="title_wrapper"
         )
+        if not css_selection:
+            return {}
+
         if title := css_selection.h1:
             title = title.text.strip()
         return {"title": title}
@@ -351,6 +383,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method="find", tag="a", title="See more release dates"
         )
+        if not css_selection:
+            return {}
+
         text = css_selection.text.strip()
         if re.search(r"\d{4}–\s", text):
             is_active = True
@@ -376,6 +411,9 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalDa
         css_selection = self.soup_selection(
             soup=self.soup, method=self.select_one, selector="#titleDetails"
         )
+        if not css_selection:
+            return result
+
         for div in css_selection.find_all("div"):
             for index, action in enumerate(actions):
                 if data := self.run_method(action, div):
