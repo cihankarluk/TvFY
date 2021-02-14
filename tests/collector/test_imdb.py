@@ -91,7 +91,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.imdb_control_home_page(result)
         self.control_episodes(season_1)
 
-        self.assertFalse(result["run_time"])
+        self.assertIsNone(result.get("run_time"))
         self.assertTrue(result["is_active"])
         self.assertFalse(result["wins"])
 
