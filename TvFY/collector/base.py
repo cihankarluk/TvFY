@@ -13,8 +13,8 @@ logger = logging.getLogger("main")
 
 
 class Scrapper:
-    def __init__(self, urls, search_type):
-        self.urls: list = urls
+    def __init__(self, urls: list, search_type=None):
+        self.urls = urls
         self.session = None
         self.search_type = search_type
 
