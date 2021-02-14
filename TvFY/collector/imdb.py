@@ -1,27 +1,32 @@
 import re
 import urllib.parse as urlparse
+from collections import defaultdict
 from datetime import datetime
-from typing import Union
+from typing import Optional, Union
 from urllib.parse import parse_qs
 
 import bs4
 
 from TvFY.collector.helpers import SoupSelectionMixin
-from TvFY.core.helpers import get_date_time
+from TvFY.core.helpers import get_date_time, regex_search
 from TvFY.movies.models import Movie
+from TvFY.series.models import Series
 
 
 class IMDBEpisodes(SoupSelectionMixin):
     url: str
 
     def get_imdb_vote_count(self, episode_data: bs4) -> int:
-        vote_str = self.soup_selection(
+        css_selection = self.soup_selection(
             soup=episode_data,
             method="find",
             tag="span",
             class_="ipl-rating-star__total-votes",
-        ).text
-        vote_count = int("".join(re.findall(r"\d+", vote_str)))
+        )
+        if not css_selection:
+            return 0
+
+        vote_count = int("".join(re.findall(r"\d+", css_selection.text)))
         return vote_count
 
     @property
@@ -156,10 +161,86 @@ class IMDBMovie(SoupSelectionMixin):
         return ww_gross
 
 
-class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
+class IMDBPersonalData(SoupSelectionMixin):
+    @property
+    def get_birth_date(self) -> dict:
+        css_selection = self.soup_selection(
+            soup=self.soup, method=self.find, tag="div", id="name-born-info"
+        )
+        born_date = css_selection.time["datetime"]
+
+        return {"born": datetime.strptime(born_date, "%Y-%m-%d")}
+
+    @property
+    def get_born_place(self) -> dict:
+        css_selection = self.soup_selection(
+            soup=self.soup, method=self.find, tag="div", id="name-born-info"
+        )
+        selection: list = css_selection.find_all("a")
+        return {"born_at": selection[-1].text}
+
+    @property
+    def get_death_date(self) -> dict:
+        css_selection = self.soup_selection(
+            soup=self.soup, method=self.find, tag="div", id="name-death-info"
+        )
+        if not css_selection:
+            return {}
+
+        died_date = css_selection.time["datetime"]
+        return {"died": datetime.strptime(died_date, "%Y-%m-%d")}
+
+    @property
+    def get_death_place(self) -> dict:
+        css_selection = self.soup_selection(
+            soup=self.soup, method=self.find, tag="div", id="name-death-info"
+        )
+        if not css_selection:
+            return {}
+
+        selection: list = css_selection.find_all("a")
+        return {"died_at": selection[-1].text}
+
+    @property
+    def get_person_awards(self) -> dict:
+        result = {}
+        css_selection = self.soup_selection(
+            soup=self.soup, method=self.find_all, tag="span", class_="awards-blurb"
+        )
+        if not css_selection:
+            return {}
+
+        oscar_data = css_selection[0].text
+        search = regex_search(oscar_data, r"\d{1,2}")
+        if "Won" in oscar_data:
+            result.update({"oscars": search})
+        else:
+            result.update({"oscar_nominations": search})
+
+        wins, nominations = re.findall(r"\d+", css_selection[-1].text)
+        result.update({"wins": wins, "nominations": nominations})
+        return result
+
+    @property
+    def get_perks(self) -> dict:
+        perks = defaultdict(list)
+        css_selection = self.soup_selection(
+            soup=self.soup, method=self.find, tag="div", class_="infobar"
+        )
+
+        selection = css_selection.find_all("a")
+
+        for perk in selection:
+            perk = perk["href"].replace("#", "")
+            perks["perks"].append(perk)
+        return perks
+
+
+class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie, IMDBPersonalData):
     episodes = "episodes"
     fullcredits = "fullcredits"
     awards = "awards"
+    person_data = "name"
     BASE_URL = "https://www.imdb.com"
 
     def __init__(self, soup: bs4, url: str, search_type: str):
@@ -240,14 +321,14 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         return country
 
     @staticmethod
-    def get_language(content) -> dict:
+    def get_language(content: bs4) -> dict:
         language = {}
         if content.h4 and content.h4.text == "Language:":
             language = {"language": [a.text for a in content.find_all("a")]}
         return language
 
     @staticmethod
-    def get_release_date(content) -> dict:
+    def get_release_date(content: bs4) -> dict:
         release_date = {}
         if content.h4 and content.h4.text == "Release Date:":
             text = content.get_text(" sp ")
@@ -287,7 +368,7 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
         action_method: classmethod = action_class[action]
         return action_method(content=content)
 
-    def split_details(self, actions) -> dict:
+    def split_details(self, actions: list) -> dict:
         """
         Get data under title details.
         """
@@ -323,7 +404,14 @@ class IMDBScrapper(IMDBEpisodes, IMDBCast, IMDBAwards, IMDBMovie):
             result.update(self.get_popularity)
             result.update(self.get_total_vote_count)
             result.update(self.get_total_imdb_rating)
-        else:
+        elif self.person_data in self.url:
+            result.update(self.get_birth_date)
+            result.update(self.get_born_place)
+            result.update(self.get_death_date)
+            result.update(self.get_death_place)
+            result.update(self.get_person_awards)
+            result.update(self.get_perks)
+        elif self.search_type == Series.TYPE:
             result.update(self.split_details(actions=actions))
             result.update(self.get_genre)
             result.update(self.get_title)
