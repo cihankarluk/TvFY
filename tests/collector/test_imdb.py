@@ -184,4 +184,16 @@ class IMDBPersonalDataTestCase(BaseTest):
 
         self.imdb_control_personal_data(result)
 
-        self.assertTrue("oscar_nominations")
+        self.assertTrue(result["oscar_nominations"])
+        self.assertTrue(result["died"])
+        self.assertTrue(result["died_at"])
+
+    def test_kaya_scodelario(self):
+        urls = ["https://www.imdb.com/name/nm2546012/"]
+        cls = Scrapper(urls=urls)
+        result = cls.handle()
+
+        self.imdb_control_personal_data(result)
+
+        self.assertIsNone(result.get("oscars"))
+        self.assertIsNone(result.get("oscar_nominations"))

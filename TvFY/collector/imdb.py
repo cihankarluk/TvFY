@@ -224,7 +224,8 @@ class IMDBPersonalData(SoupSelectionMixin):
         search = regex_search(oscar_data, r"\d{1,2}")
         if "Won" in oscar_data:
             result.update({"oscars": search})
-        else:
+        elif len(css_selection) > 1:
+            # If there is no oscar wins and nominations
             result.update({"oscar_nominations": search})
 
         wins, nominations = re.findall(r"\d+", css_selection[-1].text)
