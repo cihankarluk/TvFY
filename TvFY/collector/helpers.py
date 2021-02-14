@@ -1,3 +1,5 @@
+from typing import Optional
+
 from bs4 import BeautifulSoup
 
 from TvFY.core.helpers import error_handler
@@ -9,10 +11,9 @@ class SoupSelectionMixin:
     find_all = "find_all"
     soup: BeautifulSoup
 
-    @error_handler
     def soup_selection(
         self, soup: BeautifulSoup, method: str, tag: str = None, **kwargs
-    ) -> BeautifulSoup:
+    ) -> Optional[BeautifulSoup]:
         if method == self.select_one:
             css_selection = soup.select_one(**kwargs)
         elif method == self.find:
