@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from typing import Union
 from urllib.parse import urlparse
 
 import aiohttp
@@ -13,10 +14,16 @@ logger = logging.getLogger("main")
 
 
 class Scrapper:
-    def __init__(self, urls: list, search_type=None):
-        self.urls = urls
+    def __init__(self, urls: Union[str, list], search_type=None):
+        self.urls: list = self.control_urls(urls)
         self.session = None
         self.search_type = search_type
+
+    @staticmethod
+    def control_urls(urls: Union[str, list]) -> list:
+        if isinstance(urls, str):
+            urls = [urls]
+        return urls
 
     @staticmethod
     def scrapper_class(url, soup, search_type):
@@ -50,7 +57,7 @@ class Scrapper:
 
     async def run(self):
         results = {}
-        tasks = [self.weed_out(url=url) for url in self.urls]
+        tasks = [self.weed_out(url=url) for url in (self.urls or [])]
         for task in asyncio.as_completed(tasks):
             result = await task
             results.update(result)
