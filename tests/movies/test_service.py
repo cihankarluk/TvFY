@@ -48,3 +48,4 @@ class TestMovieServices(BaseTest):
         self.assertTrue(movie_cast.character_name)
         self.assertTrue(movie_cast.movie.name)
         self.assertTrue(movie_cast.actor.first_name)
+        self.assertTrue(movie_cast.actor.imdb_url)

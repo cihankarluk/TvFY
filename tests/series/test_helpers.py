@@ -45,6 +45,7 @@ class TestHelpers(BaseTest):
         self.assertTrue(series_cast.character_name)
         self.assertEqual(series_cast.series.name, "The Boys")
         self.assertTrue(series_cast.actor.first_name)
+        self.assertTrue(series_cast.actor.imdb_url)
 
         season = seasons.first()
         self.assertTrue(season.imdb_url)

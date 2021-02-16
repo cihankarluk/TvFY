@@ -12,14 +12,14 @@ class MovieService:
         self.search_data = search_data
 
     @property
-    def get_genres(self):
+    def get_genres(self) -> list:
         genres = set(self.search_data.get("rt_genre", {}))
         genres.update(set(self.search_data.get("imdb_genre", {})))
         genre_ids = Genre.objects.filter(name__in=genres).values_list("id", flat=True)
         return genre_ids
 
     @property
-    def get_or_create_language(self):
+    def get_or_create_language(self) -> list:
         language_objs = []
         for language in self.search_data.get("language", []):
             language_obj, _ = Language.objects.get_or_create(language=language)
@@ -27,7 +27,7 @@ class MovieService:
         return language_objs
 
     @property
-    def get_or_create_country(self):
+    def get_or_create_country(self) -> list:
         country_objs = []
         for country in self.search_data.get("country", []):
             country_obj, _ = Country.objects.get_or_create(country=country)
@@ -35,7 +35,7 @@ class MovieService:
         return country_objs
 
     @property
-    def get_or_create_director(self):
+    def get_or_create_director(self) -> Director:
         imdb_url = f'{IMDBScrapper.BASE_URL}{self.search_data["imdb_creator_url"]}'
         rt_url = f'{TomatoesScrapper.BASE_URL}{self.search_data["rt_creator_url"]}'
         director, _ = Director.objects.get_or_create(
@@ -87,9 +87,12 @@ class MovieCastService:
         self.movie = movie
 
     @staticmethod
-    def get_or_create_actor(actor_data):
+    def get_or_create_actor(actor_data) -> Actor:
+        imdb_url = f'{IMDBScrapper.BASE_URL}{actor_data["imdb_actor_url"]}'
         actor, _ = Actor.objects.get_or_create(
-            first_name=actor_data["first_name"], last_name=actor_data["last_name"]
+            first_name=actor_data["first_name"],
+            last_name=actor_data["last_name"],
+            imdb_url=imdb_url,
         )
         return actor
 

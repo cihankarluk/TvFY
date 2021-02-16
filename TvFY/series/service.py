@@ -1,22 +1,23 @@
 from TvFY.actor.models import Actor
+from TvFY.collector.imdb import IMDBScrapper
 from TvFY.core.models import Country, Language
 from TvFY.genre.models import Genre
 from TvFY.series.models import Episode, Season, Series, SeriesCast
 
 
 class SeriesService:
-    def __init__(self, search_data):
+    def __init__(self, search_data: dict):
         self.search_data = search_data
 
     @property
-    def get_genres(self):
+    def get_genres(self) -> list:
         genres = set(self.search_data.get("rt_genre", {}))
         genres.update(set(self.search_data.get("imdb_genre", {})))
         genre_ids = Genre.objects.filter(name__in=genres).values_list("id", flat=True)
         return genre_ids
 
     @property
-    def get_or_create_language(self):
+    def get_or_create_language(self) -> list:
         language_objs = []
         for language in self.search_data.get("language", []):
             language_obj, _ = Language.objects.get_or_create(language=language)
@@ -24,7 +25,7 @@ class SeriesService:
         return language_objs
 
     @property
-    def get_or_create_country(self):
+    def get_or_create_country(self) -> list:
         country_objs = []
         for country in self.search_data.get("country", []):
             country_obj, _ = Country.objects.get_or_create(country=country)
@@ -32,7 +33,7 @@ class SeriesService:
         return country_objs
 
     @property
-    def create_series(self):
+    def create_series(self) -> Series:
         series_data = {
             "name": self.search_data["title"],
             "creator": self.search_data.get("creator"),
@@ -73,9 +74,12 @@ class SeriesCastService:
         self.series = series
 
     @staticmethod
-    def get_or_create_actor(actor_data):
+    def get_or_create_actor(actor_data: dict) -> Actor:
+        imdb_url = f'{IMDBScrapper.BASE_URL}{actor_data["imdb_actor_url"]}'
         actor, _ = Actor.objects.get_or_create(
-            first_name=actor_data["first_name"], last_name=actor_data["last_name"]
+            first_name=actor_data["first_name"],
+            last_name=actor_data["last_name"],
+            imdb_url=imdb_url,
         )
         return actor
 
