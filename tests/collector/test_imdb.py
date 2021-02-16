@@ -18,6 +18,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertTrue(cast[0]["episode_count"])
         self.assertTrue(cast[0]["start_acting"])
         self.assertTrue(cast[0]["end_acting"])
+        self.assertTrue(cast[0]["imdb_actor_url"])
 
     def test_the_boys(self):
         urls = [
@@ -125,6 +126,7 @@ class IMDBMoviesTestCase(BaseTest):
         self.assertTrue(cast[0]["first_name"])
         self.assertTrue(cast[0]["last_name"])
         self.assertTrue(cast[0]["character_name"])
+        self.assertTrue(cast[0]["imdb_actor_url"])
 
     def test_lotr_fellowship_of_the_ring(self):
         urls = [

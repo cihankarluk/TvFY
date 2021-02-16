@@ -113,8 +113,10 @@ class IMDBCast(SoupSelectionMixin):
                     cast_information = self.cast_information(character.get_text(" sp "))
                 if not cast_information:
                     continue
-                actor = self.get_name(cast.find("td", class_="").a.text.strip())
+                actor_detail = cast.find("td", class_="").a
+                actor = self.get_name(actor_detail.text.strip())
                 actor.update(cast_information)
+                actor.update({"imdb_actor_url": actor_detail["href"]})
                 results.append(actor)
 
         return {"cast": results}
