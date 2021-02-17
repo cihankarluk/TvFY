@@ -10,11 +10,11 @@ class Director(models.Model):
     rt_url = models.URLField(blank=True, null=True, unique=True)
     born = models.DateField(null=True)
     born_at = models.ForeignKey(
-        Country, on_delete=models.SET_NULL, null=True, related_name="born_place"
+        Country, on_delete=models.SET_NULL, null=True, related_name="director_born_at"
     )
     died = models.DateField(null=True)
     died_at = models.ForeignKey(
-        Country, on_delete=models.SET_NULL, null=True, related_name="death_place"
+        Country, on_delete=models.SET_NULL, null=True, related_name="director_death_at"
     )
     perks = models.CharField(max_length=255, null=True)
     oscars = models.PositiveSmallIntegerField(default=0)

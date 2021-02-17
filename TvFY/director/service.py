@@ -8,7 +8,7 @@ class DirectorService:
         self.director = director_obj
 
     @staticmethod
-    def get_or_create_country(country):
+    def get_or_create_country(country: str):
         if country:
             country, _ = Country.objects.get_or_create(country=country)
         return country
