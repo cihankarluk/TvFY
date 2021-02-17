@@ -12,7 +12,7 @@ class ErrorReport(models.Model):
 
 
 class Country(models.Model):
-    country = models.CharField(max_length=128)
+    country = models.CharField(max_length=255)
 
 
 class Language(models.Model):
