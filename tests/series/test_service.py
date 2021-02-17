@@ -1,8 +1,8 @@
 from tests.collector.base_test import BaseTest
 from TvFY.collector.base import Scrapper
 from TvFY.collector.google import GoogleScrapper
-from TvFY.series.helpers import save_data
 from TvFY.series.models import Episode, Season, Series, SeriesCast
+from TvFY.series.service import SeasonEpisodeService, SeriesCastService, SeriesService
 
 
 class TestHelpers(BaseTest):
@@ -20,7 +20,16 @@ class TestHelpers(BaseTest):
         cls = Scrapper(urls=urls, search_type=self.series)
         result = cls.handle()
         result.update(google_result)
-        save_data(result)
+
+        series_service = SeriesService(search_data=result)
+        series = series_service.create_series
+
+        cast_data = result["cast"]
+        series_cast_service = SeriesCastService(cast_data=cast_data, series=series)
+        series_cast_service.create_series_cast()
+
+        season_and_episodes = SeasonEpisodeService(search_data=result, series=series)
+        season_and_episodes.create_season_and_episodes()
 
         series = Series.objects.prefetch_related("genres", "country", "language")
         series_cast = SeriesCast.objects.select_related("series", "actor")
