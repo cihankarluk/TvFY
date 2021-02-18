@@ -178,7 +178,7 @@ class IMDBPersonalData(SoupSelectionMixin):
             return {}
 
         born_date = css_selection.time["datetime"]
-        return {"born": datetime.strptime(born_date, "%Y-%m-%d")}
+        return {"born_date": datetime.strptime(born_date, "%Y-%m-%d")}
 
     @property
     def get_born_place(self) -> dict:
@@ -200,7 +200,7 @@ class IMDBPersonalData(SoupSelectionMixin):
             return {}
 
         died_date = css_selection.time["datetime"]
-        return {"died": datetime.strptime(died_date, "%Y-%m-%d")}
+        return {"died_date": datetime.strptime(died_date, "%Y-%m-%d")}
 
     @property
     def get_death_place(self) -> dict:

@@ -4,7 +4,7 @@ from TvFY.collector.base import Scrapper
 
 
 def fill_actor_data():
-    actors = Actor.objects.filter(born__isnull=True)
+    actors = Actor.objects.filter(born_date__isnull=True)
     for actor in actors:
         cls = Scrapper(urls=actor.imdb_url)
         result = cls.handle()
