@@ -1,8 +1,8 @@
-from tests.collector.base_test import BaseTest
+from tests.base.test_base import BaseCollectorTest
 from TvFY.collector.base import Scrapper
 
 
-class IMDBSeriesTestCase(BaseTest):
+class IMDBSeriesTestCase(BaseCollectorTest):
     def control_episodes(self, episodes):
         self.assertTrue(episodes[0]["storyline"])
         self.assertTrue(episodes[0]["imdb_rate"])
@@ -121,7 +121,7 @@ class IMDBSeriesTestCase(BaseTest):
         self.assertFalse(result["wins"])
 
 
-class IMDBMoviesTestCase(BaseTest):
+class IMDBMoviesTestCase(BaseCollectorTest):
     def control_cast(self, cast):
         self.assertTrue(cast[0]["first_name"])
         self.assertTrue(cast[0]["last_name"])
@@ -169,7 +169,7 @@ class IMDBMoviesTestCase(BaseTest):
         self.assertTrue(result["usa_opening_weekend"])
 
 
-class IMDBPersonalDataTestCase(BaseTest):
+class IMDBPersonalDataTestCase(BaseCollectorTest):
     def test_quentin_tarantino(self):
         urls = ["https://www.imdb.com/name/nm0000233/"]
         cls = Scrapper(urls=urls)
