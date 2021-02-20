@@ -75,8 +75,8 @@ class UserSignInTestCase(TestCase):
 
         expected_result = {
             "status_code": 401,
-            "code": "VALIDATION_ERROR",
-            "error_message": {"detail": "Invalid username/password."},
+            "code": "WRONG_USERNAME_OR_PASSWORD",
+            "error_message": "Entered username or password is wrong.",
         }
 
         response = self.client.get(self.url, **headers)
