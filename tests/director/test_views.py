@@ -1,12 +1,12 @@
-from django.test import TestCase
 from model_bakery import baker
 from rest_framework.reverse import reverse
-from rest_framework.test import APIClient
+
+from tests.base.test_base import BaseView
 
 
-class ActorViewTestCase(TestCase):
+class ActorViewTestCase(BaseView):
     def setUp(self) -> None:
-        self.client = APIClient()
+        super(ActorViewTestCase, self).setUp()
         self.url = reverse("director")
 
     def test_get_actor_with_correct_request(self):
@@ -18,7 +18,7 @@ class ActorViewTestCase(TestCase):
             perks=["writer", "producer", "director"],
         )
 
-        response = self.client.get(self.url, content_type="application/json")
+        response = self.client.get(self.url, **self.headers)
         json_response = response.json()
         result = json_response["results"][0]
 
