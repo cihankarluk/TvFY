@@ -28,15 +28,13 @@ class Actor(models.Model):
 
     @property
     def actor_born_at(self):
-        country = ""
-        if self.born_at:
+        if country := self.born_at:
             country = self.born_at.country
         return country
 
     @property
     def actor_died_at(self):
-        country = ""
-        if self.died_at:
+        if country := self.died_at:
             country = self.died_at.country
         return country
 
