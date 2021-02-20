@@ -6,9 +6,6 @@ from TvFY.director.tasks import fill_director_data
 
 
 class TasksTestCase(TestCase):
-    def setUp(self) -> None:
-        pass
-
     def test_fill_director_data_if_imdb_url_does_not_exists(self):
         director = baker.make("director.Director", imdb_url=None, born=None)
         fill_director_data()
