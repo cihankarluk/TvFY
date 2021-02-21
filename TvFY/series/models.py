@@ -10,7 +10,7 @@ class Series(models.Model):
     TYPE = "series"
     PREFIX = "SR"
 
-    tvfy_code = models.CharField(max_length=14)
+    tvfy_code = models.CharField(max_length=14, db_index=True, unique=True)
     name = models.CharField(max_length=255)
 
     creator = models.CharField(max_length=128, blank=True, null=True)
@@ -49,6 +49,9 @@ class Series(models.Model):
     language = models.ManyToManyField(Language)
 
     objects = SeriesManager()
+
+    class Meta:
+        ordering = ("id",)
 
     def __str__(self):
         return self.name
