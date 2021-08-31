@@ -1,9 +1,0 @@
-Django==3.1.2
-python-dotenv==0.14.0
-psycopg2==2.8.6
-django-rest-framework==0.1.0
-requests==2.24.0
-beautifulsoup4==4.9.3
-backoff-async==2.0.0
-pre-commit==2.10.0
-model-bakery==1.2.1

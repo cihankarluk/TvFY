@@ -1,5 +1,5 @@
 from TvFY.actor.models import Actor
-from TvFY.collector.imdb import IMDBScrapper
+from TvFY.collector.imdb import IMDBBase
 from TvFY.core.models import Country, Language
 from TvFY.genre.models import Genre
 from TvFY.series.models import Episode, Season, Series, SeriesCast
@@ -53,7 +53,7 @@ class SeriesService:
             "imdb_rate": self.search_data.get("total_imdb_rate"),
             "imdb_vote_count": self.search_data.get("total_imdb_vote_count"),
             "season_count": self.search_data.get("seasons"),
-            "imdb_creator_url": f'{IMDBScrapper.BASE_URL}{self.search_data.get("imdb_creator_url")}',  # NOQA
+            "imdb_creator_url": f'{IMDBBase.BASE_URL}{self.search_data.get("imdb_creator_url")}',  # NOQA
         }
 
         series = Series.objects.create(**series_data)
@@ -75,7 +75,7 @@ class SeriesCastService:
 
     @staticmethod
     def get_or_create_actor(actor_data: dict) -> Actor:
-        imdb_url = f'{IMDBScrapper.BASE_URL}{actor_data["imdb_actor_url"]}'
+        imdb_url = f'{IMDBBase.BASE_URL}{actor_data["imdb_actor_url"]}'
         actor, _ = Actor.objects.get_or_create(
             first_name=actor_data["first_name"],
             last_name=actor_data["last_name"],

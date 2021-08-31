@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:9.6
+    container_name: posgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+      POSTGRES_PASSWORD: kong

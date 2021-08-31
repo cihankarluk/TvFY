@@ -7,7 +7,7 @@ import aiohttp
 import backoff
 from bs4 import BeautifulSoup
 
-from TvFY.collector.imdb import IMDBScrapper
+from TvFY.collector.imdb import IMDBBase
 from TvFY.collector.tomatoes import TomatoesScrapper
 
 logger = logging.getLogger("main")
@@ -29,7 +29,7 @@ class Scrapper:
     def scrapper_class(url, soup, search_type):
         scrapper_map = {
             "www.rottentomatoes.com": TomatoesScrapper,
-            "www.imdb.com": IMDBScrapper,
+            "www.imdb.com": IMDBBase,
         }
         base_url = urlparse(url).netloc
         if cls := scrapper_map.get(base_url):

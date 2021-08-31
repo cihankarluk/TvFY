@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     "TvFY.director",
     "TvFY.genre",
     "TvFY.movies",
-    "TvFY.networks",
     "TvFY.search",
     "TvFY.series",
 ]
@@ -92,7 +91,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": os.getenv("DATABASE_NAME"),
         "USER": os.getenv("DATABASE_USER"),
         "PASSWORD": os.getenv("DATABASE_PASSWORD"),
@@ -173,7 +172,7 @@ LOGGING = {
             "propagate": True,
         },
         "django.db.backends": {
-            "level": "DEBUG",
+            "level": "WARNING",
             "handlers": ["log_to_stdout"],
         },
     },
