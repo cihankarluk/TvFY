@@ -7,6 +7,6 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: kong
-      POSTGRES_DB: kong
-      POSTGRES_PASSWORD: kong
+      POSTGRES_USER:
+      POSTGRES_DB:
+      POSTGRES_PASSWORD:
