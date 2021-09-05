@@ -147,6 +147,7 @@ STATIC_URL = "/static/"
 
 AUTH_USER_MODEL = "account.Account"
 
+# TODO: move this fields to proper address
 IMDB_CAST = "fullcredits"
 IMDB_SEASON = "episodes?season="
 IMDB_AWARDS = "awards"

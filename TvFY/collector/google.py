@@ -1,7 +1,4 @@
-from collections import OrderedDict
-
 import requests
-from bs4 import BeautifulSoup
 
 from TvFY.core.helpers import regex_search
 
@@ -10,11 +7,11 @@ class GoogleScrapper:
     def __init__(self, search_key):
         self.search_key = search_key
 
-    def google_search(self):
+    @property
+    def google_search(self) -> str:
         search_url = f"https://www.google.com/search?q={self.search_key}&hl=en-EN"
         search_response = requests.get(search_url)
-        soup = BeautifulSoup(search_response.content, "lxml")
-        return soup
+        return search_response.text
 
     @staticmethod
     def get_imdb_url(content: str) -> dict:
@@ -25,7 +22,7 @@ class GoogleScrapper:
 
     @staticmethod
     def get_rotten_tomatoes_url(content: str) -> dict:
-        regex_pattern = r"https://www.rottentomatoes.com/.+?/.+?(?<=/)"
+        regex_pattern = r"https://www.rottentomatoes.com/.+/.+?(?=&)"
         rotten_tomatoes_url = regex_search(content=content, pattern=regex_pattern)
         result = (
             {"rotten_tomatoes_url": rotten_tomatoes_url} if rotten_tomatoes_url else {}
@@ -53,50 +50,11 @@ class GoogleScrapper:
         result = {"seasons": int(seasons.strip())} if seasons else {}
         return result
 
-    def run_method(self, action: str, content: str):
-        action_class: dict = OrderedDict(
-            [
-                ("get_imdb_url", self.get_imdb_url),
-                ("get_rotten_tomatoes_url", self.get_rotten_tomatoes_url),
-                ("get_tv_com_rate", self.get_tv_com_rate),
-                ("get_seasons", self.get_seasons),
-            ]
-        )
-        action_method: classmethod = action_class[action]
-        return action_method(content=content)
-
-    def search_divs(self, soup):
-        actions = ["get_tv_com_rate", "get_seasons"]
-        repeat, result = None, {}
-        for div in soup.find_all("div"):
-            if (content := div.text) == repeat or not content:
-                repeat = content
-                continue
-            for index, action in enumerate(actions):
-                if data := self.run_method(action, content):
-                    actions.pop(index)
-                    result.update(data)
-            if not actions:
-                break
-        return result
-
-    def search_urls(self, soup):
-        actions = ["get_imdb_url", "get_rotten_tomatoes_url"]
-        repeat, result = None, {}
-        for div in soup.find_all("a", href=True):
-            if (content := div["href"]) == repeat or not content:
-                repeat = content
-                continue
-            for index, action in enumerate(actions):
-                if data := self.run_method(action, content):
-                    actions.pop(index)
-                    result.update(data)
-            if not actions:
-                break
-        return result
-
-    def run(self):
-        soup = self.google_search()
-        result = self.search_divs(soup)
-        result.update(self.search_urls(soup))
+    def run(self) -> dict:
+        content = self.google_search
+        result = {}
+        result.update(self.get_imdb_url(content))
+        result.update(self.get_rotten_tomatoes_url(content))
+        result.update(self.get_tv_com_rate(content))
+        result.update(self.get_seasons(content))
         return result

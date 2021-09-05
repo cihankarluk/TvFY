@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from typing import Union
+from typing import Optional, Union
 from urllib.parse import urlparse
 
 import aiohttp
@@ -8,7 +8,7 @@ import backoff
 from bs4 import BeautifulSoup
 
 from TvFY.collector.imdb import IMDBBase
-from TvFY.collector.tomatoes import TomatoesScrapper
+from TvFY.collector.tomatoes import TomatoesBase
 
 logger = logging.getLogger("main")
 
@@ -26,9 +26,9 @@ class Scrapper:
         return urls
 
     @staticmethod
-    def scrapper_class(url, soup, search_type):
+    def scrapper_class(url: str, soup: dict, search_type: str):
         scrapper_map = {
-            "www.rottentomatoes.com": TomatoesScrapper,
+            "www.rottentomatoes.com": TomatoesBase,
             "www.imdb.com": IMDBBase,
         }
         base_url = urlparse(url).netloc
@@ -50,12 +50,12 @@ class Scrapper:
         soup = BeautifulSoup(text, "html.parser")
         return {url: soup}
 
-    async def weed_out(self, url: str):
+    async def weed_out(self, url: str) -> dict:
         soup = await self.soup_response(url=url)
         cls = self.scrapper_class(url, soup, self.search_type)
         return cls.run()
 
-    async def run(self):
+    async def run(self) -> dict:
         results = {}
         tasks = [self.weed_out(url=url) for url in (self.urls or [])]
         for task in asyncio.as_completed(tasks):
