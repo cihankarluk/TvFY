@@ -24,9 +24,9 @@ class TomatoesMovieHomePage:
             "data-qa": "movie-info-item-value",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            genres = {"rt_genre": [
-                genre.strip() for genre in css_selection.text.split(",")
-            ]}
+            genres = {
+                "rt_genre": [genre.strip() for genre in css_selection.text.split(",")]
+            }
 
         return genres
 
@@ -102,7 +102,9 @@ class TomatoesSeriesHomePage:
             "data-qa": "audience-score",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            audience_rate = {"rt_audience_rate": css_selection.get_text(strip=True).replace("%", "")}
+            audience_rate = {
+                "rt_audience_rate": css_selection.get_text(strip=True).replace("%", "")
+            }
 
         return audience_rate
 
@@ -117,7 +119,7 @@ class TomatoesSeriesHomePage:
             "data-qa": "series-details-genre",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            genre = {"genres": [css_selection.get_text(strip=True)]}
+            genre = {"rt_genre": [css_selection.get_text(strip=True)]}
 
         return genre
 
@@ -161,6 +163,9 @@ class TomatoesBase(TomatoesMovieHomePage, TomatoesSeriesHomePage, SoupSelectionM
         self.search_type = search_type
 
     def run(self):
+        """
+        Keys: 'rt_genre', 'rt_tomatometer_rate', 'rt_audience_rate', 'network', 'storyline'
+        """
         result = {}
         if self.search_type == Movie.TYPE:
             result.update(self.get_movie_genre)

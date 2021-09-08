@@ -190,9 +190,7 @@ class IMDBPersonalData:
         }
         if css_selection := self.soup_selection(**soup_selection):
             born_date = {
-                "born_date": datetime.strptime(
-                    css_selection.time["datetime"], "%Y-%m-%d"
-                )
+                "born_date": datetime.strptime(css_selection.time["datetime"], "%Y-%m-%d")
             }
 
         return born_date
@@ -224,9 +222,7 @@ class IMDBPersonalData:
         }
         if css_selection := self.soup_selection(**soup_selection):
             died_date = {
-                "died_date": datetime.strptime(
-                    css_selection.time["datetime"], "%Y-%m-%d"
-                )
+                "died_date": datetime.strptime(css_selection.time["datetime"], "%Y-%m-%d")
             }
 
         return died_date
@@ -265,9 +261,7 @@ class IMDBPersonalData:
                 # If there is no oscar wins and nominations
                 result.update({"oscar_nominations": search})
 
-            wins, nominations = re.findall(
-                r"\d+", css_selection[-1].get_text(strip=True)
-            )
+            wins, nominations = re.findall(r"\d+", css_selection[-1].get_text(strip=True))
             result.update({"wins": wins, "nominations": nominations})
 
         return result
@@ -310,9 +304,7 @@ class IMDBRating:
         if css_selection := self.soup_selection(**soup_selection):
             selection_list = css_selection.get_text(strip=True).splitlines()
             # ['304,144', 'IMDb users have given aweighted averagevote of  8.7 / 10]
-            total_imdb_vote = {
-                "total_imdb_vote": int(selection_list[0].replace(",", ""))
-            }
+            total_imdb_vote = {"total_imdb_vote": int(selection_list[0].replace(",", ""))}
 
         return total_imdb_vote
 
@@ -608,6 +600,12 @@ class IMDBBase(
         self.search_type = search_type
 
     def run(self) -> dict:
+        """
+        Keys: 'total_imdb_vote', 'average_imdb_rate', 'wins', 'nominations',
+        1, 'imdb_genre', 'director', 'imdb_director_url', 'run_time',
+        'imdb_popularity', 'country', 'language', 'release_date', 'title',
+        'is_active', 'cast', 'usa_opening_weekend', 'ww_gross', 'budget'
+        """
         result = {}
         if self.EPISODES in self.url:
             result.update(self.get_episodes)

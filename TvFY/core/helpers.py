@@ -1,10 +1,9 @@
 import json
 import os
-import random
 import re
-import string
 from datetime import datetime
 from unittest.mock import Mock
+from uuid import uuid4
 
 import bs4
 from django.core import validators
@@ -80,10 +79,7 @@ def get_date_time(date: str, pattern: str) -> datetime:
 
 
 def get_random_string(length):
-    # Random string with the combination of lower and upper case
-    letters = string.ascii_letters
-    result_str = "".join(random.choice(letters) for _ in range(length))
-    return result_str
+    return str(uuid4())[:length]
 
 
 def read_file(path, is_json=False):

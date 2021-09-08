@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from typing import Optional, Union
+from typing import Union
 from urllib.parse import urlparse
 
 import aiohttp
