@@ -3,7 +3,6 @@
 APP_STATE=TEST
 SECRET_KEY="test_secret_key"
 ALLOWED_HOSTS=* # Always set allowed hosts on staging and prod
-DJANGO_SETTINGS_MODULE=config.settings
 
 # Database connection parameters
 DATABASE_USER=
