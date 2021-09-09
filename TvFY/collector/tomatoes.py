@@ -21,7 +21,7 @@ class TomatoesMovieHomePage:
             "method": self.find,
             "tag": "div",
             "class": "meta-value genre",
-            "data-qa": "movie-info-item-value",
+            "dataset-qa": "movie-info-item-value",
         }
         if css_selection := self.soup_selection(**soup_selection):
             genres = {
@@ -38,7 +38,7 @@ class TomatoesMovieHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "a",
-            "data-qa": "movie-info-director",
+            "dataset-qa": "movie-info-director",
         }
         if css_selection := self.soup_selection(**soup_selection):
             director = {
@@ -56,7 +56,7 @@ class TomatoesMovieHomePage:
             "soup": self.soup,
             "method": self.find,
             "class": "scoreboard",
-            "data-qa": "score-panel",
+            "dataset-qa": "score-panel",
         }
         if css_selection := self.soup_selection(**soup_selection):
             ratings = {
@@ -81,7 +81,7 @@ class TomatoesSeriesHomePage:
             "method": self.find,
             "tag": "span",
             "class": "mop-ratings-wrap__percentage",
-            "data-qa": "tomatometer",
+            "dataset-qa": "tomatometer",
         }
         if css_selection := self.soup_selection(**soup_selection):
             average_tomatometer = {
@@ -99,7 +99,7 @@ class TomatoesSeriesHomePage:
             "method": self.find,
             "tag": "span",
             "class": "mop-ratings-wrap__percentage",
-            "data-qa": "audience-score",
+            "dataset-qa": "audience-score",
         }
         if css_selection := self.soup_selection(**soup_selection):
             audience_rate = {
@@ -116,7 +116,7 @@ class TomatoesSeriesHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "td",
-            "data-qa": "series-details-genre",
+            "dataset-qa": "series-details-genre",
         }
         if css_selection := self.soup_selection(**soup_selection):
             genre = {"rt_genre": [css_selection.get_text(strip=True)]}
@@ -131,7 +131,7 @@ class TomatoesSeriesHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "td",
-            "data-qa": "series-details-network",
+            "dataset-qa": "series-details-network",
         }
         if css_selection := self.soup_selection(**soup_selection):
             network = {"network": css_selection.get_text(strip=True)}

@@ -7,8 +7,8 @@ from TvFY.core.models import Country
 class Director(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
-    imdb_url = models.URLField(blank=True, null=True, unique=True)
-    rt_url = models.URLField(blank=True, null=True, unique=True)
+    imdb_director_url = models.URLField(blank=True, null=True, unique=True)
+    rt_director_url = models.URLField(blank=True, null=True, unique=True)
     born_date = models.DateField(null=True)
     born_at = models.ForeignKey(
         Country, on_delete=models.SET_NULL, null=True, related_name="director_born_at"

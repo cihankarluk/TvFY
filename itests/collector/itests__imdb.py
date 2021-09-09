@@ -1,6 +1,6 @@
+from itests.base import BaseTestCase
 from TvFY.movies.models import Movie
 from TvFY.series.models import Series
-from itests.base import BaseTestCase
 
 
 class IMDBEpisodesTestCase(BaseTestCase):
@@ -67,49 +67,63 @@ class IMDBCastTestCase(BaseTestCase):
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.series_expected_attrs, results=result["cast"])
+        )
 
     def test__get_cast__breaking_bad(self):
         url = "https://www.imdb.com/title/tt0903747/fullcredits"
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.series_expected_attrs, results=result["cast"])
+        )
 
     def test__get_cast__raised_by_wolves(self):
         url = "https://www.imdb.com/title/tt9170108/fullcredits"
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.series_expected_attrs, results=result["cast"])
+        )
 
     def test__get_cast__hunter_x_hunter(self):
         url = "https://www.imdb.com/title/tt2098220/fullcredits"
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.series_expected_attrs, results=result["cast"])
+        )
 
     def test__get_cast__lotr(self):
         url = "https://www.imdb.com/title/tt0120737/fullcredits"
 
         result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"])
+        )
 
     def test__get_cast__the_dark_knight(self):
         url = "https://www.imdb.com/title/tt0468569/fullcredits"
 
         result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"])
+        )
 
     def test__get_cast__monsters(self):
         url = "https://www.imdb.com/title/tt0198781/fullcredits"
 
         result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"]))
+        self.assertTrue(
+            self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"])
+        )
 
 
 class IMDBAwardsTestCase(BaseTestCase):
@@ -211,42 +225,42 @@ class IMDBRatingTestCase(BaseTestCase):
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(result["total_imdb_vote"])
+        self.assertTrue(result["imdb_vote_count"])
 
     def test__get_total_vote__hunter_x_hunter(self):
         url = "https://www.imdb.com/title/tt2098220/ratings/"
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(result["total_imdb_vote"])
+        self.assertTrue(result["imdb_vote_count"])
 
     def test__get_total_vote__lotr(self):
         url = "https://www.imdb.com/title/tt0120737/ratings/"
 
         result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
 
-        self.assertTrue(result["total_imdb_vote"])
+        self.assertTrue(result["imdb_vote_count"])
 
     def test__get_average_rating__the_boys(self):
         url = "https://www.imdb.com/title/tt1190634/ratings/"
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(result["average_imdb_rate"])
+        self.assertTrue(result["imdb_rate"])
 
     def test__get_average_rating__hunter_x_hunter(self):
         url = "https://www.imdb.com/title/tt2098220/ratings/"
 
         result = self.get_imdb_result(url=url, search_type=Series.TYPE)
 
-        self.assertTrue(result["average_imdb_rate"])
+        self.assertTrue(result["imdb_rate"])
 
     def test__get_average_rating__lotr(self):
         url = "https://www.imdb.com/title/tt0120737/ratings/"
 
         result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
 
-        self.assertTrue(result["average_imdb_rate"])
+        self.assertTrue(result["imdb_rate"])
 
 
 class IMDBHomePageTestCase(BaseTestCase):

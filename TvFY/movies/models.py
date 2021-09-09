@@ -11,24 +11,23 @@ class Movie(models.Model):
     TYPE = "movie"
     PREFIX = "MV"
 
-    tvfy_code = models.CharField(max_length=10, db_index=True)
+    tvfy_code = models.CharField(max_length=14, db_index=True, unique=True)
 
-    name = models.CharField(max_length=255)
-    creator = models.CharField(max_length=128, blank=True, null=True)
+    title = models.CharField(max_length=255)
     storyline = models.TextField()
-    release_date = models.DateField(blank=True, null=True)
-    run_time = models.PositiveIntegerField(blank=True, null=True)
-    rt_tomatometer = models.PositiveIntegerField(blank=True, null=True)
-    rt_tomatometer_count = models.PositiveIntegerField(blank=True, null=True)
-    rt_audience_rate = models.PositiveIntegerField(blank=True, null=True)
-    rt_audience_rate_count = models.PositiveIntegerField(blank=True, null=True)
-    imdb_popularity = models.PositiveIntegerField(blank=True, null=True)
-    imdb_rate = models.FloatField(blank=True, null=True)
-    imdb_vote_count = models.PositiveIntegerField(blank=True, null=True)
-    wins = models.PositiveIntegerField(blank=True, null=True, default=0)
-    nominations = models.PositiveIntegerField(blank=True, null=True, default=0)
-    budget = models.PositiveIntegerField(blank=True, null=True, default=0)
+    release_date = models.DateField(null=True)
+    run_time = models.PositiveIntegerField(null=True)
+    rt_tomatometer_rate = models.PositiveIntegerField(null=True)
+    rt_audience_rate = models.PositiveIntegerField(null=True)
+    imdb_popularity = models.PositiveIntegerField(null=True)
+    imdb_rate = models.FloatField(null=True)
+    imdb_vote_count = models.PositiveIntegerField(null=True)
+    wins = models.PositiveIntegerField(null=True, default=0)
+    nominations = models.PositiveIntegerField(null=True, default=0)
+    budget = models.PositiveIntegerField(null=True, default=0)
+    budget_currency = models.CharField(max_length=255, null=True)
     usa_opening_weekend = models.PositiveIntegerField(blank=True, null=True, default=0)
+    usa_opening_weekend_currency = models.CharField(max_length=255, null=True)
     ww_gross = models.PositiveIntegerField(blank=True, null=True, default=0)
     imdb_url = models.URLField(blank=True, null=True)
     rotten_tomatoes_url = models.URLField(blank=True, null=True)
@@ -41,7 +40,7 @@ class Movie(models.Model):
     objects = MovieManager()
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class MovieCast(models.Model):

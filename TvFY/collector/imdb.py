@@ -90,6 +90,7 @@ class IMDBCast:
     get_name: classmethod
     soup: BeautifulSoup
     search_type: str
+    BASE_URL: str
 
     @staticmethod
     def cast_information(cast_data: str) -> Union[bool, dict]:
@@ -141,7 +142,9 @@ class IMDBCast:
                     actor_detail = cast.find("td", class_="").a
                     actor = self.get_name(actor_detail.text.strip())
                     actor.update(cast_information)
-                    actor.update({"imdb_actor_url": actor_detail["href"]})
+                    actor.update(
+                        {"imdb_actor_url": f'{self.BASE_URL}{actor_detail["href"]}'}
+                    )
                     results.append(actor)
             cast = {"cast": results}
 
@@ -293,7 +296,7 @@ class IMDBRating:
 
     @property
     def get_total_vote(self) -> dict:
-        total_imdb_vote = {}
+        imdb_vote_count = {}
 
         soup_selection = {
             "soup": self.soup,
@@ -304,13 +307,13 @@ class IMDBRating:
         if css_selection := self.soup_selection(**soup_selection):
             selection_list = css_selection.get_text(strip=True).splitlines()
             # ['304,144', 'IMDb users have given aweighted averagevote of  8.7 / 10]
-            total_imdb_vote = {"total_imdb_vote": int(selection_list[0].replace(",", ""))}
+            imdb_vote_count = {"imdb_vote_count": int(selection_list[0].replace(",", ""))}
 
-        return total_imdb_vote
+        return imdb_vote_count
 
     @property
     def get_average_rating(self) -> dict:
-        average_imdb_rate = {}
+        imdb_rate = {}
 
         soup_selection = {
             "soup": self.soup,
@@ -319,9 +322,9 @@ class IMDBRating:
             "class": "ipl-rating-star__rating",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            average_imdb_rate = {"average_imdb_rate": float(css_selection.text)}
+            imdb_rate = {"imdb_rate": float(css_selection.text)}
 
-        return average_imdb_rate
+        return imdb_rate
 
 
 class IMDBHomePage:
@@ -330,6 +333,7 @@ class IMDBHomePage:
     find_all: str
     soup_selection: classmethod
     soup: BeautifulSoup
+    BASE_URL: str
 
     @property
     def get_genre(self) -> dict:
@@ -339,7 +343,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "div",
-            "data-testid": "genres",
+            "dataset-testid": "genres",
         }
         if css_selection := self.soup_selection(**soup_selection):
             genres = {"imdb_genre": css_selection.get_text("-").split("-")}
@@ -359,7 +363,7 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             creator = {
                 "creator": css_selection.a.text.strip(),
-                "imdb_creator_url": css_selection.a["href"],
+                "imdb_creator_url": f'{self.BASE_URL}{css_selection.a["href"]}',
             }
 
         return creator
@@ -377,7 +381,7 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             director = {
                 "director": css_selection.text,
-                "imdb_director_url": css_selection["href"],
+                "imdb_director_url": f'{self.BASE_URL}{css_selection["href"]}',
             }
 
         return director
@@ -390,7 +394,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "ul",
-            "data-testid": "hero-title-block__metadata",
+            "dataset-testid": "hero-title-block__metadata",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # '2h 58min' or '1h' or '24min'
@@ -408,7 +412,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "div",
-            "data-testid": "hero-rating-bar__popularity__score",
+            "dataset-testid": "hero-rating-bar__popularity__score",
         }
         if css_selection := self.soup_selection(**soup_selection):
             imdb_popularity = {"imdb_popularity": css_selection.text}
@@ -423,7 +427,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "data-testid": "title-details-origin",
+            "dataset-testid": "title-details-origin",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Countries of origin', 'New Zealand', 'United States']
@@ -440,7 +444,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "data-testid": "title-details-languages",
+            "dataset-testid": "title-details-languages",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Languages', 'English', 'Sindarin']
@@ -457,7 +461,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "data-testid": "title-details-releasedate",
+            "dataset-testid": "title-details-releasedate",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Release date', 'December 21, 2001 (Turkey)']
@@ -483,7 +487,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "h1",
-            "data-testid": "hero-title-block__title",
+            "dataset-testid": "hero-title-block__title",
         }
         if css_selection := self.soup_selection(**soup_selection):
             title = {"title": css_selection.text.strip()}
@@ -515,7 +519,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "data-testid": "title-boxoffice-budget",
+            "dataset-testid": "title-boxoffice-budget",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Budget', '$93,000,000 (estimated)']
@@ -532,7 +536,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "data-testid": "title-boxoffice-openingweekenddomestic",
+            "dataset-testid": "title-boxoffice-openingweekenddomestic",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # TODO: need currency control
@@ -552,7 +556,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "data-testid": "title-boxoffice-cumulativeworldwidegross",
+            "dataset-testid": "title-boxoffice-cumulativeworldwidegross",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Gross worldwide', '$897,690,072']
@@ -601,7 +605,7 @@ class IMDBBase(
 
     def run(self) -> dict:
         """
-        Keys: 'total_imdb_vote', 'average_imdb_rate', 'wins', 'nominations',
+        Keys: 'imdb_vote_count', 'imdb_rate', 'wins', 'nominations',
         1, 'imdb_genre', 'director', 'imdb_director_url', 'run_time',
         'imdb_popularity', 'country', 'language', 'release_date', 'title',
         'is_active', 'cast', 'usa_opening_weekend', 'ww_gross', 'budget'

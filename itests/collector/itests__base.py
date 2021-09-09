@@ -34,8 +34,8 @@ class ScrapperTestCase(BaseTestCase):
             "release_date",
             "title",
             "is_active",
-            "average_imdb_rate",
-            "total_imdb_vote",
+            "imdb_rate",
+            "imdb_vote_count",
         ]
 
         urls = [
@@ -72,8 +72,8 @@ class ScrapperTestCase(BaseTestCase):
             "language",
             "release_date",
             "title",
-            "average_imdb_rate",
-            "total_imdb_vote",
+            "imdb_rate",
+            "imdb_vote_count",
             "budget",
             "usa_opening_weekend",
             "ww_gross",

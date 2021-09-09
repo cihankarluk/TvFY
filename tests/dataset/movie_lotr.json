@@ -1,0 +1,856 @@
+{
+   "imdb_vote_count":1726982,
+   "imdb_rate":8.8,
+   "wins":120,
+   "nominations":126,
+   "cast":[
+      {
+         "first_name":"Alan",
+         "last_name":"Howard",
+         "character_name":"Voice of the Ring",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0397102/"
+      },
+      {
+         "first_name":"Noel",
+         "last_name":"Appleby",
+         "character_name":"Everard Proudfoot",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0032370/"
+      },
+      {
+         "first_name":"Sean",
+         "last_name":"Astin",
+         "character_name":"Sam",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000276/"
+      },
+      {
+         "first_name":"Sala",
+         "last_name":"Baker",
+         "character_name":"Sauron",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1019674/"
+      },
+      {
+         "first_name":"Sean",
+         "last_name":"Bean",
+         "character_name":"Boromir",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000293/"
+      },
+      {
+         "first_name":"Cate",
+         "last_name":"Blanchett",
+         "character_name":"Galadriel",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000949/"
+      },
+      {
+         "first_name":"Orlando",
+         "last_name":"Bloom",
+         "character_name":"Legolas",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0089217/"
+      },
+      {
+         "first_name":"Billy",
+         "last_name":"Boyd",
+         "character_name":"Pippin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0101710/"
+      },
+      {
+         "first_name":"Marton",
+         "last_name":"Csokas",
+         "character_name":"Celeborn",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0190744/"
+      },
+      {
+         "first_name":"Megan",
+         "last_name":"Edwards",
+         "character_name":"Mrs. Proudfoot",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1104283/"
+      },
+      {
+         "first_name":"Michael",
+         "last_name":"Elsworth",
+         "character_name":"Gondorian Archivist",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1096480/"
+      },
+      {
+         "first_name":"Mark",
+         "last_name":"Ferguson",
+         "character_name":"Gil-galad",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0272527/"
+      },
+      {
+         "first_name":"Ian",
+         "last_name":"Holm",
+         "character_name":"Bilbo",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000453/"
+      },
+      {
+         "first_name":"Christopher",
+         "last_name":"Lee",
+         "character_name":"Saruman",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000489/"
+      },
+      {
+         "first_name":"Lawrence",
+         "last_name":"Makoare",
+         "character_name":"Lurtz",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0538692/"
+      },
+      {
+         "first_name":"Andy",
+         "last_name":"Serkis",
+         "character_name":"Gollum",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0785227/"
+      },
+      {
+         "first_name":"Brent",
+         "last_name":"McIntyre",
+         "character_name":"Witch-king",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1098595/"
+      },
+      {
+         "first_name":"Ian",
+         "last_name":"McKellen",
+         "character_name":"Gandalf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0005212/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"McKenzie",
+         "character_name":"Elendil",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1013159/"
+      },
+      {
+         "first_name":"Sarah",
+         "last_name":"McLeod",
+         "character_name":"Rosie Cotton",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0572867/"
+      },
+      {
+         "first_name":"Dominic",
+         "last_name":"Monaghan",
+         "character_name":"Merry",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0597480/"
+      },
+      {
+         "first_name":"Viggo",
+         "last_name":"Mortensen",
+         "character_name":"Aragorn",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0001557/"
+      },
+      {
+         "first_name":"Ian",
+         "last_name":"Mune",
+         "character_name":"Bounder",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0612786/"
+      },
+      {
+         "first_name":"Craig",
+         "last_name":"Parker",
+         "character_name":"Haldir",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0662164/"
+      },
+      {
+         "first_name":"Cameron",
+         "last_name":"Rhodes",
+         "character_name":"Farmer Maggot",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0722397/"
+      },
+      {
+         "first_name":"John",
+         "last_name":"Rhys-Davies",
+         "character_name":"Gimli",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0722636/"
+      },
+      {
+         "first_name":"Martyn",
+         "last_name":"Sanderson",
+         "character_name":"Gate Keeper",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0761809/"
+      },
+      {
+         "first_name":"Harry",
+         "last_name":"Sinclair",
+         "character_name":"Isildur",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0801625/"
+      },
+      {
+         "first_name":"Liv",
+         "last_name":"Tyler",
+         "character_name":"Arwen",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000239/"
+      },
+      {
+         "first_name":"David",
+         "last_name":"Weatherley",
+         "character_name":"Barliman Butterbur",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0915750/"
+      },
+      {
+         "first_name":"Hugo",
+         "last_name":"Weaving",
+         "character_name":"Elrond",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0915989/"
+      },
+      {
+         "first_name":"Elijah",
+         "last_name":"Wood",
+         "character_name":"Frodo",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0000704/"
+      },
+      {
+         "first_name":"Victoria",
+         "last_name":"Beynon-Cole",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1113484/"
+      },
+      {
+         "first_name":"Lee",
+         "last_name":"Hartley",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1101755/"
+      },
+      {
+         "first_name":"Sam",
+         "last_name":"La Hood",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1114489/"
+      },
+      {
+         "first_name":"Chris",
+         "last_name":"Streeter",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0834115/"
+      },
+      {
+         "first_name":"Jonathan",
+         "last_name":"Jordan",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1180112/"
+      },
+      {
+         "first_name":"Semi",
+         "last_name":"Kuresa",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1114479/"
+      },
+      {
+         "first_name":"Clinton",
+         "last_name":"Ulyatt",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0880770/"
+      },
+      {
+         "first_name":"Paul",
+         "last_name":"Bryson",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1115767/"
+      },
+      {
+         "first_name":"Lance",
+         "last_name":"Fabian Kemp",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1114380/"
+      },
+      {
+         "first_name":"Jono",
+         "last_name":"Manks",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1115930/"
+      },
+      {
+         "first_name":"Ben",
+         "last_name":"Price",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1862062/"
+      },
+      {
+         "first_name":"Phil",
+         "last_name":"Grieve",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1115856/"
+      },
+      {
+         "first_name":"Billy",
+         "last_name":"Jackson",
+         "character_name":"Cute Hobbit Child",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0413309/"
+      },
+      {
+         "first_name":"Katie",
+         "last_name":"Jackson",
+         "character_name":"Cute Hobbit Child",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1116175/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"Corrigan",
+         "character_name":"Otho (extended edition)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0992227/"
+      },
+      {
+         "first_name":"Lori",
+         "last_name":"Dungey",
+         "character_name":"Mrs. Bracegirdle (extended edition)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0242256/"
+      },
+      {
+         "first_name":"Norman",
+         "last_name":"Forsey",
+         "character_name":"Gaffer Gamgee (extended edition)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0286852/"
+      },
+      {
+         "first_name":"William",
+         "last_name":"Johnson",
+         "character_name":"Old Noakes (extended edition)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0424592/"
+      },
+      {
+         "first_name":"Thomas",
+         "last_name":"McGinty",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1224412/"
+      },
+      {
+         "first_name":"Elizabeth",
+         "last_name":"Moody",
+         "character_name":"Lobelia (extended edition)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0600473/"
+      },
+      {
+         "first_name":"Kate",
+         "last_name":"O'Rourke",
+         "character_name":"Hero Orcs",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1225722/"
+      },
+      {
+         "first_name":"Brian",
+         "last_name":"Sergent",
+         "character_name":"Ted Sandyman (extended edition)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0785082/"
+      },
+      {
+         "first_name":"Gino",
+         "last_name":"Acevedo",
+         "character_name":"Ring Dwarf-lord",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0009707/"
+      },
+      {
+         "first_name":"Betty",
+         "last_name":"Adams",
+         "character_name":"Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1558540/"
+      },
+      {
+         "first_name":"Daniel",
+         "last_name":"Andrews",
+         "character_name":"Orc",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1836352/"
+      },
+      {
+         "first_name":"Matt",
+         "last_name":"Appleton",
+         "character_name":"Council Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0032434/"
+      },
+      {
+         "first_name":"Rodney",
+         "last_name":"Bane",
+         "character_name":"Orc",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2493977/"
+      },
+      {
+         "first_name":"Timothy",
+         "last_name":"Bartlett",
+         "character_name":"Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0058910/"
+      },
+      {
+         "first_name":"Jarl",
+         "last_name":"Benzon",
+         "character_name":"Last Alliance Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400476/"
+      },
+      {
+         "first_name":"Jørn",
+         "last_name":"Benzon",
+         "character_name":"Lothlorien Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1747358/"
+      },
+      {
+         "first_name":"Lynden",
+         "last_name":"Berryman",
+         "character_name":"Uruk at Amon Hen",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3489159/"
+      },
+      {
+         "first_name":"Bob",
+         "last_name":"Blackwell",
+         "character_name":"Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2263707/"
+      },
+      {
+         "first_name":"Ben",
+         "last_name":"Britton",
+         "character_name":"Last Alliance Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1401687/"
+      },
+      {
+         "first_name":"Jed",
+         "last_name":"Brophy",
+         "character_name":"Ringwraith",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0112400/"
+      },
+      {
+         "first_name":"Riley",
+         "last_name":"Brophy",
+         "character_name":"Cute Hobbit Child",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2666895/"
+      },
+      {
+         "first_name":"Ryan",
+         "last_name":"Carey",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0137032/"
+      },
+      {
+         "first_name":"Norman",
+         "last_name":"Cates",
+         "character_name":"Party Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1113630/"
+      },
+      {
+         "first_name":"Rachel",
+         "last_name":"Clentworth",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3723566/"
+      },
+      {
+         "first_name":"Randall",
+         "last_name":"William Cook",
+         "character_name":"Cave Troll",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0177241/"
+      },
+      {
+         "first_name":"Sabine",
+         "last_name":"Crossen",
+         "character_name":"Rivendell Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1644336/"
+      },
+      {
+         "first_name":"Tack",
+         "last_name":"Daniel",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8353680/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"Daube",
+         "character_name":"Khai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0202219/"
+      },
+      {
+         "first_name":"Mana",
+         "last_name":"Hira Davis",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1397662/"
+      },
+      {
+         "first_name":"Shane",
+         "last_name":"Dawson",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0206266/"
+      },
+      {
+         "first_name":"Branko",
+         "last_name":"Dordevich",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1397730/"
+      },
+      {
+         "first_name":"Siaosi",
+         "last_name":"Fonua",
+         "character_name":"Orc",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1929366/"
+      },
+      {
+         "first_name":"Kester",
+         "last_name":"Fordham",
+         "character_name":"Last Alliance Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1397866/"
+      },
+      {
+         "first_name":"Xander",
+         "last_name":"Forterie",
+         "character_name":"Ring Dwarf-lord",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0287205/"
+      },
+      {
+         "first_name":"Ben",
+         "last_name":"Fransham",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0291740/"
+      },
+      {
+         "first_name":"Phoebe",
+         "last_name":"Gittins",
+         "character_name":"Cute Hobbit Child",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3907831/"
+      },
+      {
+         "first_name":"Warren",
+         "last_name":"Green",
+         "character_name":"Isengard Orc Blacksmith",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0338402/"
+      },
+      {
+         "first_name":"Winham",
+         "last_name":"Hammond",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1398027/"
+      },
+      {
+         "first_name":"Jonathan",
+         "last_name":"Harding",
+         "character_name":"Council Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400563/"
+      },
+      {
+         "first_name":"Zo",
+         "last_name":"Hartley",
+         "character_name":"Kissing Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0366899/"
+      },
+      {
+         "first_name":"Taea",
+         "last_name":"Hartwell",
+         "character_name":"Cute Hobbit Child",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0367290/"
+      },
+      {
+         "first_name":"Ray",
+         "last_name":"Henwood",
+         "character_name":"Council Man",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0378309/"
+      },
+      {
+         "first_name":"Dave",
+         "last_name":"Houma",
+         "character_name":"Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1584709/"
+      },
+      {
+         "first_name":"Lani",
+         "last_name":"Jackson",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400888/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"Jackson",
+         "character_name":"Albert Dreary",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0001392/"
+      },
+      {
+         "first_name":"Gareth",
+         "last_name":"Jensen",
+         "character_name":"Rivendell Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400358/"
+      },
+      {
+         "first_name":"Ralph",
+         "last_name":"Johnson",
+         "character_name":"Council Man",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4317270/"
+      },
+      {
+         "first_name":"Stu",
+         "last_name":"Johnson",
+         "character_name":"Isengard Orc Blacksmith",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400883/"
+      },
+      {
+         "first_name":"Tim",
+         "last_name":"Kano",
+         "character_name":"Gondorian Citizen",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2922563/"
+      },
+      {
+         "first_name":"Sam",
+         "last_name":"Kelly",
+         "character_name":"Council Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1262711/"
+      },
+      {
+         "first_name":"Jeff",
+         "last_name":"Kingsford-Brown",
+         "character_name":"Party Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1398308/"
+      },
+      {
+         "first_name":"Greg",
+         "last_name":"Lane",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1677583/"
+      },
+      {
+         "first_name":"Alan",
+         "last_name":"Lee",
+         "character_name":"Ring King of Men",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0496769/"
+      },
+      {
+         "first_name":"Sacha",
+         "last_name":"Lee",
+         "character_name":"Arms of Gollum",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0498184/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"Lyon",
+         "character_name":"Isengard Orc Blacksmith",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400884/"
+      },
+      {
+         "first_name":"Marta",
+         "last_name":"Martí",
+         "character_name":"Village Female Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6419667/"
+      },
+      {
+         "first_name":"Sharon",
+         "last_name":"Maxwell",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1402467/"
+      },
+      {
+         "first_name":"Richard",
+         "last_name":"Maybery",
+         "character_name":"Ring Dwarf-lord",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0562250/"
+      },
+      {
+         "first_name":"Bret",
+         "last_name":"McKenzie",
+         "character_name":"Figwit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1235366/"
+      },
+      {
+         "first_name":"Tim",
+         "last_name":"McLachlan",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1398610/"
+      },
+      {
+         "first_name":"Liz",
+         "last_name":"Merton",
+         "character_name":"Hobbit Band Member",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6228188/"
+      },
+      {
+         "first_name":"Arnold",
+         "last_name":"Montey",
+         "character_name":"Burning Ringwraith",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7419291/"
+      },
+      {
+         "first_name":"Dean",
+         "last_name":"Morganty",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2781139/"
+      },
+      {
+         "first_name":"Greg",
+         "last_name":"'Danger' Morrison",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1398693/"
+      },
+      {
+         "first_name":"Blair",
+         "last_name":"Morton",
+         "character_name":"Council Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1400645/"
+      },
+      {
+         "first_name":"Andrew",
+         "last_name":"Munro",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0613088/"
+      },
+      {
+         "first_name":"David",
+         "last_name":"J. Muzzerall",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1319651/"
+      },
+      {
+         "first_name":"Timothy",
+         "last_name":"Patrick",
+         "character_name":"Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7541034/"
+      },
+      {
+         "first_name":"Christy",
+         "last_name":"Qulliam",
+         "character_name":"Galadriel's Elf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3245719/"
+      },
+      {
+         "first_name":"Shane",
+         "last_name":"Rangi",
+         "character_name":"Witch-king",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1432313/"
+      },
+      {
+         "first_name":"Chris",
+         "last_name":"Reid",
+         "character_name":"Orc",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1308942/"
+      },
+      {
+         "first_name":"Steve",
+         "last_name":"Reinsfield",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1319947/"
+      },
+      {
+         "first_name":"Larry",
+         "last_name":"Rew",
+         "character_name":"Ring King of Men",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1659162/"
+      },
+      {
+         "first_name":"Grant",
+         "last_name":"Roa",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1169385/"
+      },
+      {
+         "first_name":"Thomas",
+         "last_name":"Robins",
+         "character_name":"Hand of Gollum",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0992718/"
+      },
+      {
+         "first_name":"Vincent",
+         "last_name":"Roxburgh",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1399073/"
+      },
+      {
+         "first_name":"Chris",
+         "last_name":"Ryan",
+         "character_name":"Breelander",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0752468/"
+      },
+      {
+         "first_name":"Paul",
+         "last_name":"Shapcott",
+         "character_name":"Burning Ringwraith",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0788425/"
+      },
+      {
+         "first_name":"Samuel",
+         "last_name":"E. Shore",
+         "character_name":"Refugee",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3176878/"
+      },
+      {
+         "first_name":"Skeleton",
+         "last_name":"",
+         "character_name":"Skeleton #1",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2213817/"
+      },
+      {
+         "first_name":"Mike",
+         "last_name":"Stearne",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3511440/"
+      },
+      {
+         "first_name":"Andrew",
+         "last_name":"Stehlin",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1399271/"
+      },
+      {
+         "first_name":"Ken",
+         "last_name":"Stratton",
+         "character_name":"Isengard Orc",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1962073/"
+      },
+      {
+         "first_name":"Jo",
+         "last_name":"Surgison",
+         "character_name":"Hobbit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3383126/"
+      },
+      {
+         "first_name":"John",
+         "last_name":"Turner",
+         "character_name":"Orc",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1577978/"
+      },
+      {
+         "first_name":"James",
+         "last_name":"Waterhouse-Brown",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1399543/"
+      },
+      {
+         "first_name":"Josh",
+         "last_name":"Widdicombe",
+         "character_name":"Hobbit #3",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4073381/"
+      },
+      {
+         "first_name":"Tim",
+         "last_name":"Wong",
+         "character_name":"Uruk-hai",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1249399/"
+      },
+      {
+         "first_name":"Robert",
+         "last_name":"Young",
+         "character_name":"Goblin",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1397133/"
+      }
+   ],
+   "rt_genre":[
+      "Fantasy",
+      "Adventure"
+   ],
+   "rt_director":{
+      "first_name":"Peter",
+      "last_name":"Jackson"
+   },
+   "rt_director_url":"https://www.rottentomatoes.com/celebrity/peter_jackson",
+   "rt_audience_rate":"95",
+   "rt_tomatometer_rate":"91",
+   "storyline":"The future of civilization rests in the fate of the One Ring, which has been lost for centuries. Powerful forces are unrelenting in their search for it. But fate has placed it in the hands of a young Hobbit named Frodo Baggins (Elijah Wood), who inherits the Ring and steps into legend. A daunting task lies ahead for Frodo when he becomes the Ringbearer - to destroy the One Ring in the fires of Mount Doom where it was forged.",
+   "imdb_genre":[
+      "Action",
+      "Adventure",
+      "Drama"
+   ],
+   "director":"Peter Jackson",
+   "imdb_director_url":"https://www.imdb.com/name/nm0001392/?ref_=tt_ov_dr",
+   "run_time":178,
+   "imdb_popularity":"117",
+   "country":[
+      "New Zealand",
+      "United States"
+   ],
+   "language":[
+      "English",
+      "Sindarin"
+   ],
+   "release_date": "2001-12-19",
+   "title":"The Lord of the Rings: The Fellowship of the Ring",
+   "budget":"93000000",
+   "budget_currency": "USD",
+   "usa_opening_weekend":"47211490",
+   "usa_opening_weekend_currency": "USD",
+   "ww_gross":"897690072",
+   "imdb_url": "https://www.imdb.com/title/tt0120737/",
+   "rotten_tomatoes_url": "https://www.rottentomatoes.com/m/the_lord_of_the_rings_the_fellowship_of_the_ring"
+}
