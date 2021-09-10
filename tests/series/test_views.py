@@ -1,7 +1,7 @@
 from model_bakery import baker
 from rest_framework.reverse import reverse
 
-from tests.base.test_base import BaseView
+from tests.test_base import BaseView
 from TvFY.core.helpers import read_file
 
 
@@ -12,7 +12,7 @@ class SeriesViewTestCase(BaseView):
         self.series_detail_url = reverse(
             "series_detail", kwargs={"tvfy_code": "test_tvfy_code"}
         )
-        json_file = read_file("tests/data/series_data.json", is_json=True)
+        json_file = read_file("tests/dataset/series_data.json", is_json=True)
         baker.make("series.Series", **json_file)
 
     def test_get_series_with_correct_request(self):

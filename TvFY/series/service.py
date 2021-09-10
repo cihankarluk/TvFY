@@ -51,7 +51,7 @@ class SeriesService:
             "rotten_tomatoes_url": self.search_data.get("rotten_tomatoes_url"),
             "end_date": self.search_data.get("end_date"),
             "imdb_rate": self.search_data.get("total_imdb_rate"),
-            "imdb_vote_count": self.search_data.get("total_imdb_vote_count"),
+            "imdb_vote_count": self.search_data.get("imdb_vote_count"),
             "season_count": self.search_data.get("seasons"),
             "imdb_creator_url": f'{IMDBBase.BASE_URL}{self.search_data.get("imdb_creator_url")}',  # NOQA
         }

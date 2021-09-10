@@ -2,6 +2,7 @@ import json
 import os
 import re
 from datetime import datetime
+from threading import local
 from unittest.mock import Mock
 from uuid import uuid4
 
@@ -11,6 +12,8 @@ from django.utils.deconstruct import deconstructible
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import exception_handler
+
+_threadlocals = local()
 
 
 @deconstructible
@@ -97,3 +100,16 @@ def regex_search(content: str, pattern: str) -> str:
     except AttributeError:
         search_string = None
     return search_string
+
+
+def get_thread_variable(key, default=None):
+    return getattr(_threadlocals, key, default)
+
+
+def get_current_request():
+    return get_thread_variable("request", None)
+
+
+def get_current_user():
+    request = get_current_request()
+    return getattr(request, "user", None) if request else None

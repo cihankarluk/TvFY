@@ -9,7 +9,10 @@ setup(
     author="Cihan Karluk",
     author_email="cihankarluk@gmail.com",
     install_requires=[
-        "Django==3.2.5",
+        "django",
+        "djangorestframework",
+        "django-filter",
+        "django-environ",
         "python-dotenv==0.19.0",
         "psycopg2-binary==2.9.1",
         "django-rest-framework==0.1.0",
@@ -20,6 +23,7 @@ setup(
         "model-bakery==1.3.2",
         "django-extensions==3.1.3",
         "aiohttp==3.7.4",
+        "pytest-django",
     ],
     python_requires=">=3.8.0",
     classifiers=[

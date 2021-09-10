@@ -1,11 +1,12 @@
-from tests.base.test_base import BaseCollectorTest
+from unittest import TestCase
+
 from TvFY.collector.base import Scrapper
 from TvFY.collector.google import GoogleScrapper
 from TvFY.series.models import Episode, Season, Series, SeriesCast
 from TvFY.series.service import SeasonEpisodeService, SeriesCastService, SeriesService
 
 
-class TestHelpers(BaseCollectorTest):
+class TestHelpers(TestCase):
     def test_save_series_data(self):
         cls = GoogleScrapper(search_key="the boys")
         google_result = cls.run()

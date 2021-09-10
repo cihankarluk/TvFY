@@ -1,15 +1,15 @@
 from django.db import models
 
 from TvFY.actor.models import Actor
-from TvFY.core.models import Country, Language
+from TvFY.core.models import AuditMixin, Country, Language
 from TvFY.director.models import Director
 from TvFY.genre.models import Genre
 from TvFY.movies.managers import MovieManager
 
 
-class Movie(models.Model):
+class Movie(AuditMixin):
     TYPE = "movie"
-    PREFIX = "MV"
+    PREFIX = "mv"
 
     tvfy_code = models.CharField(max_length=14, db_index=True, unique=True)
 

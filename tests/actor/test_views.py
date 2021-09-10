@@ -1,7 +1,7 @@
 from model_bakery import baker
 from rest_framework.reverse import reverse
 
-from tests.base.test_base import BaseView
+from tests.test_base import BaseView
 
 
 class ActorViewTestCase(BaseView):
