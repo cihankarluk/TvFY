@@ -342,10 +342,12 @@ class IMDBHomePage:
         soup_selection = {
             "soup": self.soup,
             "method": self.find,
-            "tag": "div",
-            "dataset-testid": "genres",
+            "tag": "li",
+            "data-testid": "storyline-genres",
         }
         if css_selection := self.soup_selection(**soup_selection):
+            genres_list = css_selection.get_text("-").split("-")
+            genres_list.pop(0)
             genres = {"imdb_genre": css_selection.get_text("-").split("-")}
 
         return genres
@@ -415,7 +417,7 @@ class IMDBHomePage:
             "dataset-testid": "hero-rating-bar__popularity__score",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            imdb_popularity = {"imdb_popularity": css_selection.text}
+            imdb_popularity = {"imdb_popularity": int(css_selection.text)}
 
         return imdb_popularity
 

@@ -824,8 +824,8 @@
       "last_name":"Jackson"
    },
    "rt_director_url":"https://www.rottentomatoes.com/celebrity/peter_jackson",
-   "rt_audience_rate":"95",
-   "rt_tomatometer_rate":"91",
+   "rt_audience_rate":95,
+   "rt_tomatometer_rate":91,
    "storyline":"The future of civilization rests in the fate of the One Ring, which has been lost for centuries. Powerful forces are unrelenting in their search for it. But fate has placed it in the hands of a young Hobbit named Frodo Baggins (Elijah Wood), who inherits the Ring and steps into legend. A daunting task lies ahead for Frodo when he becomes the Ringbearer - to destroy the One Ring in the fires of Mount Doom where it was forged.",
    "imdb_genre":[
       "Action",
@@ -835,7 +835,7 @@
    "director":"Peter Jackson",
    "imdb_director_url":"https://www.imdb.com/name/nm0001392/?ref_=tt_ov_dr",
    "run_time":178,
-   "imdb_popularity":"117",
+   "imdb_popularity":117,
    "country":[
       "New Zealand",
       "United States"

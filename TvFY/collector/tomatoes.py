@@ -60,8 +60,8 @@ class TomatoesMovieHomePage:
         }
         if css_selection := self.soup_selection(**soup_selection):
             ratings = {
-                "rt_audience_rate": css_selection["audiencescore"],
-                "rt_tomatometer_rate": css_selection["tomatometerscore"],
+                "rt_audience_rate": int(css_selection["audiencescore"]),
+                "rt_tomatometer_rate": int(css_selection["tomatometerscore"]),
             }
 
         return ratings
@@ -92,7 +92,7 @@ class TomatoesSeriesHomePage:
 
     @property
     def get_series_audience_rate(self) -> dict:
-        audience_rate = {"audience_rate"}
+        audience_rate = {"audience_rate": None}
 
         soup_selection = {
             "soup": self.soup,
@@ -103,7 +103,9 @@ class TomatoesSeriesHomePage:
         }
         if css_selection := self.soup_selection(**soup_selection):
             audience_rate = {
-                "rt_audience_rate": css_selection.get_text(strip=True).replace("%", "")
+                "rt_audience_rate": int(
+                    css_selection.get_text(strip=True).replace("%", "")
+                )
             }
 
         return audience_rate
