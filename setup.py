@@ -18,7 +18,7 @@ setup(
         "django-rest-framework==0.1.0",
         "requests==2.24.0",
         "beautifulsoup4==4.9.3",
-        "backoff==1.11.1",
+        "backoff==2.0.1",
         "pre-commit==2.10.0",
         "model-bakery==1.3.2",
         "django-extensions==3.1.3",

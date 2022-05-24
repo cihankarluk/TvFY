@@ -36,7 +36,7 @@ logging.warning(f"Using {APP_ENV} environment.")
 DEBUG_STATES = ("TEST", "DEV")
 DEBUG = APP_ENV in DEBUG_STATES
 
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "drf_yasg",
     "TvFY.account",
     "TvFY.actor",
     "TvFY.collector",
@@ -57,6 +58,8 @@ INSTALLED_APPS = [
     "TvFY.movies",
     "TvFY.search",
     "TvFY.series",
+    "TvFY.country",
+    "TvFY.language",
 ]
 
 MIDDLEWARE = [
@@ -95,11 +98,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("DATABASE_NAME"),
-        "USER": os.getenv("DATABASE_USER"),
-        "PASSWORD": os.getenv("DATABASE_PASSWORD"),
-        "HOST": os.getenv("DATABASE_HOST", "127.0.0.1"),
-        "PORT": os.getenv("DATABASE_PORT", "5432"),
+        "NAME": "tvfy",
+        "USER": "postgres",
+        "PASSWORD": "",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 
@@ -150,11 +153,6 @@ STATIC_URL = "/static/"
 
 AUTH_USER_MODEL = "account.Account"
 
-# TODO: move this fields to proper address
-IMDB_CAST = "fullcredits"
-IMDB_SEASON = "episodes?season="
-IMDB_AWARDS = "awards"
-
 
 LOGGING = {
     "version": 1,
@@ -176,7 +174,7 @@ LOGGING = {
             "propagate": True,
         },
         "django.db.backends": {
-            "level": "WARNING",
+            "level": "DEBUG",
             "handlers": ["log_to_stdout"],
         },
     },
