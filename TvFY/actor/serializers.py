@@ -3,20 +3,22 @@ from rest_framework import serializers
 from TvFY.actor.models import Actor
 
 
-class ActorSerializer(serializers.ModelSerializer):
-    actor_born_at = serializers.ReadOnlyField()
-    actor_died_at = serializers.ReadOnlyField()
+class ActorListSerializer(serializers.ModelSerializer):
+    born_at = serializers.SerializerMethodField(method_name="get_born_at")
+    died_at = serializers.SerializerMethodField(method_name="get_died_at")
 
     class Meta:
         model = Actor
         fields = (
+            "tvfy_code",
             "first_name",
             "last_name",
+            "full_name",
             "imdb_url",
             "born_date",
-            "actor_born_at",
+            "born_at",
             "died_date",
-            "actor_died_at",
+            "died_at",
             "perks",
             "oscars",
             "oscar_nominations",
@@ -24,7 +26,10 @@ class ActorSerializer(serializers.ModelSerializer):
             "nominations",
         )
 
-    def to_representation(self, instance: Actor):
-        data = super(ActorSerializer, self).to_representation(instance)
-        data["full_name"] = instance.get_full_name
-        return data
+    @classmethod
+    def get_born_at(cls, obj):
+        return obj.born_at and obj.born_at.name
+
+    @classmethod
+    def get_died_at(cls, obj):
+        return obj.died_at and obj.died_at.name

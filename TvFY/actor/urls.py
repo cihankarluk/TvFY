@@ -1,5 +1,8 @@
-from django.urls import path
+from TvFY.actor.views import ActorViewSet
+from TvFY.core.routers import RestRouter
 
-from TvFY.actor import views
+router = RestRouter()
 
-urlpatterns = [path("", views.ActorView.as_view(), name="actor")]
+router.register("", ActorViewSet, basename="actor")
+
+urlpatterns = router.urls
