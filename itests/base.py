@@ -1,8 +1,10 @@
+from typing import Union, List
+
 import requests
 from bs4 import BeautifulSoup
 from django.test import TestCase
 
-from TvFY.collector.base import Scrapper
+from TvFY.collector.base import Scraper
 from TvFY.collector.google import GoogleScrapper
 from TvFY.collector.imdb import IMDBBase
 from TvFY.collector.tomatoes import TomatoesBase
@@ -32,16 +34,18 @@ class BaseTestCase(TestCase):
         return result
 
     @classmethod
-    def get_scrapper_result(cls, urls: list, search_type: str) -> dict:
-        cls_ = Scrapper(urls=urls, search_type=search_type)
+    def get_scrapper_result(cls, urls: List[str], search_type: str) -> dict:
+        cls_ = Scraper(urls=urls, search_type=search_type)
         result = cls_.handle()
         return result
 
     @classmethod
-    def is_subset(cls, attrs, results) -> bool:
-        set_attrs = set(attrs)
-        is_subset: bool = all(
-            set_attrs.issubset(transaction) and set_attrs.issuperset(transaction)
-            for transaction in results
-        )
-        return is_subset
+    def is_subset(cls, attrs: set, results: Union[dict, list]) -> bool:
+        """
+        Take diff of expected attrs and results from scrapping if diff are
+         different from the expected attrs returns False.
+        """
+        if isinstance(results, dict):
+            results = [results]
+        is_subset = all([all([attrs - set(result.keys()), set(result.keys()) - attrs]) for result in results])
+        return not is_subset

@@ -7,3 +7,7 @@ class ValidationError(ValidationError):
 
 class UsernameAlreadyExists(ValidationError):
     code = "USERNAME_ALREADY_EXISTS"
+
+
+class SeriesDoesNotExist(ValidationError):
+    code = "SERIES_DOES_NOT_EXISTS"

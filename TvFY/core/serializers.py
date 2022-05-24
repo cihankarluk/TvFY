@@ -6,8 +6,7 @@ class BaseSerializer:
     fields: dict
 
     def validate(self, attrs):
-        initial_data_keys = self.initial_data.keys()
-        unknown_keys = set(initial_data_keys) - set(self.fields.keys())
+        unknown_keys = set(self.initial_data.keys()) - set(self.fields.keys())
         if unknown_keys:
             raise ValidationError(f"Got unknown fields: {unknown_keys}")
         return attrs
