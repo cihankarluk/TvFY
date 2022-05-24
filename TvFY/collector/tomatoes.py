@@ -21,12 +21,10 @@ class TomatoesMovieHomePage:
             "method": self.find,
             "tag": "div",
             "class": "meta-value genre",
-            "dataset-qa": "movie-info-item-value",
+            "data-qa": "movie-info-item-value",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            genres = {
-                "rt_genre": [genre.strip() for genre in css_selection.text.split(",")]
-            }
+            genres = {"rt_genre": [genre.strip() for genre in css_selection.text.split(",")]}
 
         return genres
 
@@ -38,7 +36,7 @@ class TomatoesMovieHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "a",
-            "dataset-qa": "movie-info-director",
+            "data-qa": "movie-info-director",
         }
         if css_selection := self.soup_selection(**soup_selection):
             director = {
@@ -56,7 +54,7 @@ class TomatoesMovieHomePage:
             "soup": self.soup,
             "method": self.find,
             "class": "scoreboard",
-            "dataset-qa": "score-panel",
+            "data-qa": "score-panel",
         }
         if css_selection := self.soup_selection(**soup_selection):
             ratings = {
@@ -81,32 +79,26 @@ class TomatoesSeriesHomePage:
             "method": self.find,
             "tag": "span",
             "class": "mop-ratings-wrap__percentage",
-            "dataset-qa": "tomatometer",
+            "data-qa": "tomatometer",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            average_tomatometer = {
-                "rt_tomatometer_rate": css_selection.get_text(strip=True).replace("%", "")
-            }
+            average_tomatometer = {"rt_tomatometer_rate": css_selection.get_text(strip=True).replace("%", "")}
 
         return average_tomatometer
 
     @property
     def get_series_audience_rate(self) -> dict:
-        audience_rate = {"audience_rate": None}
+        audience_rate = {"rt_audience_rate": None}
 
         soup_selection = {
             "soup": self.soup,
             "method": self.find,
             "tag": "span",
             "class": "mop-ratings-wrap__percentage",
-            "dataset-qa": "audience-score",
+            "data-qa": "audience-score",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            audience_rate = {
-                "rt_audience_rate": int(
-                    css_selection.get_text(strip=True).replace("%", "")
-                )
-            }
+            audience_rate = {"rt_audience_rate": int(css_selection.get_text(strip=True).replace("%", ""))}
 
         return audience_rate
 
@@ -118,7 +110,7 @@ class TomatoesSeriesHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "td",
-            "dataset-qa": "series-details-genre",
+            "data-qa": "series-details-genre",
         }
         if css_selection := self.soup_selection(**soup_selection):
             genre = {"rt_genre": [css_selection.get_text(strip=True)]}
@@ -133,7 +125,7 @@ class TomatoesSeriesHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "td",
-            "dataset-qa": "series-details-network",
+            "data-qa": "series-details-network",
         }
         if css_selection := self.soup_selection(**soup_selection):
             network = {"network": css_selection.get_text(strip=True)}
@@ -159,14 +151,14 @@ class TomatoesSeriesHomePage:
 class TomatoesBase(TomatoesMovieHomePage, TomatoesSeriesHomePage, SoupSelectionMixin):
     BASE_URL = "https://www.rottentomatoes.com"
 
-    def __init__(self, soup, url, search_type):
+    def __init__(self, soup: BeautifulSoup, url: str, search_type: str):
         self.soup = soup
         self.url = url
         self.search_type = search_type
 
-    def run(self):
+    def run(self) -> dict:
         """
-        Keys: 'rt_genre', 'rt_tomatometer_rate', 'rt_audience_rate', 'network', 'storyline'
+        Generated Keys: 'rt_genre', 'rt_tomatometer_rate', 'rt_audience_rate', 'network', 'storyline'
         """
         result = {}
         if self.search_type == Movie.TYPE:

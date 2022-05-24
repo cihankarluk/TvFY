@@ -13,7 +13,7 @@ from TvFY.collector.tomatoes import TomatoesBase
 logger = logging.getLogger("main")
 
 
-class Scrapper:
+class Scraper:
     def __init__(self, urls: Union[str, list], search_type=None):
         self.urls: list = self.control_urls(urls)
         self.session = None
@@ -21,9 +21,7 @@ class Scrapper:
 
     @staticmethod
     def control_urls(urls: Union[str, list]) -> list:
-        if isinstance(urls, str):
-            urls = [urls]
-        return urls
+        return [urls] if isinstance(urls, str) else urls
 
     @staticmethod
     def scrapper_class(url: str, soup: dict, search_type: str):
@@ -36,9 +34,7 @@ class Scrapper:
             cls = cls(soup=soup[url], url=url, search_type=search_type)
         return cls
 
-    @backoff.on_exception(
-        backoff.expo, (aiohttp.ClientError, AssertionError), max_tries=2
-    )
+    @backoff.on_exception(backoff.expo, (aiohttp.ClientError, AssertionError), max_tries=2)
     async def fetch_html(self, url: str):
         search_response = await self.session.get(url)
         assert search_response.status == 200
@@ -52,7 +48,7 @@ class Scrapper:
 
     async def weed_out(self, url: str) -> dict:
         soup = await self.soup_response(url=url)
-        cls = self.scrapper_class(url, soup, self.search_type)
+        cls = self.scrapper_class(url=url, soup=soup, search_type=self.search_type)
         return cls.run()
 
     async def run(self) -> dict:

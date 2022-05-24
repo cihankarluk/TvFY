@@ -24,9 +24,7 @@ class GoogleScrapper:
     def get_rotten_tomatoes_url(content: str) -> dict:
         regex_pattern = r"https://www.rottentomatoes.com/.+/.+?(?=&)"
         rotten_tomatoes_url = regex_search(content=content, pattern=regex_pattern)
-        result = (
-            {"rotten_tomatoes_url": rotten_tomatoes_url} if rotten_tomatoes_url else {}
-        )
+        result = {"rotten_tomatoes_url": rotten_tomatoes_url} if rotten_tomatoes_url else {}
         return result
 
     @staticmethod
@@ -56,5 +54,5 @@ class GoogleScrapper:
         result.update(self.get_imdb_url(content))
         result.update(self.get_rotten_tomatoes_url(content))
         result.update(self.get_tv_com_rate(content))
-        result.update(self.get_seasons(content))
+        # result.update(self.get_seasons(content))
         return result

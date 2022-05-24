@@ -2,7 +2,7 @@ import re
 import urllib.parse as urlparse
 from collections import defaultdict
 from datetime import datetime
-from typing import Union
+from typing import Union, Optional
 from urllib.parse import parse_qs
 
 from bs4 import BeautifulSoup
@@ -40,15 +40,23 @@ class IMDBEpisodes:
         season: str = parse_qs(parsed.query)["season"][0]
         return int(season)
 
-    def get_episode_release_date(self, episode_data):
-        date = self.soup_selection(
-            soup=episode_data, method="find", tag="div", class_="airdate"
-        ).text.strip()
-        try:
-            date_time = get_date_time(date, "%d %b. %Y")
-        except ValueError:
-            date_time = get_date_time(date, "%d %b %Y")
-        return date_time
+    def get_episode_release_date(self, episode_data: BeautifulSoup) -> Optional[datetime]:
+        episode_release_date = None
+
+        soup_selection = {
+            "soup": episode_data,
+            "method": self.find,
+            "tag": "div",
+            "class": "airdate",
+        }
+        if css_selection := self.soup_selection(**soup_selection):
+            episode_release_date = css_selection.text.strip()
+            try:
+                episode_release_date = get_date_time(episode_release_date, "%d %b. %Y")
+            except ValueError:
+                episode_release_date = get_date_time(episode_release_date, "%d %b %Y")
+
+        return episode_release_date
 
     @property
     def get_episodes(self) -> dict:
@@ -65,12 +73,8 @@ class IMDBEpisodes:
             for episode_data in css_selection:
                 data = {
                     "name": episode_data.a["title"],
-                    "storyline": episode_data.find(
-                        "div", class_="item_description"
-                    ).text.strip(),
-                    "imdb_rate": float(
-                        episode_data.find("span", class_="ipl-rating-star__rating").text
-                    ),
+                    "storyline": episode_data.find("div", class_="item_description").text.strip(),
+                    "imdb_rate": float(episode_data.find("span", class_="ipl-rating-star__rating").text),
                     "imdb_vote_count": self.get_imdb_vote_count(episode_data),
                     "episode": int(episode_data.meta["content"]),
                     "release_date": self.get_episode_release_date(episode_data),
@@ -133,18 +137,14 @@ class IMDBCast:
                     if self.search_type == Movie.TYPE:
                         cast_information = {"character_name": character.a.text}
                     else:
-                        cast_information = self.cast_information(
-                            character.get_text(" sp ")
-                        )
+                        cast_information = self.cast_information(character.get_text(" sp "))
                     if not cast_information:
                         continue
 
                     actor_detail = cast.find("td", class_="").a
                     actor = self.get_name(actor_detail.text.strip())
                     actor.update(cast_information)
-                    actor.update(
-                        {"imdb_actor_url": f'{self.BASE_URL}{actor_detail["href"]}'}
-                    )
+                    actor.update({"imdb_actor_url": f'{self.BASE_URL}{actor_detail["href"]}'})
                     results.append(actor)
             cast = {"cast": results}
 
@@ -192,9 +192,7 @@ class IMDBPersonalData:
             "id": "name-born-info",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            born_date = {
-                "born_date": datetime.strptime(css_selection.time["datetime"], "%Y-%m-%d")
-            }
+            born_date = {"born_date": datetime.strptime(css_selection.time["datetime"], "%Y-%m-%d")}
 
         return born_date
 
@@ -224,9 +222,7 @@ class IMDBPersonalData:
             "id": "name-death-info",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            died_date = {
-                "died_date": datetime.strptime(css_selection.time["datetime"], "%Y-%m-%d")
-            }
+            died_date = {"died_date": datetime.strptime(css_selection.time["datetime"], "%Y-%m-%d")}
 
         return died_date
 
@@ -396,11 +392,11 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "ul",
-            "dataset-testid": "hero-title-block__metadata",
+            "data-testid": "hero-title-block__metadata",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # '2h 58min' or '1h' or '24min'
-            runtime_str = css_selection.get_text("~").split("~")[-1]
+            runtime_str = css_selection.contents[-1].text
             runtime_int = self.convert_runtime(runtime_str)
             runtime = {"run_time": runtime_int}
 
@@ -414,7 +410,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "div",
-            "dataset-testid": "hero-rating-bar__popularity__score",
+            "data-testid": "hero-rating-bar__popularity__score",
         }
         if css_selection := self.soup_selection(**soup_selection):
             imdb_popularity = {"imdb_popularity": int(css_selection.text)}
@@ -429,7 +425,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "dataset-testid": "title-details-origin",
+            "data-testid": "title-details-origin",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Countries of origin', 'New Zealand', 'United States']
@@ -446,7 +442,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "dataset-testid": "title-details-languages",
+            "data-testid": "title-details-languages",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Languages', 'English', 'Sindarin']
@@ -463,7 +459,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "dataset-testid": "title-details-releasedate",
+            "data-testid": "title-details-releasedate",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Release date', 'December 21, 2001 (Turkey)']
@@ -489,7 +485,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "h1",
-            "dataset-testid": "hero-title-block__title",
+            "data-testid": "hero-title-block__title",
         }
         if css_selection := self.soup_selection(**soup_selection):
             title = {"title": css_selection.text.strip()}
@@ -498,6 +494,7 @@ class IMDBHomePage:
 
     @property
     def get_is_active(self) -> dict:
+        # TODO: bug
         is_active = {"is_active": False}
 
         soup_selection = {
@@ -521,7 +518,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "dataset-testid": "title-boxoffice-budget",
+            "data-testid": "title-boxoffice-budget",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Budget', '$93,000,000 (estimated)']
@@ -538,15 +535,13 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "dataset-testid": "title-boxoffice-openingweekenddomestic",
+            "data-testid": "title-boxoffice-openingweekenddomestic",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # TODO: need currency control
             # ['Opening weekend US & Canada', '$47,211,490', 'Dec 23, 2001']
             selection_list = css_selection.get_text("~").split("~")
-            usa_opening_weekend = {
-                "usa_opening_weekend": re.sub("[$,]", "", selection_list[1])
-            }
+            usa_opening_weekend = {"usa_opening_weekend": re.sub("[$,]", "", selection_list[1])}
 
         return usa_opening_weekend
 
@@ -558,7 +553,7 @@ class IMDBHomePage:
             "soup": self.soup,
             "method": self.find,
             "tag": "li",
-            "dataset-testid": "title-boxoffice-cumulativeworldwidegross",
+            "data-testid": "title-boxoffice-cumulativeworldwidegross",
         }
         if css_selection := self.soup_selection(**soup_selection):
             # ['Gross worldwide', '$897,690,072']
@@ -592,9 +587,9 @@ class IMDBBase(
     IMDBRating,
     IMDBHomePage,
     SoupSelectionMixin,
-):  # NOQA: E501
+):
     EPISODES = "episodes"
-    FULL_CREDITS = "fullcredits"
+    CAST = "fullcredits"
     AWARDS = "awards"
     PERSONAL_DATA = "name"
     RATINGS = "ratings"
@@ -607,7 +602,7 @@ class IMDBBase(
 
     def run(self) -> dict:
         """
-        Keys: 'imdb_vote_count', 'imdb_rate', 'wins', 'nominations',
+        Generated Keys: 'imdb_vote_count', 'imdb_rate', 'wins', 'nominations',
         1, 'imdb_genre', 'director', 'imdb_director_url', 'run_time',
         'imdb_popularity', 'country', 'language', 'release_date', 'title',
         'is_active', 'cast', 'usa_opening_weekend', 'ww_gross', 'budget'
@@ -615,7 +610,7 @@ class IMDBBase(
         result = {}
         if self.EPISODES in self.url:
             result.update(self.get_episodes)
-        elif self.FULL_CREDITS in self.url:
+        elif self.CAST in self.url:
             result.update(self.get_cast)
         elif self.AWARDS in self.url:
             result.update(self.get_awards)
