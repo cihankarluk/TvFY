@@ -1,6 +1,6 @@
-from itests.base import BaseTestCase
 from TvFY.movies.models import Movie
 from TvFY.series.models import Series
+from itests.base import BaseTestCase
 
 
 class ScrapperTestCase(BaseTestCase):
@@ -13,7 +13,7 @@ class ScrapperTestCase(BaseTestCase):
             self.get_scrapper_result(urls=urls, search_type=Series.TYPE)
 
     def test__the_boys(self):
-        series_expected_attrs = [
+        series_expected_attrs = {
             2,
             1,
             "wins",
@@ -36,7 +36,7 @@ class ScrapperTestCase(BaseTestCase):
             "is_active",
             "imdb_rate",
             "imdb_vote_count",
-        ]
+        }
 
         urls = [
             "https://www.imdb.com/title/tt1190634/",
@@ -50,10 +50,10 @@ class ScrapperTestCase(BaseTestCase):
 
         result = self.get_scrapper_result(urls=urls, search_type=Series.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=series_expected_attrs, results=[result]))
+        self.assertTrue(self.is_subset(attrs=series_expected_attrs, results=result))
 
     def test__lotr(self):
-        movies_expected_attrs = [
+        movies_expected_attrs = {
             "wins",
             "nominations",
             "rt_genre",
@@ -77,7 +77,7 @@ class ScrapperTestCase(BaseTestCase):
             "budget",
             "usa_opening_weekend",
             "ww_gross",
-        ]
+        }
 
         urls = [
             "https://www.imdb.com/title/tt0120737/",
@@ -89,4 +89,4 @@ class ScrapperTestCase(BaseTestCase):
 
         result = self.get_scrapper_result(urls=urls, search_type=Movie.TYPE)
 
-        self.assertTrue(self.is_subset(attrs=movies_expected_attrs, results=[result]))
+        self.assertTrue(self.is_subset(attrs=movies_expected_attrs, results=result))
