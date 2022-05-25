@@ -42,6 +42,7 @@ urlpatterns = [
     path("api/search/", include("TvFY.search.urls"), name="search"),
     path("api/country/", include("TvFY.country.urls"), name="country"),
     path("api/language/", include("TvFY.language.urls"), name="language"),
+    path("api/genre/", include("TvFY.genre.urls"), name="genre"),
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",
         schema_view.without_ui(cache_timeout=0),
