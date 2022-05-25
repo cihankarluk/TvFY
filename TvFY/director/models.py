@@ -1,43 +1,45 @@
+from typing import Optional
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-from TvFY.core.models import Country
+from TvFY.core.models import AuditMixin
+from TvFY.country.models import Country
+from TvFY.director.managers import DirectorManager
 
 
-class Director(models.Model):
-    first_name = models.CharField(max_length=128)
-    last_name = models.CharField(max_length=128)
-    imdb_director_url = models.URLField(blank=True, null=True, unique=True)
-    rt_director_url = models.URLField(blank=True, null=True, unique=True)
-    born_date = models.DateField(null=True)
-    born_at = models.ForeignKey(
-        Country, on_delete=models.SET_NULL, null=True, related_name="director_born_at"
-    )
-    died_date = models.DateField(null=True)
-    died_at = models.ForeignKey(
-        Country, on_delete=models.SET_NULL, null=True, related_name="director_died_at"
-    )
-    perks = ArrayField(models.CharField(max_length=32, blank=True), null=True)
-    oscars = models.PositiveSmallIntegerField(default=0)
-    oscar_nominations = models.PositiveSmallIntegerField(default=0)
-    wins = models.PositiveSmallIntegerField(blank=True, null=True, default=0)
-    nominations = models.PositiveSmallIntegerField(blank=True, null=True, default=0)
+class Director(AuditMixin):
+    TYPE = "director"
+    PREFIX = "dt"
 
-    @property
-    def get_full_name(self):
-        return f"{self.first_name} {self.last_name}"
+    tvfy_code = models.CharField(db_column="tvfy", max_length=11, db_index=True, unique=True)
+    first_name = models.CharField(db_column="first_name", max_length=128)
+    last_name = models.CharField(db_column="last_name", max_length=128)
+    full_name = models.CharField(db_column="full_name", max_length=255)
+    imdb_url = models.URLField(db_column="imdb_url", null=True, unique=True)
+    rt_url = models.URLField(db_column="rt_url", null=True, unique=True)
+    born_date = models.DateTimeField(db_column="born_date", null=True)
+    born_at = models.ForeignKey(Country, db_column="born_at", on_delete=models.SET_NULL, null=True,
+                                related_name="d_born_at")
+    died_date = models.DateTimeField(db_column="died_date", null=True)
+    died_at = models.ForeignKey(Country, db_column="died_at", on_delete=models.SET_NULL, null=True,
+                                related_name="d_died_at")
+    perks = ArrayField(models.CharField(db_column="perks", max_length=32, blank=True), null=True)
+    oscars = models.PositiveSmallIntegerField(db_column="oscars", null=True)
+    oscar_nominations = models.PositiveSmallIntegerField(db_column="oscar_nominations", null=True)
+    wins = models.PositiveSmallIntegerField(db_column="wins", null=True)
+    nominations = models.PositiveSmallIntegerField(db_column="nominations", null=True)
+    is_updated = models.BooleanField(db_column="is_updated", default=False)
 
-    @property
-    def director_born_at(self):
-        if country := self.born_at:
-            country = self.born_at.country
-        return country
+    objects = DirectorManager()
 
     @property
-    def director_died_at(self):
-        if country := self.died_at:
-            country = self.died_at.country
-        return country
+    def director_born_at(self) -> Optional[str]:
+        return self.born_at.name if self.born_at else None
+
+    @property
+    def director_died_at(self) -> Optional[str]:
+        return self.died_at.name if self.died_at else None
 
     def __str__(self):
-        return self.get_full_name
+        return self.full_name

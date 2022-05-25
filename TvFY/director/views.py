@@ -1,9 +1,13 @@
-from rest_framework import generics
+from rest_framework.filters import SearchFilter
+from rest_framework.mixins import ListModelMixin
+from rest_framework.viewsets import GenericViewSet
 
 from TvFY.director.models import Director
-from TvFY.director.serializers import DirectorSerializer
+from TvFY.director.serializers import DirectorListSerializer
 
 
-class DirectorView(generics.ListAPIView):
-    serializer_class = DirectorSerializer
+class DirectorViewSet(GenericViewSet, ListModelMixin):
+    serializer_class = DirectorListSerializer
     queryset = Director.objects.select_related("born_at", "died_at")
+    filter_backends = SearchFilter,
+    search_fields = "full_name",

@@ -1,23 +1,24 @@
-from TvFY.core.models import Country
+from TvFY.country.service import CountryService
 from TvFY.director.models import Director
 
 
 class DirectorService:
-    def __init__(self, search_data: dict, director_obj: Director):
-        self.search_data = search_data
-        self.director = director_obj
 
-    @staticmethod
-    def get_or_create_country(country: str):
-        if country:
-            country, _ = Country.objects.get_or_create(country=country)
-        return country
+    @classmethod
+    def create_director(cls, director_data: dict) -> Director:
+        director = Director.objects.create(
+            first_name=director_data["first_name"],
+            last_name=director_data["last_name"],
+            imdb_url=director_data["imdb_director_url"],
+        )
+        return director
 
-    def update_director(self):
-        born_at = self.search_data.pop("born_at", None)
-        died_at = self.search_data.pop("died_at", None)
-        for field, value in self.search_data.items():
-            setattr(self.director, field, value)
-        self.director.born_at = self.get_or_create_country(country=born_at)
-        self.director.died_at = self.get_or_create_country(country=died_at)
-        self.director.save()
+    @classmethod
+    def update_director(cls, director_data: dict, director_obj: Director):
+        born_at = director_data.pop("born_at", None)
+        died_at = director_data.pop("died_at", None)
+        for field, value in director_data.items():
+            setattr(director_obj, field, value)
+        director_obj.born_at = CountryService.get_or_create_country(country_name=born_at)
+        director_obj.died_at = CountryService.get_or_create_country(country_name=died_at)
+        director_obj.save()

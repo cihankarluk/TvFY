@@ -1,5 +1,8 @@
-from django.urls import path
+from TvFY.core.routers import RestRouter
+from TvFY.director.views import DirectorViewSet
 
-from TvFY.director import views
+router = RestRouter()
 
-urlpatterns = [path("", views.DirectorView.as_view(), name="director")]
+router.register("", DirectorViewSet, basename="director")
+
+urlpatterns = router.urls
