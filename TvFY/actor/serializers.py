@@ -4,8 +4,8 @@ from TvFY.actor.models import Actor
 
 
 class ActorListSerializer(serializers.ModelSerializer):
-    born_at = serializers.SerializerMethodField(method_name="get_born_at")
-    died_at = serializers.SerializerMethodField(method_name="get_died_at")
+    born_at = serializers.CharField(source="actor_born_at")
+    died_at = serializers.CharField(source="actor_died_at")
 
     class Meta:
         model = Actor
@@ -25,11 +25,3 @@ class ActorListSerializer(serializers.ModelSerializer):
             "wins",
             "nominations",
         )
-
-    @classmethod
-    def get_born_at(cls, obj):
-        return obj.born_at and obj.born_at.name
-
-    @classmethod
-    def get_died_at(cls, obj):
-        return obj.died_at and obj.died_at.name

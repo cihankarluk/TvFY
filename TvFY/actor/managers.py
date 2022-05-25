@@ -15,6 +15,6 @@ class ActorManager(models.Manager):
 
     def create(self, **actor_data):
         actor_data.update({"tvfy_code": self.create_actor_code})
-        actor_data.update({"full_name": f"{actor_data['first_name']}_{actor_data['last_name']}"})
+        actor_data.update({"full_name": f"{actor_data['first_name']} {actor_data['last_name']}"})
         actor = super(ActorManager, self).create(**actor_data)
         return actor
