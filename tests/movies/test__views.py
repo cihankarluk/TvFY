@@ -428,13 +428,14 @@ class MovieViewSetTestCase(BaseTestCase):
             "language",
             "cast",
         }
+
         response = self.client.get(
             self.get_movie_detail_url(self.movie.tvfy_code),
         )
         json_response = response.json()
 
         self.assertEqual(200, response.status_code)
-        self.assertTrue(self.is_subset(attrs=expected_attrs, results=[json_response]))
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
 
     def test__get_cast(self):
         expected_attrs = {

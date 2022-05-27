@@ -21,8 +21,8 @@ class MovieService:
         return None
 
     @classmethod
-    def get_movie(cls, key: str, url: str) -> Optional[Movie]:
-        movie_query = Movie.objects.filter(**{key: url})
+    def get_movie(cls, filter_map: dict) -> Optional[Movie]:
+        movie_query = Movie.objects.filter(**filter_map)
         if movie_query.exists():
             movie = movie_query.get()
         else:
@@ -32,9 +32,9 @@ class MovieService:
     @classmethod
     def check_movie_exists(cls, search_data: dict) -> Optional[Movie]:
         if imdb_url := search_data.get("imdb_url"):
-            movie = cls.get_movie(key="imdb_url", url=imdb_url)
+            movie = cls.get_movie(filter_map={"imdb_url": imdb_url})
         elif rotten_tomatoes_url := search_data.get("rotten_tomatoes_url"):
-            movie = cls.get_movie(key="rotten_tomatoes_url", url=rotten_tomatoes_url)
+            movie = cls.get_movie(filter_map={"rotten_tomatoes_url": rotten_tomatoes_url})
         else:
             movie = None
         return movie

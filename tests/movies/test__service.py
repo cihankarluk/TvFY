@@ -10,15 +10,6 @@ from tests.base import BaseTestCase
 class MovieServiceTestCase(BaseTestCase):
     def setUp(self) -> None:
         super(MovieServiceTestCase, self).setUp()
-        self.expected_attribute_errors = {
-            "rt_genre",
-            "imdb_genre",
-            "rt_director",
-            "rt_director_url",
-            "imdb_director",
-            "imdb_director_url",
-            "cast",
-        }
         self.movie_data = self.read_file("movie_lotr.json", is_json=True)
         self.updated_movie_data = self.read_file("movie_lotr_updated.json", is_json=True)
 
@@ -46,19 +37,19 @@ class MovieServiceTestCase(BaseTestCase):
     def test__get_movie__imdb_url(self):
         movie = self.create_movie()[0]
 
-        result = MovieService.get_movie(key="imdb_url", url=movie.imdb_url)
+        result = MovieService.get_movie(filter_map={"imdb_url": movie.imdb_url})
 
         self.assertEqual(movie, result)
 
     def test__get_movie__rotten_tomatoes_url(self):
         movie = self.create_movie()[0]
 
-        result = MovieService.get_movie(key="rotten_tomatoes_url", url=movie.rotten_tomatoes_url)
+        result = MovieService.get_movie(filter_map={"rotten_tomatoes_url": movie.rotten_tomatoes_url})
 
         self.assertEqual(movie, result)
 
     def test__get_movie__none(self):
-        result = MovieService.get_movie(key="imdb_url", url="wrong_url")
+        result = MovieService.get_movie(filter_map={"imdb_url": "wrong_url"})
 
         self.assertIsNone(result)
 
@@ -87,6 +78,7 @@ class MovieServiceTestCase(BaseTestCase):
 
     def test__create_movie(self):
         movie_data = {"title": "The Lord of the Rings: The Fellowship of the Ring"}
+
         MovieService.create_movie(movie_data=movie_data, search_data=self.movie_data)
 
         movie_query = Movie.objects.filter(title="The Lord of the Rings: The Fellowship of the Ring")
@@ -107,6 +99,15 @@ class MovieServiceTestCase(BaseTestCase):
         self.assertEqual(7.9, updated_movie.imdb_rate)
 
     def test__create_or_update_movie__create_movie(self):
+        expected_attribute_errors = {
+            "rt_genre",
+            "imdb_genre",
+            "rt_director",
+            "rt_director_url",
+            "imdb_director",
+            "imdb_director_url",
+            "cast",
+        }
         MovieService.create_or_update_movie(search_data=self.movie_data)
 
         movie_query = Movie.objects.filter(title="The Lord of the Rings: The Fellowship of the Ring")
@@ -125,7 +126,7 @@ class MovieServiceTestCase(BaseTestCase):
                     self.assertEqual(2, attribute.count())
             except AttributeError:
                 attribute_errors.add(key)
-        self.assertFalse(self.expected_attribute_errors - attribute_errors)
+        self.assertFalse(expected_attribute_errors - attribute_errors)
         self.assertEqual(4, movie.genres.count())
 
     def test__create_or_update_movie__update_movie(self):

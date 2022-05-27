@@ -19,20 +19,24 @@ class Movie(AuditMixin):
     storyline = models.TextField(db_column="storyline", null=True)
     release_date = models.DateTimeField(db_column="release_date", null=True)
     run_time = models.PositiveIntegerField(db_column="run_time", null=True)
-    rt_tomatometer_rate = models.PositiveIntegerField(db_column="rt_tomatometer_rate", null=True)
-    rt_audience_rate = models.PositiveIntegerField(db_column="rt_audience_rate", null=True)
-    imdb_popularity = models.PositiveIntegerField(db_column="imdb_popularity", null=True)
-    imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
-    imdb_vote_count = models.PositiveIntegerField(db_column="imdb_vote_count", null=True)
+
     wins = models.PositiveIntegerField(db_column="wins", null=True)
     nominations = models.PositiveIntegerField(db_column="nominations", null=True)
+
+    imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
+    imdb_vote_count = models.PositiveIntegerField(db_column="imdb_vote_count", null=True)
+    imdb_popularity = models.PositiveIntegerField(db_column="imdb_popularity", null=True)
+    imdb_url = models.URLField(db_column="imdb_url", null=True, unique=True, db_index=True)
+
+    rt_tomatometer_rate = models.PositiveIntegerField(db_column="rt_tomatometer_rate", null=True)
+    rt_audience_rate = models.PositiveIntegerField(db_column="rt_audience_rate", null=True)
+    rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True, unique=True, db_index=True)
+
     budget = models.PositiveIntegerField(db_column="budget", null=True)
     budget_currency = models.CharField(db_column="budget_currency", max_length=255, null=True)
     usa_opening_weekend = models.PositiveIntegerField(db_column="usa_opening_weekend", null=True)
     usa_opening_weekend_currency = models.CharField(db_column="usa_opening_weekend_currency", max_length=255, null=True)
     ww_gross = models.PositiveIntegerField(db_column="ww_gross", null=True)
-    imdb_url = models.URLField(db_column="imdb_url", null=True, unique=True, db_index=True)
-    rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True, unique=True, db_index=True)
 
     director = models.ForeignKey(to=Director, db_column="director", on_delete=models.CASCADE, null=True)
     genres = models.ManyToManyField(to=Genre, db_column="genres")
