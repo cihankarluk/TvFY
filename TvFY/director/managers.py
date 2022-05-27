@@ -11,7 +11,7 @@ class DirectorManager(models.Manager):
     def create_director_code(self) -> Union[str, classmethod]:
         director_code = f"{self.model.PREFIX}-{get_random_string(8)}"
         if super().get_queryset().filter(tvfy_code=director_code).exists():
-            return self.create_director_code()
+            return self.create_director_code
         return director_code
 
     def create(self, **director_data):
