@@ -9,5 +9,5 @@ def main():
 
 
 @main.command()
-def create_genre_fixtures():
-    GenreService.insert_genre_fixtures()
+def load_genres():
+    GenreService.load_genres()
