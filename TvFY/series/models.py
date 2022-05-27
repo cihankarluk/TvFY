@@ -1,52 +1,49 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from TvFY.actor.models import Actor
-from TvFY.core.models import Country, Language
+from TvFY.core.models import AuditMixin
+from TvFY.country.models import Country
+from TvFY.director.models import Director
 from TvFY.genre.models import Genre
+from TvFY.language.models import Language
 from TvFY.series.managers import SeriesManager
 
 
-class Series(models.Model):
+class Series(AuditMixin):
     TYPE = "series"
-    PREFIX = "SR"
+    PREFIX = "sr"
 
-    tvfy_code = models.CharField(max_length=14, db_index=True, unique=True)
-    name = models.CharField(max_length=255)
+    tvfy_code = models.CharField(db_column="tvfy_code", max_length=11, db_index=True, unique=True)
 
-    creator = models.CharField(max_length=128, blank=True, null=True)
+    title = models.CharField(db_column="title", max_length=255)
+    storyline = models.TextField(db_column="storyline", null=True)
+    release_date = models.DateTimeField(db_column="release_date", null=True)
+    end_date = models.DateTimeField(db_column="end_date", null=True)
+    run_time = models.IntegerField(db_column="run_time", null=True)
 
-    run_time = models.IntegerField(blank=True, null=True)
+    is_active = models.BooleanField(db_column="is_active", null=True)
+    season_count = models.IntegerField(db_column="season_count", null=True)
+    wins = models.IntegerField(db_column="wins", null=True)
+    nominations = models.IntegerField(db_column="nominations", null=True)
+    tv_network = ArrayField(models.CharField(max_length=32), db_column="tv_network", null=True)
 
-    storyline = models.TextField()
+    imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
+    imdb_vote_count = models.IntegerField(db_column="imdb_vote_count", null=True)
+    imdb_popularity = models.IntegerField(db_column="imdb_popularity", null=True)
+    imdb_url = models.URLField(db_column="imdb_url", null=True)
 
-    release_date = models.DateField()
-    is_active = models.BooleanField()
-    end_date = models.DateField(blank=True, null=True)
+    rt_tomatometer_rate = models.IntegerField(db_column="rt_tomatometer_rate", null=True)
+    rt_audience_rate = models.IntegerField(db_column="rt_audience_rate", null=True)
+    rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True)
 
-    tv_network = models.CharField(max_length=255, blank=True, null=True)
+    tv_com_rate = models.FloatField(db_column="tv_com_rate", null=True)
+    tv_com_url = models.URLField(db_column="tv_com_url", null=True)
 
-    wins = models.IntegerField(blank=True, null=True, default=0)
-    nominations = models.IntegerField(blank=True, null=True, default=0)
-
-    season_count = models.IntegerField(blank=True, null=True)
-
-    imdb_rate = models.FloatField(blank=True, null=True)
-    imdb_vote_count = models.IntegerField(blank=True, null=True)
-    imdb_popularity = models.CharField(max_length=4, blank=True, null=True)
-    tv_com_rate = models.FloatField(blank=True, null=True)
-    rt_tomatometer = models.IntegerField(blank=True, null=True)
-    rt_audience_rate = models.IntegerField(blank=True, null=True)
-    tvfy_rate = models.FloatField(blank=True, null=True)
-    tvfy_popularity = models.FloatField(blank=True, null=True)
-
-    imdb_url = models.URLField(blank=True, null=True)
-    imdb_creator_url = models.URLField(blank=True, null=True)
-    tv_network_url = models.URLField(blank=True, null=True)
-    rotten_tomatoes_url = models.URLField(blank=True, null=True)
-
-    genres = models.ManyToManyField(Genre)
-    country = models.ManyToManyField(Country)
-    language = models.ManyToManyField(Language)
+    creator = models.ForeignKey(to=Director, db_column="creator", on_delete=models.SET_NULL, null=True)
+    genres = models.ManyToManyField(to=Genre, db_column="tvfy_code")
+    country = models.ManyToManyField(to=Country, db_column="tvfy_code")
+    language = models.ManyToManyField(to=Language, db_column="tvfy_code")
 
     objects = SeriesManager()
 
@@ -54,14 +51,14 @@ class Series(models.Model):
         ordering = ("id",)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class SeriesCast(models.Model):
-    character_name = models.CharField(max_length=255, default="John Doe")
-    episode_count = models.IntegerField(default=0)
-    start_acting = models.DateField(blank=True, null=True)
-    end_acting = models.DateField(blank=True, null=True)
+    character_name = models.CharField(max_length=255)
+    episode_count = models.IntegerField(null=True)
+    start_acting = models.DateTimeField(null=True)
+    end_acting = models.DateTimeField(null=True)
 
     series = models.ForeignKey(Series, on_delete=models.CASCADE)
     actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
@@ -71,28 +68,27 @@ class SeriesCast(models.Model):
 
 
 class Season(models.Model):
-    season = models.IntegerField()
-    imdb_url = models.URLField(blank=True, null=True)
-    imdb_season_average_rate = models.FloatField(blank=True, null=True)
-    tvfy_rate = models.FloatField(blank=True, null=True)
+    season = models.IntegerField(db_column="season", null=True)
+    imdb_url = models.URLField(db_column="imdb_url", null=True)
+    imdb_season_average_rate = models.FloatField(db_column="imdb_season_average_rate", null=True)
 
-    series = models.ForeignKey(Series, on_delete=models.CASCADE)
+    series = models.ForeignKey(to=Series, db_column="series", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.series.name}_{self.season}"
+        return f"{self.season}: {self.series.title}"
 
 
 class Episode(models.Model):
-    name = models.CharField(max_length=255)
-    storyline = models.TextField(blank=True, null=True)
-    release_date = models.DateField()
-    imdb_rate = models.FloatField(blank=True, null=True)
-    imdb_vote_count = models.IntegerField(default=0)
-    tvfy_rate = models.FloatField(blank=True, null=True)
-    tvfy_vote_count = models.FloatField(default=0)
-    episode = models.IntegerField(default=0)
+    title = models.CharField(db_column="title", max_length=255)
+    storyline = models.TextField(db_column="storyline", null=True)
+    release_date = models.DateField(db_column="release_date", null=True)
+    imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
+    imdb_vote_count = models.IntegerField(db_column="imdb_vote_count", null=True)
+    tvfy_rate = models.FloatField(db_column="tvfy_rate", null=True)
+    tvfy_vote_count = models.FloatField(db_column="tvfy_vote_count", null=True)
+    episode = models.IntegerField(db_column="episode", null=True)
 
-    season = models.ForeignKey(Season, on_delete=models.CASCADE)
+    season = models.ForeignKey(to=Season, db_column="season", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.title

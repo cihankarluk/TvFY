@@ -1,8 +1,8 @@
-from django.urls import path
+from TvFY.core.routers import RestRouter
+from TvFY.series.views import SeriesViewSet
 
-from TvFY.series import views
+router = RestRouter()
 
-urlpatterns = [
-    path("", views.SeriesView.as_view(), name="series"),
-    path("<str:tvfy_code>", views.SeriesDetailView.as_view(), name="series_detail"),
-]
+router.register("", SeriesViewSet, basename="series")
+
+urlpatterns = router.urls

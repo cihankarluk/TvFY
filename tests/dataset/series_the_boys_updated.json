@@ -1,0 +1,75 @@
+{
+   "rt_genre":[
+      "Drama"
+   ],
+   "rt_tomatometer_rate":"91",
+   "rt_audience_rate":84,
+   "network":[
+      "Prime Video"
+   ],
+  "imdb_genre":[
+    "Action",
+    "Crime",
+    "Drama",
+    "Sci-Fi"
+  ],
+   "storyline":"Superheroes are often as popular as celebrities, as influential as politicians, and sometimes even as revered as gods. But that's when they're using their powers for good. What happens when the heroes go rogue and start abusing their powers? When it's the powerless against the super powerful, the Boys head out on a heroic quest to expose the truth about the Seven and Vought, the multibillion-dollar conglomerate that manages the superheroes and covers up their dirty secrets. Based on the comic book series of the same name.",
+   "wins":420,
+   "nominations":54,
+   "imdb_director":{
+      "first_name":"Eric",
+      "last_name":"Kripke"
+   },
+   "imdb_director_url":"https://www.imdb.com/name/nm0471392/?ref_=tt_ov_wr",
+   "run_time":60,
+   "imdb_popularity":14,
+   "country":[
+      "United States"
+   ],
+   "language":[
+      "English"
+   ],
+   "release_date":null,
+   "title":"The Boys",
+   "is_active":false,
+   "cast":[
+      {
+         "first_name":"Karl",
+         "last_name":"Urban",
+         "character_name":"Billy Butcher",
+         "episode_count":24,
+         "start_acting":null,
+         "end_acting":null,
+         "imdb_actor_url":"https://www.imdb.com/name/nm0881631/"
+      },
+      {
+         "first_name":"Jack",
+         "last_name":"Quaid",
+         "character_name":"Hughie Campbell",
+         "episode_count":24,
+         "start_acting":null,
+         "end_acting":null,
+         "imdb_actor_url":"https://www.imdb.com/name/nm4425051/"
+      },
+      {
+         "first_name":"Antony",
+         "last_name":"Starr",
+         "character_name":"Homelander",
+         "episode_count":24,
+         "start_acting":null,
+         "end_acting":null,
+         "imdb_actor_url":"https://www.imdb.com/name/nm1102278/"
+      },
+      {
+         "first_name":"Erin",
+         "last_name":"Moriarty",
+         "character_name":"Annie January",
+         "episode_count":24,
+         "start_acting":null,
+         "end_acting":null,
+         "imdb_actor_url":"https://www.imdb.com/name/nm3929195/"
+      }
+   ],
+   "imdb_url":"https://www.imdb.com/title/tt1190634/",
+   "rotten_tomatoes_url":"https://www.rottentomatoes.com/tv/the_boys_2019"
+}

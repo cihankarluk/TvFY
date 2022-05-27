@@ -5,7 +5,7 @@ from TvFY.core.helpers import get_random_string
 
 class SeriesManager(models.Manager):
     def create_series_code(self):
-        series_code = f"{self.model.PREFIX}{get_random_string(12)}"
+        series_code = f"{self.model.PREFIX}-{get_random_string(8)}"
         if super().get_queryset().filter(tvfy_code=series_code).exists():
             return self.create_series_code()
         return series_code

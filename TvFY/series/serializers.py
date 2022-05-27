@@ -1,52 +1,93 @@
 from rest_framework import serializers
 
-from TvFY.series.models import Series
+from TvFY.actor.serializers import ActorListSerializer
+from TvFY.series.models import Series, SeriesCast
 
 
-class SeriesSerializer(serializers.ModelSerializer):
+class SeriesCastSerializer(serializers.ModelSerializer):
+    actor = ActorListSerializer(read_only=True)
+
     class Meta:
-        model = Series
+        model = SeriesCast
         fields = (
-            "tvfy_code",
-            "name",
-            "release_date",
-            "is_active",
-            "tv_network",
-            "imdb_rate",
-            "tv_com_rate",
-            "rt_tomatometer",
-            "rt_audience_rate",
-            "tvfy_rate",
-            "tvfy_popularity",
+            "character_name",
+            "episode_count",
+            "start_acting",
+            "end_acting",
+            "actor",
         )
 
 
-class SeriesDetailSerializer(serializers.ModelSerializer):
+class SeriesListSerializer(serializers.ModelSerializer):
+    creator = serializers.SerializerMethodField("get_full_name")
+    genres = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
+    country = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
+    language = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
+
     class Meta:
         model = Series
         fields = (
             "tvfy_code",
-            "name",
-            "creator",
-            "run_time",
+            "title",
             "storyline",
             "release_date",
-            "is_active",
             "end_date",
-            "tv_network",
+            "run_time",
+            "is_active",
+            "season_count",
             "wins",
             "nominations",
-            "season_count",
+            "tv_network",
             "imdb_rate",
             "imdb_vote_count",
             "imdb_popularity",
-            "tv_com_rate",
-            "rt_tomatometer",
-            "rt_audience_rate",
-            "tvfy_rate",
-            "tvfy_popularity",
             "imdb_url",
-            "imdb_creator_url",
-            "tv_network_url",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
             "rotten_tomatoes_url",
+            "tv_com_rate",
+            "tv_com_url",
+            "creator",
+            "genres",
+            "country",
+            "language",
+        )
+
+    @classmethod
+    def get_full_name(cls, obj):
+        full_name = obj.creator and obj.creator.full_name
+        return full_name
+
+
+class SeriesDetailSerializer(SeriesListSerializer):
+    cast = SeriesCastSerializer(source="seriescast_set.all", read_only=True, many=True)
+
+    class Meta:
+        model = Series
+        fields = (
+            "tvfy_code",
+            "title",
+            "storyline",
+            "release_date",
+            "end_date",
+            "run_time",
+            "is_active",
+            "season_count",
+            "wins",
+            "nominations",
+            "tv_network",
+            "imdb_rate",
+            "imdb_vote_count",
+            "imdb_popularity",
+            "imdb_url",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
+            "rotten_tomatoes_url",
+            "tv_com_rate",
+            "tv_com_url",
+            "creator",
+            "genres",
+            "country",
+            "language",
+            "cast",
         )

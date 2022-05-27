@@ -1,74 +1,58 @@
 from model_bakery import baker
 from rest_framework.reverse import reverse
 
-from tests.test_base import BaseView
 from TvFY.core.helpers import read_file
+from TvFY.series.service import SeriesService
+from tests.base import BaseTestCase
 
 
-class SeriesViewTestCase(BaseView):
+class SeriesViewSetTestCase(BaseTestCase):
+    series_list_url = reverse("series-list")
+
+    @classmethod
+    def get_series_detail_url(cls, tvfy_code):
+        return reverse("series-detail", kwargs={'tvfy_code': tvfy_code})
+
+    @classmethod
+    def get_cast_url(cls, tvfy_code):
+        return reverse("series-cast", kwargs={'tvfy_code': tvfy_code})
+
     def setUp(self) -> None:
-        super(SeriesViewTestCase, self).setUp()
-        self.series_url = reverse("series")
-        self.series_detail_url = reverse(
-            "series_detail", kwargs={"tvfy_code": "test_tvfy_code"}
-        )
-        json_file = read_file("tests/dataset/series_data.json", is_json=True)
-        baker.make("series.Series", **json_file)
+        super(SeriesViewSetTestCase, self).setUp()
+        series_data = self.read_file("series_the_boys.json", is_json=True)
+        self.series = SeriesService.create_or_update_series(search_data=series_data)
 
-    def test_get_series_with_correct_request(self):
-        response = self.client.get(self.series_url, **self.headers)
-        self.assertEqual(response.status_code, 200)
-
-        json_response = response.json()
-        result = json_response["results"][0]
-        self.assertTrue(result["tvfy_code"])
-        self.assertTrue(result["name"])
-        self.assertTrue(result["release_date"])
-        self.assertTrue(result["is_active"])
-        self.assertTrue(result["tv_network"])
-        self.assertTrue(result["imdb_rate"])
-        self.assertTrue(result["rt_tomatometer"])
-        self.assertTrue(result["rt_audience_rate"])
-
-    def test_get_series_detail_with_correct_request(self):
-        response = self.client.get(self.series_detail_url, **self.headers)
-        self.assertEqual(response.status_code, 200)
-
-        result = response.json()
-        self.assertTrue(result["tvfy_code"])
-        self.assertTrue(result["name"])
-        self.assertTrue(result["creator"])
-        self.assertTrue(result["run_time"])
-        self.assertTrue(result["storyline"])
-        self.assertTrue(result["release_date"])
-        self.assertTrue(result["is_active"])
-        self.assertIsNone(result["end_date"])
-        self.assertTrue(result["tv_network"])
-        self.assertTrue(result["wins"])
-        self.assertTrue(result["nominations"])
-        self.assertTrue(result["season_count"])
-        self.assertTrue(result["imdb_rate"])
-        self.assertTrue(result["imdb_vote_count"])
-        self.assertTrue(result["imdb_popularity"])
-        self.assertIsNone(result["tv_com_rate"])
-        self.assertTrue(result["rt_tomatometer"])
-        self.assertTrue(result["rt_audience_rate"])
-        self.assertIsNone(result["tvfy_rate"])
-        self.assertIsNone(result["tvfy_popularity"])
-        self.assertTrue(result["imdb_url"])
-        self.assertTrue(result["imdb_creator_url"])
-        self.assertIsNone(result["tv_network_url"])
-        self.assertTrue(result["rotten_tomatoes_url"])
-
-    def test_get_series_detail_with_wrong_code(self):
-        url = f"{self.series_detail_url}a"
-        response = self.client.get(url, **self.headers)
-        self.assertEqual(response.status_code, 404)
-
-        expected_result = {
-            "status_code": 404,
-            "code": "SERIES_DOES_NOT_EXIST",
-            "error_message": {"detail": "Series does not exists."},
+    def test__retrieve(self):
+        expected_attrs = {
+            "tvfy_code",
+            "title",
+            "storyline",
+            "release_date",
+            "end_date",
+            "run_time",
+            "is_active",
+            "season_count",
+            "wins",
+            "nominations",
+            "tv_network",
+            "imdb_rate",
+            "imdb_vote_count",
+            "imdb_popularity",
+            "imdb_url",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
+            "rotten_tomatoes_url",
+            "tv_com_rate",
+            "tv_com_url",
+            "creator",
+            "genres",
+            "country",
+            "language",
+            "cast",
         }
-        result = response.json()
-        self.assertEqual(result, expected_result)
+
+        response = self.client.get(self.get_series_detail_url(self.series.tvfy_code))
+        json_response = response.json()
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
