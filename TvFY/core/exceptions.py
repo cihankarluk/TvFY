@@ -11,3 +11,11 @@ class UsernameAlreadyExists(ValidationError):
 
 class SeriesDoesNotExist(ValidationError):
     code = "SERIES_DOES_NOT_EXISTS"
+
+
+class NotAbleToFindMovieSourceUrl(ValidationError):
+    code = "MOVIE_SOURCE_URL_NOT_FOUND"
+
+
+class NotAbleToFindDirectorSourceUrl(ValidationError):
+    code = "DIRECTOR_SOURCE_URL_NOT_FOUND"

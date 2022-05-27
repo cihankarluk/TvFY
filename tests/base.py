@@ -1,7 +1,8 @@
 import datetime
 import json
 import os
-from typing import List
+from ctypes import Union
+from typing import List, Any
 
 from django.conf import settings
 from django.test import TestCase
@@ -12,15 +13,19 @@ from TvFY.actor.models import Actor
 from TvFY.country.models import Country
 from TvFY.director.models import Director
 from TvFY.genre.models import Genre
+from TvFY.genre.service import GenreService
 from TvFY.language.models import Language
 
 __all__ = ["BaseTestCase"]
+
+from TvFY.movies.models import Movie
 
 
 class BaseTestCase(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         self.now = datetime.datetime.now(tz=datetime.timezone.utc)
+        GenreService.load_genres()
 
     @staticmethod
     def read_file(path, is_json=False):
@@ -31,10 +36,12 @@ class BaseTestCase(TestCase):
             return file
 
     @classmethod
-    def is_subset(cls, attrs, results) -> bool:
-        set_attrs = set(attrs)
+    def is_subset(cls, attrs: set, results: Any) -> bool:
+        if not isinstance(results, list):
+            results: List[dict] = [results]
+
         is_subset: bool = all(
-            set_attrs.issubset(transaction) and set_attrs.issuperset(transaction) for transaction in results
+            attrs.issubset(transaction) and attrs.issuperset(transaction) for transaction in results
         )
         return is_subset
 
@@ -47,6 +54,7 @@ class BaseTestCase(TestCase):
         cls.create_genre()
         cls.create_actor()
         cls.create_director()
+        cls.create_movie()
 
     @classmethod
     def create_country(
@@ -179,3 +187,52 @@ class BaseTestCase(TestCase):
                 is_updated=is_updated,
             ))
         return directors
+
+    @classmethod
+    def create_movie(
+            cls,
+            index_start=0,
+            count=10,
+            tvfy_code="",
+            title="",
+            storyline=None,
+            release_date=None,
+            run_time=None,
+            rt_tomatometer_rate=None,
+            imdb_popularity=None,
+            imdb_rate=None,
+            imdb_vote_count=None,
+            wins=None,
+            nominations=None,
+            budget=None,
+            budget_currency=None,
+            usa_opening_weekend=None,
+            usa_opening_weekend_currency=None,
+            ww_gross=None,
+            imdb_url="https://test.com",
+            rotten_tomatoes_url="https://rt-test.com",
+    ) -> List[Movie]:
+        movies = []
+        for index in range(index_start, count + index_start, 1):
+            movies.append(baker.make(
+                Movie,
+                tvfy_code=f"{tvfy_code}_{index}",
+                title=f"{title}_{index}",
+                storyline=storyline,
+                release_date=release_date,
+                run_time=run_time,
+                rt_tomatometer_rate=rt_tomatometer_rate,
+                imdb_popularity=imdb_popularity,
+                imdb_rate=imdb_rate,
+                imdb_vote_count=imdb_vote_count,
+                wins=wins,
+                nominations=nominations,
+                budget=budget,
+                budget_currency=budget_currency,
+                usa_opening_weekend=usa_opening_weekend,
+                usa_opening_weekend_currency=usa_opening_weekend_currency,
+                ww_gross=ww_gross,
+                imdb_url=f"{imdb_url}/{index}/",
+                rotten_tomatoes_url=f"{rotten_tomatoes_url}/{index}",
+            ))
+        return movies
