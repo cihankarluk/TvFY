@@ -35,6 +35,13 @@ class ActorServiceTestCase(BaseTestCase):
         second_actor = Actor.objects.get(imdb_url="https://www.test.com/name/2/")
         self.assertEqual(return_value["https://www.test.com/name/2/"]["actor"], second_actor)
 
+    def test__create_multiple_actor__empty_cast_data(self):
+        cast_data = []
+
+        ActorService.create_multiple_actor(cast_data=cast_data)
+
+        self.assertEqual(Actor.objects.count(), 0)
+
     def test__update_actor(self):
         actor_data = {
             "first_name": "test",
