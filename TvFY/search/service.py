@@ -1,18 +1,18 @@
+from typing import List
 from urllib.parse import urljoin
 
-from django.conf import settings
+from TvFY.collector.imdb import IMDBBase
 
 
-def get_urls(google_data: dict) -> list:
-    urls = []
-    if imdb_base := google_data.get("imdb_url"):
-        urls.append(urljoin(imdb_base, settings.IMDB_CAST))
-        urls.append(urljoin(imdb_base, settings.AWARDS))
-        seasons_str = google_data.get("seasons", 0)
-        for season in range(1, int(seasons_str) + 1):
-            season_base = urljoin(imdb_base, settings.IMDB_SEASON)
-            urls.append(f"{season_base}{season}")
-        urls.append(imdb_base)
-    if rottentomatoes := google_data.get("rotten_tomatoes_url"):
-        urls.append(rottentomatoes)
-    return urls
+class SearchService:
+
+    @classmethod
+    def get_urls(cls, google_data: dict) -> List[str]:
+        urls = []
+        if imdb_base := google_data.get("imdb_url"):
+            urls.append(urljoin(imdb_base, IMDBBase.CAST))
+            urls.append(urljoin(imdb_base, IMDBBase.AWARDS))
+            urls.append(imdb_base)
+        if rottentomatoes := google_data.get("rotten_tomatoes_url"):
+            urls.append(rottentomatoes)
+        return urls
