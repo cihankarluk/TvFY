@@ -1,28 +1,34 @@
 from datetime import timedelta
 
 from django.urls import reverse
-from django.utils import timezone
 from model_bakery import baker
 
-from tests.base import BaseTestCase
-from TvFY.core.models import Country, Language
+from TvFY.country.models import Country
 from TvFY.genre.models import Genre
+from TvFY.language.models import Language
 from TvFY.movies.models import Movie
 from TvFY.movies.service import MovieService
+from tests.base import BaseTestCase
 
 
 class MovieViewSetTestCase(BaseTestCase):
     movie_list_url = reverse("movie-list")
 
+    @classmethod
+    def get_movie_detail_url(cls, tvfy_code):
+        return reverse("movie-detail", kwargs={'tvfy_code': tvfy_code})
+
+    @classmethod
+    def get_cast_url(cls, tvfy_code):
+        return reverse("movie-cast", kwargs={'tvfy_code': tvfy_code})
+
     def setUp(self) -> None:
         super(MovieViewSetTestCase, self).setUp()
         movie_data = self.read_file("movie_lotr.json", is_json=True)
-
-        self.movie = MovieService(search_data=movie_data).create_movie()
+        self.movie = MovieService.create_or_update_movie(search_data=movie_data)
 
     def test__list(self):
-        expected_attrs = [
-            "id",
+        expected_attrs = {
             "tvfy_code",
             "title",
             "storyline",
@@ -46,7 +52,8 @@ class MovieViewSetTestCase(BaseTestCase):
             "genres",
             "country",
             "language",
-        ]
+        }
+
         response = self.client.get(self.movie_list_url)
         json_response = response.json()
 
@@ -54,32 +61,32 @@ class MovieViewSetTestCase(BaseTestCase):
         self.is_subset(attrs=expected_attrs, results=json_response["results"])
 
     def test__list__filter_release_date_after(self):
-        now_ = timezone.now()
-        second_movie = baker.make(Movie, release_date=now_)
+        movie1 = baker.make(Movie, release_date=self.now)
+        baker.make(Movie, release_date=self.now - timedelta(days=2))
 
         response = self.client.get(
             self.movie_list_url,
-            data={"release_date_after": (now_ - timedelta(days=1)).strftime("%Y-%m-%d")},
+            data={"release_date_after": (self.now - timedelta(days=1)).strftime("%Y-%m-%d")},
         )
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], second_movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], movie1.tvfy_code)
 
     def test__list__filter_release_date_before(self):
-        now_ = timezone.now()
-        baker.make(Movie, release_date=now_)
+        baker.make(Movie, release_date=self.now)
+        movie2 = baker.make(Movie, release_date=self.now - timedelta(days=2))
 
         response = self.client.get(
             self.movie_list_url,
-            data={"release_date_before": (now_ - timedelta(days=1)).strftime("%Y-%m-%d")},
+            data={"release_date_before": (self.now - timedelta(days=1)).strftime("%Y-%m-%d")},
         )
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], movie2.tvfy_code)
 
     def test__list__filter_run_time_min(self):
         baker.make(Movie, run_time=self.movie.run_time - 1)
@@ -92,7 +99,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_run_time_max(self):
         baker.make(Movie, run_time=self.movie.run_time + 1)
@@ -105,7 +112,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_rt_tomatometer_rate_min(self):
         baker.make(Movie, rt_tomatometer_rate=self.movie.rt_tomatometer_rate - 1)
@@ -118,7 +125,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_rt_tomatometer_rate_max(self):
         baker.make(Movie, rt_tomatometer_rate=self.movie.rt_tomatometer_rate + 1)
@@ -131,7 +138,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_rt_audience_rate_min(self):
         baker.make(Movie, rt_audience_rate=self.movie.rt_audience_rate - 1)
@@ -144,7 +151,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_rt_audience_rate_max(self):
         baker.make(Movie, rt_audience_rate=self.movie.rt_audience_rate + 1)
@@ -157,7 +164,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_imdb_rate_min(self):
         baker.make(Movie, imdb_rate=self.movie.imdb_rate - 0.1)
@@ -170,7 +177,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_imdb_rate_max(self):
         baker.make(Movie, imdb_rate=self.movie.imdb_rate + 0.1)
@@ -183,7 +190,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_imdb_rate_range(self):
         baker.make(Movie, imdb_rate=self.movie.imdb_rate + 0.2)
@@ -199,7 +206,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_imdb_popularity_min(self):
         baker.make(Movie, imdb_popularity=self.movie.imdb_popularity - 1)
@@ -212,7 +219,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_imdb_popularity_max(self):
         baker.make(Movie, imdb_popularity=self.movie.imdb_popularity + 1)
@@ -225,7 +232,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_wins_min(self):
         baker.make(Movie, wins=self.movie.wins - 1)
@@ -238,7 +245,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_wins_max(self):
         baker.make(Movie, wins=self.movie.wins + 1)
@@ -251,7 +258,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_nominations_min(self):
         baker.make(Movie, nominations=self.movie.nominations - 1)
@@ -264,7 +271,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_nominations_max(self):
         baker.make(Movie, nominations=self.movie.nominations + 1)
@@ -277,79 +284,60 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_director_full_name(self):
         baker.make(Movie)
 
-        response = self.client.get(
-            self.movie_list_url, data={"director_full_name": "Peter Jacks"}
-        )
+        response = self.client.get(self.movie_list_url, data={"director_full_name": "Peter Jacks"})
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_genres(self):
         genre = baker.make(Genre)
-        second_movie = baker.make(Movie)
-        second_movie.genres.add(genre)
+        movie2 = baker.make(Movie)
+        movie2.genres.add(genre)
 
         response = self.client.get(
             self.movie_list_url,
-            data={
-                "genres": ",".join(
-                    [
-                        str(genre_id)
-                        for genre_id in self.movie.genres.values_list("id", flat=True)
-                    ]
-                )
-            },
+            data={"genres": ",".join([str(genre_id) for genre_id in self.movie.genres.values_list("id", flat=True)])},
         )
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_country(self):
         country = baker.make(Country)
-        second_movie = baker.make(Movie)
-        second_movie.country.add(country)
+        movie2 = baker.make(Movie)
+        movie2.country.add(country)
 
         response = self.client.get(
             self.movie_list_url,
             data={
-                "country": ",".join(
-                    [
-                        str(country_id)
-                        for country_id in self.movie.country.values_list("id", flat=True)
-                    ]
-                )
+                "country": ",".join([str(country_id) for country_id in self.movie.country.values_list("id", flat=True)])
             },
         )
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
 
     def test__list__filter_language(self):
         language = baker.make(Language)
-        second_movie = baker.make(Movie)
-        second_movie.language.add(language)
+        movie2 = baker.make(Movie)
+        movie2.language.add(language)
 
         response = self.client.get(
             self.movie_list_url,
             data={
                 "language": ",".join(
-                    [
-                        str(language_id)
-                        for language_id in self.movie.language.values_list(
-                            "id", flat=True
-                        )
-                    ]
+                    [str(language_id) for language_id in self.movie.language.values_list("id", flat=True)]
                 )
             },
         )
@@ -357,4 +345,106 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json_response["count"], 1)
-        self.assertEqual(json_response["results"][0]["id"], self.movie.id)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
+
+    def test__search__title(self):
+        movie2 = baker.make(Movie, title="Mahmut Tuncer Welcome to my Halay")
+
+        response = self.client.get(
+            self.movie_list_url,
+            data={"search": "Mahmut Tuncer"}
+        )
+        json_response = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json_response["count"], 1)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], movie2.tvfy_code)
+
+    def test__search__tvfy_code(self):
+        movie2 = baker.make(Movie)
+
+        response = self.client.get(
+            self.movie_list_url,
+            data={"search": movie2.tvfy_code}
+        )
+        json_response = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json_response["count"], 1)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], movie2.tvfy_code)
+
+    def test__search__tvfy_code__not_exact_code(self):
+        movie2 = baker.make(Movie)
+
+        response = self.client.get(
+            self.movie_list_url,
+            data={"search": movie2.tvfy_code[:5]}
+        )
+        json_response = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json_response["count"], 0)
+
+    def test__ordering_fields_imdb_rate(self):
+        movie1 = baker.make(Movie, imdb_rate=self.movie.imdb_rate - 1)
+        movie2 = baker.make(Movie, imdb_rate=self.movie.imdb_rate - 2)
+
+        response = self.client.get(
+            self.movie_list_url,
+            data={"ordering": "-imdb_rate"}
+        )
+        json_response = response.json()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json_response["count"], 3)
+        self.assertEqual(json_response["results"][0]["tvfy_code"], self.movie.tvfy_code)
+        self.assertEqual(json_response["results"][1]["tvfy_code"], movie1.tvfy_code)
+        self.assertEqual(json_response["results"][2]["tvfy_code"], movie2.tvfy_code)
+
+    def test__retrieve(self):
+        expected_attrs = {
+            "tvfy_code",
+            "title",
+            "storyline",
+            "release_date",
+            "run_time",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
+            "imdb_popularity",
+            "imdb_rate",
+            "imdb_vote_count",
+            "wins",
+            "nominations",
+            "budget",
+            "budget_currency",
+            "usa_opening_weekend",
+            "usa_opening_weekend_currency",
+            "ww_gross",
+            "imdb_url",
+            "rotten_tomatoes_url",
+            "director",
+            "genres",
+            "country",
+            "language",
+            "cast",
+        }
+        response = self.client.get(
+            self.get_movie_detail_url(self.movie.tvfy_code),
+        )
+        json_response = response.json()
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=[json_response]))
+
+    def test__get_cast(self):
+        expected_attrs = {
+            "character_name",
+            "actor"
+        }
+        response = self.client.get(
+            self.get_cast_url(self.movie.tvfy_code),
+        )
+        json_response = response.json()
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))

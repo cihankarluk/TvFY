@@ -1,9 +1,11 @@
 from django.db import models
 
 from TvFY.actor.models import Actor
-from TvFY.core.models import AuditMixin, Country, Language
+from TvFY.core.models import AuditMixin
+from TvFY.country.models import Country
 from TvFY.director.models import Director
 from TvFY.genre.models import Genre
+from TvFY.language.models import Language
 from TvFY.movies.managers import MovieManager
 
 
@@ -11,31 +13,31 @@ class Movie(AuditMixin):
     TYPE = "movie"
     PREFIX = "mv"
 
-    tvfy_code = models.CharField(max_length=14, db_index=True, unique=True)
+    tvfy_code = models.CharField(db_column="tvfy", max_length=11, unique=True, db_index=True)
 
-    title = models.CharField(max_length=255)
-    storyline = models.TextField()
-    release_date = models.DateField(null=True)
-    run_time = models.PositiveIntegerField(null=True)
-    rt_tomatometer_rate = models.PositiveIntegerField(null=True)
-    rt_audience_rate = models.PositiveIntegerField(null=True)
-    imdb_popularity = models.PositiveIntegerField(null=True)
-    imdb_rate = models.FloatField(null=True)
-    imdb_vote_count = models.PositiveIntegerField(null=True)
-    wins = models.PositiveIntegerField(null=True, default=0)
-    nominations = models.PositiveIntegerField(null=True, default=0)
-    budget = models.PositiveIntegerField(null=True, default=0)
-    budget_currency = models.CharField(max_length=255, null=True)
-    usa_opening_weekend = models.PositiveIntegerField(blank=True, null=True, default=0)
-    usa_opening_weekend_currency = models.CharField(max_length=255, null=True)
-    ww_gross = models.PositiveIntegerField(blank=True, null=True, default=0)
-    imdb_url = models.URLField(blank=True, null=True)
-    rotten_tomatoes_url = models.URLField(blank=True, null=True)
+    title = models.CharField(db_column="title", max_length=255)
+    storyline = models.TextField(db_column="storyline", null=True)
+    release_date = models.DateTimeField(db_column="release_date", null=True)
+    run_time = models.PositiveIntegerField(db_column="run_time", null=True)
+    rt_tomatometer_rate = models.PositiveIntegerField(db_column="rt_tomatometer_rate", null=True)
+    rt_audience_rate = models.PositiveIntegerField(db_column="rt_audience_rate", null=True)
+    imdb_popularity = models.PositiveIntegerField(db_column="imdb_popularity", null=True)
+    imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
+    imdb_vote_count = models.PositiveIntegerField(db_column="imdb_vote_count", null=True)
+    wins = models.PositiveIntegerField(db_column="wins", null=True)
+    nominations = models.PositiveIntegerField(db_column="nominations", null=True)
+    budget = models.PositiveIntegerField(db_column="budget", null=True)
+    budget_currency = models.CharField(db_column="budget_currency", max_length=255, null=True)
+    usa_opening_weekend = models.PositiveIntegerField(db_column="usa_opening_weekend", null=True)
+    usa_opening_weekend_currency = models.CharField(db_column="usa_opening_weekend_currency", max_length=255, null=True)
+    ww_gross = models.PositiveIntegerField(db_column="ww_gross", null=True)
+    imdb_url = models.URLField(db_column="imdb_url", null=True, unique=True, db_index=True)
+    rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True, unique=True, db_index=True)
 
-    director = models.ForeignKey(Director, on_delete=models.CASCADE)
-    genres = models.ManyToManyField(Genre)
-    country = models.ManyToManyField(Country)
-    language = models.ManyToManyField(Language)
+    director = models.ForeignKey(to=Director, db_column="director", on_delete=models.CASCADE, null=True)
+    genres = models.ManyToManyField(to=Genre, db_column="genres")
+    country = models.ManyToManyField(to=Country, db_column="country")
+    language = models.ManyToManyField(to=Language, db_column="language")
 
     objects = MovieManager()
 
@@ -44,10 +46,10 @@ class Movie(AuditMixin):
 
 
 class MovieCast(models.Model):
-    character_name = models.CharField(max_length=255, default="John Doe")
+    character_name = models.CharField(db_column="character_name", max_length=255, default="John Doe")
 
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    movie = models.ForeignKey(to=Movie, db_column="movie", on_delete=models.CASCADE)
+    actor = models.ForeignKey(to=Actor, db_column="actor", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.character_name} ({self.actor.first_name} {self.actor.last_name})"

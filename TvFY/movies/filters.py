@@ -17,9 +17,7 @@ class MovieViewSetFilterSet(django_filters.FilterSet):
     wins = django_filters.RangeFilter()
     nominations = django_filters.RangeFilter()
 
-    director_full_name = django_filters.CharFilter(
-        field_name="director_full_name", lookup_expr="icontains"
-    )
+    director_full_name = django_filters.CharFilter(field_name="director__full_name", lookup_expr="icontains")
 
     genres = NumberInFilter(distinct=True)
     country = NumberInFilter(distinct=True)
