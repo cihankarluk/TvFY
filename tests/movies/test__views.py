@@ -437,6 +437,22 @@ class MovieViewSetTestCase(BaseTestCase):
         self.assertEqual(200, response.status_code)
         self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
 
+    def test__retrieve__not_exists(self):
+        expected_result = {
+            "status_code": 404,
+            "code": "MOVIE_NOT_FOUND",
+            "error_message": {
+                "detail": "Movie with notExists code does not exists."
+            }
+        }
+        response = self.client.get(
+            self.get_movie_detail_url("notExists"),
+        )
+        json_response = response.json()
+
+        self.assertEqual(404, response.status_code)
+        self.assertEqual(expected_result, json_response)
+
     def test__get_cast(self):
         expected_attrs = {
             "character_name",
@@ -449,3 +465,19 @@ class MovieViewSetTestCase(BaseTestCase):
 
         self.assertEqual(200, response.status_code)
         self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
+
+    def test__cast__not_exists(self):
+        expected_result = {
+            "status_code": 404,
+            "code": "MOVIE_NOT_FOUND",
+            "error_message": {
+                "detail": "Movie with notExists code does not exists."
+            }
+        }
+        response = self.client.get(
+            self.get_movie_detail_url("notExists"),
+        )
+        json_response = response.json()
+
+        self.assertEqual(404, response.status_code)
+        self.assertEqual(expected_result, json_response)

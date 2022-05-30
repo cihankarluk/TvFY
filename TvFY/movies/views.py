@@ -1,3 +1,4 @@
+from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
@@ -7,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from TvFY.core.exceptions import MovieNotFoundError
 from TvFY.movies.filters import MovieViewSetFilterSet
 from TvFY.movies.models import Movie
 from TvFY.movies.serializers import MovieListSerializer, MovieDetailSerializer, MovieCastSerializer
@@ -33,9 +35,17 @@ class MovieViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
             return MovieCastSerializer
         return self.serializer_class
 
+    def get_object(self):
+        try:
+            movie = super(MovieViewSet, self).get_object()
+        except Http404:
+            raise MovieNotFoundError(f"Movie with {self.kwargs['tvfy_code']} code does not exists.")
+        return movie
+
     def retrieve(self, request, *args, **kwargs):
         """Return detailed movie data."""
         movie: Movie = self.get_object()
+
         serializer = self.get_serializer(movie)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
