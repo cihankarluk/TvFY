@@ -1,6 +1,7 @@
 from typing import List
 
 from TvFY.actor.models import Actor
+from TvFY.collector.base import Scraper
 from TvFY.country.service import CountryService
 
 
@@ -31,11 +32,23 @@ class ActorService:
         return cast_dict
 
     @classmethod
-    def update_actor(cls, actor_data: dict, actor: Actor):
-        born_at = actor_data.pop("born_at", None)
-        died_at = actor_data.pop("died_at", None)
+    def update_actor(cls, actor_obj: Actor, actor_data: dict):
+        if born_at := actor_data.pop("born_at", None):
+            actor_obj.born_at = CountryService.get_or_create_country(country_name=born_at)
+        if died_at := actor_data.pop("died_at", None):
+            actor_obj.died_at = CountryService.get_or_create_country(country_name=died_at)
         for field, value in actor_data.items():
-            setattr(actor, field, value)
-        actor.born_at = CountryService.get_or_create_country(country_name=born_at)
-        actor.died_at = CountryService.get_or_create_country(country_name=died_at)
-        actor.save()
+            setattr(actor_obj, field, value)
+        actor_obj.save()
+
+    @classmethod
+    def scrap_and_update_actor(cls):
+        actors = Actor.objects.filter(is_updated=False)
+
+        actor_map = {actor.imdb_url: actor for actor in actors}
+        urls = list(actor_map.keys())
+
+        results = Scraper(urls=urls).handle()
+
+        for imdb_url, data in results.items():
+            cls.update_actor(actor_obj=actor_map[imdb_url], actor_data=data)
