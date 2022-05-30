@@ -1,7 +1,5 @@
-from model_bakery import baker
 from rest_framework.reverse import reverse
 
-from TvFY.core.helpers import read_file
 from TvFY.series.service import SeriesService
 from tests.base import BaseTestCase
 
@@ -56,3 +54,51 @@ class SeriesViewSetTestCase(BaseTestCase):
 
         self.assertEqual(200, response.status_code)
         self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
+
+    def test__retrieve__not_exists(self):
+        expected_result = {
+            "status_code": 404,
+            "code": "SERIES_NOT_FOUND",
+            "error_message": {
+                "detail": "Series with notExists code does not exists."
+            }
+        }
+        response = self.client.get(
+            self.get_series_detail_url("notExists"),
+        )
+        json_response = response.json()
+
+        self.assertEqual(404, response.status_code)
+        self.assertEqual(expected_result, json_response)
+
+    def test__get_cast(self):
+        expected_attrs = {
+            "character_name",
+            "episode_count",
+            "start_acting",
+            "end_acting",
+            "actor",
+        }
+        response = self.client.get(
+            self.get_cast_url(self.series.tvfy_code),
+        )
+        json_response = response.json()
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
+
+    def test__cast__not_exists(self):
+        expected_result = {
+            "status_code": 404,
+            "code": "SERIES_NOT_FOUND",
+            "error_message": {
+                "detail": "Series with notExists code does not exists."
+            }
+        }
+        response = self.client.get(
+            self.get_series_detail_url("notExists"),
+        )
+        json_response = response.json()
+
+        self.assertEqual(404, response.status_code)
+        self.assertEqual(expected_result, json_response)

@@ -1,3 +1,4 @@
+from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
@@ -7,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from TvFY.core.exceptions import SeriesNotFoundError
 from TvFY.series.models import Series
 from TvFY.series.serializers import SeriesListSerializer, SeriesDetailSerializer, SeriesCastSerializer
 
@@ -32,6 +34,13 @@ class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         elif self.action == "get_cast":
             return SeriesCastSerializer
         return self.serializer_class
+
+    def get_object(self):
+        try:
+            series = super(SeriesViewSet, self).get_object()
+        except Http404:
+            raise SeriesNotFoundError(f"Series with {self.kwargs['tvfy_code']} code does not exists.")
+        return series
 
     def retrieve(self, request, *args, **kwargs):
         series: Series = self.get_object()
