@@ -1,5 +1,6 @@
 from typing import Optional
 
+from TvFY.collector.base import Scraper
 from TvFY.core.exceptions import NotAbleToFindDirectorSourceUrl
 from TvFY.country.service import CountryService
 from TvFY.director.models import Director
@@ -53,11 +54,23 @@ class DirectorService:
         return director
 
     @classmethod
-    def update_director(cls, director_data: dict, director_obj: Director):
-        born_at = director_data.pop("born_at", None)
-        died_at = director_data.pop("died_at", None)
+    def update_director(cls, director_obj: Director, director_data: dict):
+        if born_at := director_data.pop("born_at", None):
+            director_obj.born_at = CountryService.get_or_create_country(country_name=born_at)
+        if died_at := director_data.pop("died_at", None):
+            director_obj.died_at = CountryService.get_or_create_country(country_name=died_at)
         for field, value in director_data.items():
             setattr(director_obj, field, value)
-        director_obj.born_at = CountryService.get_or_create_country(country_name=born_at)
-        director_obj.died_at = CountryService.get_or_create_country(country_name=died_at)
         director_obj.save()
+
+    @classmethod
+    def scrap_and_update_director(cls):
+        directors = Director.objects.filter(is_updated=False)
+
+        director_map = {director.imdb_url: director for director in directors}
+        urls = list(director_map.keys())
+
+        results = Scraper(urls=urls).handle()
+
+        for imdb_url, data in results.items():
+            cls.update_director(director_obj=director_map[imdb_url], director_data=data)
