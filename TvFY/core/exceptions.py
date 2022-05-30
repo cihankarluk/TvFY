@@ -1,4 +1,4 @@
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError, NotFound
 
 
 class ValidationError(ValidationError):
@@ -17,5 +17,25 @@ class NotAbleToFindMovieSourceUrl(ValidationError):
     code = "MOVIE_SOURCE_URL_NOT_FOUND"
 
 
+class NotAbleToFindSeriesSourceUrl(ValidationError):
+    code = "SERIES_SOURCE_URL_NOT_FOUND"
+
+
 class NotAbleToFindDirectorSourceUrl(ValidationError):
     code = "DIRECTOR_SOURCE_URL_NOT_FOUND"
+
+
+class MovieNotFoundError(NotFound):
+    code = "MOVIE_NOT_FOUND"
+
+
+class SeriesNotFoundError(NotFound):
+    code = "SERIES_NOT_FOUND"
+
+
+class ActorNotFoundError(NotFound):
+    code = "ACTOR_NOT_FOUND"
+
+
+class DirectorNotFoundError(NotFound):
+    code = "DIRECTOR_NOT_FOUND"

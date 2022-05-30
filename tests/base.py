@@ -19,6 +19,7 @@ from TvFY.language.models import Language
 __all__ = ["BaseTestCase"]
 
 from TvFY.movies.models import Movie
+from TvFY.series.models import Series
 
 
 class BaseTestCase(TestCase):
@@ -199,6 +200,7 @@ class BaseTestCase(TestCase):
             release_date=None,
             run_time=None,
             rt_tomatometer_rate=None,
+            rt_audience_rate=None,
             imdb_popularity=None,
             imdb_rate=None,
             imdb_vote_count=None,
@@ -222,6 +224,7 @@ class BaseTestCase(TestCase):
                 release_date=release_date,
                 run_time=run_time,
                 rt_tomatometer_rate=rt_tomatometer_rate,
+                rt_audience_rate=rt_audience_rate,
                 imdb_popularity=imdb_popularity,
                 imdb_rate=imdb_rate,
                 imdb_vote_count=imdb_vote_count,
@@ -236,3 +239,58 @@ class BaseTestCase(TestCase):
                 rotten_tomatoes_url=f"{rotten_tomatoes_url}/{index}",
             ))
         return movies
+
+    @classmethod
+    def create_series(
+            cls,
+            index_start=0,
+            count=10,
+            tvfy_code="",
+            title="",
+            storyline=None,
+            release_date=None,
+            end_date=None,
+            run_time=None,
+            is_active=None,
+            season_count=None,
+            wins=None,
+            nominations=None,
+            tv_network=None,
+            imdb_rate=None,
+            imdb_vote_count=None,
+            imdb_popularity=None,
+            imdb_url="https://test.com",
+            rt_tomatometer_rate=None,
+            rt_audience_rate=None,
+            rotten_tomatoes_url="https://rt-test.com",
+            tv_com_rate=None,
+            tv_com_url=None,
+            creator=None,
+    ) -> List[Series]:
+        series = []
+        for index in range(index_start, count + index_start, 1):
+            series.append(baker.make(
+                Series,
+                tvfy_code=f"{tvfy_code}_{index}",
+                title=f"{title}_{index}",
+                storyline=storyline,
+                release_date=release_date,
+                end_date=end_date,
+                run_time=run_time,
+                is_active=is_active,
+                season_count=season_count,
+                wins=wins,
+                nominations=nominations,
+                tv_network=tv_network,
+                imdb_rate=imdb_rate,
+                imdb_vote_count=imdb_vote_count,
+                imdb_popularity=imdb_popularity,
+                imdb_url=f"{imdb_url}/{index}/",
+                rt_tomatometer_rate=rt_tomatometer_rate,
+                rt_audience_rate=rt_audience_rate,
+                rotten_tomatoes_url=f"{rotten_tomatoes_url}/{index}",
+                tv_com_rate=tv_com_rate,
+                tv_com_url=tv_com_url,
+                creator=creator,
+            ))
+        return series

@@ -55,7 +55,7 @@ def custom_exception_handler(exc, context: dict):
         "error_message": error_message,
     }
 
-    return Response(data, status=response.status_code, headers=response._headers)
+    return Response(data, status=response.status_code, headers=response.headers)
 
 
 def error_handler(func):
