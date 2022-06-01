@@ -11,6 +11,7 @@ from TvFY.collector.google import GoogleScrapper
 from TvFY.collector.imdb import IMDBBase
 from TvFY.collector.tomatoes import TomatoesBase
 from TvFY.director.models import Director
+from TvFY.series.models import Series, SeriesCast, Season, Episode
 
 
 class BaseTestCase(TestCase):
@@ -130,4 +131,114 @@ class BaseTestCase(TestCase):
             is_updated=is_updated,
         )
         return director
+
+    @classmethod
+    def create_series(
+            cls,
+            title=None,
+            storyline=None,
+            release_date=None,
+            end_date=None,
+            run_time=None,
+            is_active=None,
+            season_count=None,
+            wins=None,
+            nominations=None,
+            tv_network=None,
+            imdb_rate=None,
+            imdb_vote_count=None,
+            imdb_popularity=None,
+            imdb_url=None,
+            rt_tomatometer_rate=None,
+            rt_audience_rate=None,
+            rotten_tomatoes_url=None,
+            tv_com_rate=None,
+            tv_com_url=None,
+            creator=None,
+    ) -> Series:
+        series = baker.make(
+            Series,
+            title=title or f"{title}_{imdb_url}",
+            storyline=storyline,
+            release_date=release_date,
+            end_date=end_date,
+            run_time=run_time,
+            is_active=is_active,
+            season_count=season_count,
+            wins=wins,
+            nominations=nominations,
+            tv_network=tv_network,
+            imdb_rate=imdb_rate,
+            imdb_vote_count=imdb_vote_count,
+            imdb_popularity=imdb_popularity,
+            imdb_url=imdb_url,
+            rt_tomatometer_rate=rt_tomatometer_rate,
+            rt_audience_rate=rt_audience_rate,
+            rotten_tomatoes_url=rotten_tomatoes_url or f"{rotten_tomatoes_url}",
+            tv_com_rate=tv_com_rate,
+            tv_com_url=tv_com_url,
+            creator=creator,
+        )
+        return series
+
+    @classmethod
+    def create_series_cast(
+            cls,
+            character_name="",
+            episode_count=None,
+            start_acting=None,
+            end_acting=None,
+            series=None,
+            actor=None,
+    ) -> SeriesCast:
+        series_cast = baker.make(
+            SeriesCast,
+            character_name=character_name,
+            episode_count=episode_count,
+            start_acting=start_acting,
+            end_acting=end_acting,
+            series=series or cls.create_series(),
+            actor=actor or cls.create_actor(),
+        )
+        return series_cast
+
+    @classmethod
+    def create_season(
+            cls,
+            season=None,
+            imdb_url=None,
+            imdb_season_average_rate=None,
+            series=None,
+    ) -> Season:
+        season = baker.make(
+            Season,
+            season=season,
+            imdb_url=imdb_url,
+            imdb_season_average_rate=imdb_season_average_rate,
+            series=series or cls.create_series(),
+        )
+        return season
+
+    @classmethod
+    def create_episode(
+            cls,
+            title=None,
+            storyline=None,
+            release_date=None,
+            imdb_rate=None,
+            imdb_vote_count=None,
+            episode=None,
+            season=None,
+    ) -> Episode:
+        episode = baker.make(
+            Episode,
+            title=title,
+            storyline=storyline,
+            release_date=release_date,
+            imdb_rate=imdb_rate,
+            imdb_vote_count=imdb_vote_count,
+            episode=episode,
+            season=season or cls.create_season(),
+        )
+        return episode
 
