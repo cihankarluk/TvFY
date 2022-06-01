@@ -1,6 +1,12 @@
-from typing import Optional
+from typing import Optional, List
+from urllib.parse import urljoin
 
+from django.db.models import QuerySet
+
+from TvFY.actor.models import Actor
 from TvFY.actor.service import ActorService
+from TvFY.collector.base import Scraper
+from TvFY.collector.imdb import IMDBBase
 from TvFY.core.exceptions import NotAbleToFindSeriesSourceUrl
 from TvFY.country.service import CountryService
 from TvFY.director.service import DirectorService
@@ -50,7 +56,10 @@ class SeriesService:
             series.country.add(country)
         for language in LanguageService.get_or_create_multiple_language(search_data=search_data):
             series.language.add(language)
-        SeriesCastService.bulk_create_series_cast(search_data=search_data, series=series)
+        SeriesCastService.create_or_update_series_cast(series=series, search_data=search_data)
+        SeriesSeasonEpisodeService.create_or_update_series_season_episodes(
+            series=series, search_data=search_data, season_number="1"
+        )
 
         return series
 
@@ -70,7 +79,7 @@ class SeriesService:
             "end_date": search_data.get("end_date"),
             "run_time": search_data.get("run_time"),
             "is_active": search_data.get("is_active"),
-            "season_count": search_data.get("seasons"),
+            "season_count": search_data.get("season_count"),
             "wins": search_data.get("wins"),
             "nominations": search_data.get("nominations"),
             "tv_network": search_data.get("network"),
@@ -97,44 +106,127 @@ class SeriesService:
 class SeriesCastService:
 
     @classmethod
-    def bulk_create_series_cast(cls, search_data: dict, series: Series):
-        cast_data = search_data.get("cast", [])
-        actor_dict = ActorService.create_multiple_actor(cast_data=cast_data)
+    def create_series_cast(cls, series: Series, actor: Actor, cast_data: dict) -> SeriesCast:
+        series_cast = SeriesCast(
+            character_name=cast_data["character_name"],
+            episode_count=cast_data["episode_count"],
+            start_acting=cast_data.get("start_acting"),
+            end_acting=cast_data.get("end_acting"),
+            series=series,
+            actor=actor,
+        )
+        return series_cast
 
-        series_cast = []
-        for cast in cast_data:
-            series_cast.append(
-                SeriesCast(
-                    character_name=cast["character_name"],
-                    episode_count=cast["episode_count"],
-                    start_acting=cast["start_acting"],
-                    end_acting=cast["end_acting"],
-                    series=series,
-                    actor=actor_dict[cast["imdb_actor_url"]]["actor"],
-                )
-            )
-        SeriesCast.objects.bulk_create(series_cast)
+    @classmethod
+    def update_series_cast(cls, series_cast: SeriesCast, cast_data: dict):
+        for field, value in cast_data.items():
+            setattr(series_cast, field, value)
+        series_cast.save()
+
+    @classmethod
+    def get_series_cast_query(cls, series: Series, cast_data_list: List[dict], actor_map: dict) -> QuerySet:
+        """
+        Filter SeriesCast objects to later decide create or update.
+        """
+        character_names = [cast_data["character_name"] for cast_data in cast_data_list]
+        series_cast_query = SeriesCast.objects.filter(
+            series=series,
+            character_name__in=character_names,
+            actor__imdb_url__in=list(actor_map.keys())
+        )
+        return series_cast_query
+
+    @classmethod
+    def create_or_update_series_cast(cls, series: Series, search_data: dict):
+        cast_data_list = search_data.get("cast", [])
+        actor_map = ActorService.create_multiple_actor(cast_data=cast_data_list)
+        series_cast_query = cls.get_series_cast_query(series=series, cast_data_list=cast_data_list, actor_map=actor_map)
+
+        series_cast_objects = []
+        for cast_data in cast_data_list:
+            actor = actor_map[cast_data["imdb_actor_url"]]["actor"]
+            if series_cast := series_cast_query.filter(actor=actor):
+                cls.update_series_cast(series_cast=series_cast.first(), cast_data=cast_data)
+            else:
+                series_cast_objects.append(cls.create_series_cast(series=series, actor=actor, cast_data=cast_data))
+
+        if series_cast_objects:
+            SeriesCast.objects.bulk_create(series_cast_objects)
 
 
 class SeriesSeasonEpisodeService:
 
     @classmethod
-    def create_season_and_episodes(cls, series: Series, search_data: dict):
-        for season in range(1, search_data.get("seasons", 0) + 1):
-            season_data = search_data[season]
-            season = Season.objects.create(
-                season=season,
-                imdb_url=season_data[0]["imdb_url"],
-                series=series,
-            )
-            for episode in season_data:
-                # TODO: bulk create
-                Episode.objects.create(
-                    name=episode["name"],
-                    storyline=episode.get("storyline"),
-                    release_date=episode.get("release_date"),
-                    imdb_rate=episode.get("imdb_rate"),
-                    imdb_vote_count=episode.get("imdb_vote_count"),
-                    episode=episode.get("episode"),
-                    season=season,
+    def create_episode(cls, season: Season, episode_data: dict) -> Episode:
+        episode = Episode(
+            title=episode_data["title"],
+            storyline=episode_data.get("storyline"),
+            release_date=episode_data.get("release_date"),
+            imdb_rate=episode_data.get("imdb_rate"),
+            imdb_vote_count=episode_data.get("imdb_vote_count"),
+            episode=episode_data.get("episode"),
+            season=season,
+        )
+        return episode
+
+    @classmethod
+    def update_episode(cls, episode: Episode, episode_data: dict):
+        for field, value, in episode_data.items():
+            setattr(episode, field, value)
+        episode.save()
+
+    @classmethod
+    def get_episode_query(cls, season: Season, season_data: List[dict]) -> QuerySet:
+        episode_names = [episode_data["title"] for episode_data in season_data]
+        episode_query = Episode.objects.filter(season=season, title__in=episode_names)
+        return episode_query
+
+    @classmethod
+    def create_or_update_series_season_episodes(cls, series: Series, search_data: dict, season_number: str):
+        for value in list(search_data.keys()):
+            if season_number in value:
+                season_data = search_data[value][season_number]
+                season, _ = Season.objects.get_or_create(
+                    season=season_number,
+                    imdb_url=season_data[0]["imdb_url"],
+                    series=series,
                 )
+
+                episodes = []
+                episode_query = cls.get_episode_query(season=season, season_data=season_data)
+                for episode_data in season_data:
+                    if episode := episode_query.filter(title=episode_data["title"]):
+                        cls.update_episode(episode=episode.first(), episode_data=episode_data)
+                    else:
+                        episodes.append(cls.create_episode(season=season, episode_data=episode_data))
+
+                if episodes:
+                    Episode.objects.bulk_create(episodes)
+
+    @classmethod
+    def scrap_and_update_episodes(cls):
+        series_query = Series.objects.all()
+
+        series_map = {
+            series.season_count: series
+            for series in series_query
+            if series.season_count != series.season_set.count()
+        }
+
+        url_map = {}
+        for key, value in series_map.items():
+            for i in range(2, key + 1):
+                url_map[f"{urljoin(value.imdb_url, IMDBBase.EPISODES)}?season={i}"] = None
+
+        results = Scraper(urls=list(url_map.keys())).handle()
+
+        for imdb_url, search_result in results.items():
+            for key, value in search_result.items():
+                if isinstance(value, list):
+                    if value:
+                        series = Series.objects.get(imdb_url=f"{imdb_url.rsplit('/', 1)[0]}/")
+                        cls.create_or_update_series_season_episodes(
+                            series=series,
+                            search_data=search_result,
+                            season_number=key
+                        )

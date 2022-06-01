@@ -15,6 +15,14 @@ class SeriesViewSetTestCase(BaseTestCase):
     def get_cast_url(cls, tvfy_code):
         return reverse("series-cast", kwargs={'tvfy_code': tvfy_code})
 
+    @classmethod
+    def get_season_url(cls, tvfy_code):
+        return reverse("series-season", kwargs={'tvfy_code': tvfy_code})
+
+    @classmethod
+    def get_season_episodes_url(cls, tvfy_code, season_id):
+        return reverse("series-season_episodes", kwargs={'tvfy_code': tvfy_code, "season_id": season_id})
+
     def setUp(self) -> None:
         super(SeriesViewSetTestCase, self).setUp()
         series_data = self.read_file("series_the_boys.json", is_json=True)
@@ -57,12 +65,11 @@ class SeriesViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_result = {
-            "status_code": 404,
-            "code": "SERIES_NOT_FOUND",
-            "error_message": {
-                "detail": "Series with notExists code does not exists."
-            }
+            'code': 404,
+            'type': 'SeriesNotFoundError',
+            'reason': 'Series with notExists code does not exists.'
         }
+
         response = self.client.get(
             self.get_series_detail_url("notExists"),
         )
@@ -79,6 +86,7 @@ class SeriesViewSetTestCase(BaseTestCase):
             "end_acting",
             "actor",
         }
+
         response = self.client.get(
             self.get_cast_url(self.series.tvfy_code),
         )
@@ -89,12 +97,11 @@ class SeriesViewSetTestCase(BaseTestCase):
 
     def test__cast__not_exists(self):
         expected_result = {
-            "status_code": 404,
-            "code": "SERIES_NOT_FOUND",
-            "error_message": {
-                "detail": "Series with notExists code does not exists."
-            }
+            "code": 404,
+            "type": "SeriesNotFoundError",
+            "reason": "Series with notExists code does not exists."
         }
+
         response = self.client.get(
             self.get_series_detail_url("notExists"),
         )
@@ -102,3 +109,27 @@ class SeriesViewSetTestCase(BaseTestCase):
 
         self.assertEqual(404, response.status_code)
         self.assertEqual(expected_result, json_response)
+
+    def test__get_seasons(self):
+        expected_attrs = {
+            "tvfy_code",
+            "season",
+            "imdb_url",
+            "imdb_season_average_rate",
+            "series_title",
+        }
+
+        response = self.client.get(
+            self.get_season_url(self.series.tvfy_code),
+        )
+        json_response = response.json()
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response))
+
+    def test__get_season_episodes__404_error(self):
+        response = self.client.get(
+            self.get_season_episodes_url(self.series.tvfy_code, "13"),
+        )
+
+        self.assertEqual(404, response.status_code)

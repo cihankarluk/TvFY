@@ -7,7 +7,7 @@ from TvFY.country.models import Country
 from TvFY.director.models import Director
 from TvFY.genre.models import Genre
 from TvFY.language.models import Language
-from TvFY.series.managers import SeriesManager
+from TvFY.series.managers import SeriesManager, SeriesCastManager, SeriesEpisodeCastManager, SeriesSeasonManager
 
 
 class Series(AuditMixin):
@@ -55,40 +55,59 @@ class Series(AuditMixin):
 
 
 class SeriesCast(models.Model):
-    character_name = models.CharField(max_length=255)
-    episode_count = models.IntegerField(null=True)
-    start_acting = models.DateTimeField(null=True)
-    end_acting = models.DateTimeField(null=True)
+    TYPE = "seriescast"
+    PREFIX = "sc"
 
-    series = models.ForeignKey(Series, on_delete=models.CASCADE)
-    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    tvfy_code = models.CharField(db_column="tvfy_code", max_length=11, db_index=True, unique=True)
+    character_name = models.CharField(db_column="character_name", max_length=255)
+    episode_count = models.IntegerField(db_column="episode_count", null=True)
+    start_acting = models.DateTimeField(db_column="start_acting", null=True)
+    end_acting = models.DateTimeField(db_column="end_acting", null=True)
+
+    series = models.ForeignKey(to=Series, db_column="series", on_delete=models.CASCADE)
+    actor = models.ForeignKey(to=Actor, db_column="actor", on_delete=models.CASCADE)
+
+    objects = SeriesCastManager()
 
     def __str__(self):
         return f"{self.character_name} ({self.actor.first_name} {self.actor.last_name})"
 
 
 class Season(models.Model):
-    season = models.IntegerField(db_column="season", null=True)
-    imdb_url = models.URLField(db_column="imdb_url", null=True)
+    TYPE = "season"
+    PREFIX = "se"
+
+    tvfy_code = models.CharField(db_column="tvfy_code", max_length=11, db_index=True, unique=True)
+    season = models.CharField(db_column="season", max_length=3)
+    imdb_url = models.URLField(db_column="imdb_url")
     imdb_season_average_rate = models.FloatField(db_column="imdb_season_average_rate", null=True)
 
     series = models.ForeignKey(to=Series, db_column="series", on_delete=models.CASCADE)
+
+    objects = SeriesSeasonManager()
 
     def __str__(self):
         return f"{self.season}: {self.series.title}"
 
 
 class Episode(models.Model):
+    TYPE = "episode"
+    PREFIX = "ep"
+
+    tvfy_code = models.CharField(db_column="tvfy_code", max_length=11, db_index=True, unique=True)
     title = models.CharField(db_column="title", max_length=255)
     storyline = models.TextField(db_column="storyline", null=True)
     release_date = models.DateField(db_column="release_date", null=True)
     imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
     imdb_vote_count = models.IntegerField(db_column="imdb_vote_count", null=True)
-    tvfy_rate = models.FloatField(db_column="tvfy_rate", null=True)
-    tvfy_vote_count = models.FloatField(db_column="tvfy_vote_count", null=True)
     episode = models.IntegerField(db_column="episode", null=True)
 
     season = models.ForeignKey(to=Season, db_column="season", on_delete=models.CASCADE)
+
+    objects = SeriesEpisodeCastManager()
+
+    class Meta:
+        unique_together = [("episode", "season")]
 
     def __str__(self):
         return self.title

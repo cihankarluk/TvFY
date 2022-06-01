@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from TvFY.actor.serializers import ActorListSerializer
-from TvFY.series.models import Series, SeriesCast
+from TvFY.series.models import Series, SeriesCast, Season, Episode
 
 
 class SeriesCastSerializer(serializers.ModelSerializer):
@@ -90,4 +90,33 @@ class SeriesDetailSerializer(SeriesListSerializer):
             "country",
             "language",
             "cast",
+        )
+
+
+class SeriesSeasonSerializer(serializers.ModelSerializer):
+    series_title = serializers.CharField(source="series.title")
+
+    class Meta:
+        model = Season
+        fields = (
+            "tvfy_code",
+            "season",
+            "imdb_url",
+            "imdb_season_average_rate",
+            "series_title",
+        )
+
+
+class SeriesSeasonEpisodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Episode
+        fields = (
+            "tvfy_code",
+            "title",
+            "storyline",
+            "release_date",
+            "imdb_rate",
+            "imdb_vote_count",
+            "episode",
         )
