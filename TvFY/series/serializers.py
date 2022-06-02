@@ -99,7 +99,6 @@ class SeriesSeasonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Season
         fields = (
-            "tvfy_code",
             "season",
             "imdb_url",
             "imdb_season_average_rate",

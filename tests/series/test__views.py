@@ -112,7 +112,6 @@ class SeriesViewSetTestCase(BaseTestCase):
 
     def test__get_seasons(self):
         expected_attrs = {
-            "tvfy_code",
             "season",
             "imdb_url",
             "imdb_season_average_rate",

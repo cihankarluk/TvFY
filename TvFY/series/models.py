@@ -77,7 +77,6 @@ class Season(models.Model):
     TYPE = "season"
     PREFIX = "se"
 
-    tvfy_code = models.CharField(db_column="tvfy_code", max_length=11, db_index=True, unique=True)
     season = models.CharField(db_column="season", max_length=3)
     imdb_url = models.URLField(db_column="imdb_url")
     imdb_season_average_rate = models.FloatField(db_column="imdb_season_average_rate", null=True)
