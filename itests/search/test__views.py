@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from tests.base import BaseTestCase
+from itests.base import BaseTestCase
 
 
 class SearchViewSetTestCase(BaseTestCase):
@@ -9,7 +9,7 @@ class SearchViewSetTestCase(BaseTestCase):
     def test__create__series(self):
         expected_attrs = {
             "tvfy_code",
-            "name",
+            "title",
             "creator",
             "run_time",
             "storyline",
@@ -24,16 +24,15 @@ class SearchViewSetTestCase(BaseTestCase):
             "imdb_vote_count",
             "imdb_popularity",
             "tv_com_rate",
-            "rt_tomatometer",
             "rt_audience_rate",
-            "tvfy_rate",
-            "tvfy_popularity",
             "imdb_url",
-            "imdb_creator_url",
-            "tv_network_url",
+            "creator",
             "rotten_tomatoes_url",
+            "tv_com_url",
+            "genres",
+            "country",
+            "language",
         }
-
         response = self.client.post(
             path=self.search_url,
             data={"name": "The Boys", "type": "series"},
@@ -52,7 +51,6 @@ class SearchViewSetTestCase(BaseTestCase):
             "release_date",
             "ww_gross",
             "nominations",
-            "id",
             "imdb_popularity",
             "language",
             "rt_tomatometer_rate",
