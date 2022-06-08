@@ -1,12 +1,13 @@
-from itests.base import BaseTestCase
+from TvFY.collector.base import Scraper
 from TvFY.movies.models import Movie
 from TvFY.series.models import Series
+from itests.base import BaseTestCase
 
 
 class IMDBEpisodesTestCase(BaseTestCase):
     def setUp(self) -> None:
         self.expected_attrs = {
-            "name",
+            "title",
             "storyline",
             "imdb_rate",
             "imdb_vote_count",
@@ -15,38 +16,31 @@ class IMDBEpisodesTestCase(BaseTestCase):
             "imdb_url",
         }
 
-    def test__get_episodes__the_boys(self):
-        url = "https://www.imdb.com/title/tt1190634/episodes?season=1"
+    def test__1(self):
+        urls = [
+            "https://www.imdb.com/title/tt2098220/episodes?season=1",
+            "https://www.imdb.com/title/tt0409591/episodes?season=1",
+        ]
 
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
+        result = Scraper(urls=urls).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=result[1]))
+        for url in urls:
+            self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result[url]['1']))
 
-    def test__get_episodes__breaking_bad(self):
-        url = "https://www.imdb.com/title/tt0903747/episodes?season=1"
+    def test__2(self):
+        # This case is for season entered to imdb however no episodes are released yet.
+        url = "https://www.imdb.com/title/tt1190634/episodes?season=3"
 
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
+        result = Scraper(urls=[url]).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=result[1]))
-
-    def test__get_episodes__raised_by_wolves(self):
-        url = "https://www.imdb.com/title/tt9170108/episodes?season=1"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=result[1]))
-
-    def test__get_episodes__hunter_x_hunter(self):
-        url = "https://www.imdb.com/title/tt2098220/episodes?season=1"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=result[1]))
+        self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result[url]['3']))
 
 
 class IMDBCastTestCase(BaseTestCase):
-    def setUp(self) -> None:
-        self.series_expected_attrs = {
+
+    def test__1(self):
+        # Series Case
+        expected_attrs = {
             "first_name",
             "last_name",
             "character_name",
@@ -55,61 +49,24 @@ class IMDBCastTestCase(BaseTestCase):
             "end_acting",
             "imdb_actor_url",
         }
-        self.movies_expected_attrs = {
+        url = "https://www.imdb.com/title/tt0182576/fullcredits"
+
+        result = Scraper(urls=[url]).handle()
+
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result["cast"]))
+
+    def test__2(self):
+        expected_attrs = {
             "first_name",
             "last_name",
             "character_name",
             "imdb_actor_url",
         }
+        url = "https://www.imdb.com/title/tt0167260/fullcredits"
 
-    def test__get_cast__the_boys(self):
-        url = "https://www.imdb.com/title/tt1190634/fullcredits"
+        result = Scraper(urls=[url], search_type=Movie.TYPE).handle()
 
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
-
-    def test__get_cast__breaking_bad(self):
-        url = "https://www.imdb.com/title/tt0903747/fullcredits"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
-
-    def test__get_cast__raised_by_wolves(self):
-        url = "https://www.imdb.com/title/tt9170108/fullcredits"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
-
-    def test__get_cast__hunter_x_hunter(self):
-        url = "https://www.imdb.com/title/tt2098220/fullcredits"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.series_expected_attrs, results=result["cast"]))
-
-    def test__get_cast__lotr(self):
-        url = "https://www.imdb.com/title/tt0120737/fullcredits"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"]))
-
-    def test__get_cast__the_dark_knight(self):
-        url = "https://www.imdb.com/title/tt0468569/fullcredits"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"]))
-
-    def test__get_cast__monsters(self):
-        url = "https://www.imdb.com/title/tt0198781/fullcredits"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.movies_expected_attrs, results=result["cast"]))
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result["cast"]))
 
 
 class IMDBAwardsTestCase(BaseTestCase):
@@ -119,203 +76,215 @@ class IMDBAwardsTestCase(BaseTestCase):
             "nominations",
         }
 
-    def test__get_awards__the_boys(self):
+    def test__1(self):
         url = "https://www.imdb.com/title/tt1190634/awards/"
 
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
+        result = Scraper(urls=[url]).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
+        self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result))
 
-    def test__get_awards__breaking_bad(self):
-        url = "https://www.imdb.com/title/tt0903747/awards/"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
-
-    def test__get_awards__hunter_x_hunter(self):
+    def test__2(self):
         url = "https://www.imdb.com/title/tt2098220/awards/"
 
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
+        result = Scraper(urls=[url]).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
-
-    def test__get_awards__lotr(self):
-        url = "https://www.imdb.com/title/tt0120737/awards/"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
-
-    def test__get_awards__the_dark_knight(self):
-        url = "https://www.imdb.com/title/tt0468569/awards/"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
-
-    def test__get_awards__monsters(self):
-        url = "https://www.imdb.com/title/tt0198781/awards/"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
+        self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result))
 
 
 class IMDBPersonalDataTestCase(BaseTestCase):
-    def setUp(self) -> None:
-        self.expected_attrs = {
-            "born_date",
-            "born_at",
-            "died_date",
-            "died_at",
-            "oscars",
-            "oscar_nominations",
-            "wins",
-            "nominations",
-            "perks",
+
+    def test__1(self):
+        expected_attrs = {
+            'born_date',
+            'born_at',
+            'died_date',
+            'died_at',
+            'oscar_nominations',
+            'wins',
+            'nominations',
+            'perks'
         }
-
-    def test__quentin_tarantino(self):
-        url = "https://www.imdb.com/name/nm0000233/"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
-
-    def test__alfred_hitchcock(self):
         url = "https://www.imdb.com/name/nm0000033/"
 
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
+        results = Scraper(urls=[url]).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
 
-    def test__tobey_maguire(self):
-        url = "https://www.imdb.com/name/nm0001497/"
+    def test__2(self):
+        expected_attrs = {
+            'born_date',
+            'born_at',
+            'perks',
+        }
+        url = "https://www.imdb.com/name/nm0391866/"
 
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
+        results = Scraper(urls=[url]).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
 
-    def test__anna_hathaway(self):
-        url = "https://www.imdb.com/name/nm0004266/"
+    def test__3(self):
+        expected_attrs = {
+            'wins',
+            'nominations',
+            'perks',
+        }
+        url = "https://www.imdb.com/name/nm0458647"
 
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
+        results = Scraper(urls=[url]).handle()
 
-        self.assertTrue(self.is_subset(attrs=self.expected_attrs, results=[result]))
-
-
-class IMDBRatingTestCase(BaseTestCase):
-    def test__get_total_vote__the_boys(self):
-        url = "https://www.imdb.com/title/tt1190634/ratings/"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(result["imdb_vote_count"])
-
-    def test__get_total_vote__hunter_x_hunter(self):
-        url = "https://www.imdb.com/title/tt2098220/ratings/"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(result["imdb_vote_count"])
-
-    def test__get_total_vote__lotr(self):
-        url = "https://www.imdb.com/title/tt0120737/ratings/"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(result["imdb_vote_count"])
-
-    def test__get_average_rating__the_boys(self):
-        url = "https://www.imdb.com/title/tt1190634/ratings/"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(result["imdb_rate"])
-
-    def test__get_average_rating__hunter_x_hunter(self):
-        url = "https://www.imdb.com/title/tt2098220/ratings/"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.assertTrue(result["imdb_rate"])
-
-    def test__get_average_rating__lotr(self):
-        url = "https://www.imdb.com/title/tt0120737/ratings/"
-
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
-
-        self.assertTrue(result["imdb_rate"])
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
 
 
 class IMDBHomePageTestCase(BaseTestCase):
-    def setUp(self) -> None:
-        self.movie_expected_attrs = {
-            "imdb_genre",
-            "director",
-            "imdb_director_url",
-            "run_time",
-            "imdb_popularity",
-            "country",
-            "language",
-            "release_date",
-            "title",
-            "budget",
-            "usa_opening_weekend",
-            "ww_gross",
+
+    def test__movie1(self):
+        expected_attrs = {
+            'imdb_genre',
+            'imdb_director',
+            'imdb_director_url',
+            'run_time',
+            'imdb_popularity',
+            'country',
+            'language',
+            'release_date',
+            'title',
+            'budget_amount',
+            'budget_currency',
+            'usa_ow_amount',
+            'usa_ow_currency',
+            'ww_amount',
+            'ww_currency',
+            'metacritic_score',
+            'imdb_vote_count',
+            'imdb_rate',
+            'usa_ow_amount',
+            'metacritic_score',
+            'imdb_popularity',
+            'usa_ow_currency',
+            'wins',
+            'nominations',
+            'oscar_wins',
+            'oscar_nominations',
         }
-        self.series_expected_attrs = {
-            "imdb_genre",
-            "director",
-            "imdb_director_url",
-            "run_time",
-            "imdb_popularity",
-            "country",
-            "language",
-            "release_date",
-            "title",
-            "get_is_active",
+        urls = [
+            "https://www.imdb.com/title/tt0120737/",
+        ]
+
+        results = Scraper(urls=urls, search_type=Movie.TYPE).handle()
+
+        for url in urls:
+            self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
+
+    def test__movie2(self):
+        expected_attrs = {
+            'imdb_genre',
+            'imdb_director',
+            'imdb_director_url',
+            'run_time',
+            'country',
+            'language',
+            'release_date',
+            'title',
+            'budget_amount',
+            'budget_currency',
+            'ww_amount',
+            'ww_currency',
+            'imdb_vote_count',
+            'imdb_rate',
         }
+        urls = [
+            "https://www.imdb.com/title/tt7221896/",
+        ]
 
-    def test__movie__lotr(self):
-        url = "https://www.imdb.com/title/tt0120737/"
+        results = Scraper(urls=urls, search_type=Movie.TYPE).handle()
 
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
+        for url in urls:
+            self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
 
-        self.is_subset(attrs=self.movie_expected_attrs, results=result)
+    def test__movie3(self):
+        expected_attrs = {
+            'imdb_genre',
+            'imdb_director',
+            'imdb_director_url',
+            'run_time',
+            'imdb_popularity',
+            'country',
+            'language',
+            'release_date',
+            'title',
+            'usa_ow_amount',
+            'usa_ow_currency',
+            'ww_amount',
+            'ww_currency',
+            'metacritic_score',
+            'imdb_vote_count',
+            'imdb_rate',
+            'usa_ow_amount',
+            'metacritic_score',
+            'imdb_popularity',
+            'usa_ow_currency',
+            'wins',
+            'nominations',
+            'oscar_wins',
+            'oscar_nominations',
+        }
+        urls = [
+            "https://www.imdb.com/title/tt1877830/",
+        ]
 
-    def test__movie__dark_knight(self):
-        url = "https://www.imdb.com/title/tt0468569/"
+        results = Scraper(urls=urls, search_type=Movie.TYPE).handle()
 
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
+        for url in urls:
+            self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
 
-        self.is_subset(attrs=self.movie_expected_attrs, results=result)
+    def test__series1(self):
+        expected_attrs = {
+            'imdb_genre',
+            'imdb_director',
+            'imdb_director_url',
+            'run_time',
+            'country',
+            'language',
+            'release_date',
+            'title',
+            'is_active',
+            'end_date',
+            'imdb_vote_count',
+            'imdb_rate',
+            'episode_count',
+            'season_count',
+        }
+        urls = [
+            "https://www.imdb.com/title/tt2098220/",
+        ]
 
-    def test__movie__spirited_away(self):
-        url = "https://www.imdb.com/title/tt0245429/"
+        results = Scraper(urls=urls, search_type=Series.TYPE).handle()
 
-        result = self.get_imdb_result(url=url, search_type=Movie.TYPE)
+        for url in urls:
+            self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))
 
-        self.is_subset(attrs=self.movie_expected_attrs, results=result)
+    def test__series2(self):
+        expected_attrs = {
+            'imdb_genre',
+            'imdb_director',
+            'imdb_director_url',
+            'run_time',
+            'country',
+            'language',
+            'release_date',
+            'title',
+            'is_active',
+            'end_date',
+            'imdb_vote_count',
+            'imdb_rate',
+            'episode_count',
+            'season_count',
+        }
+        urls = [
+            "https://www.imdb.com/title/tt0862622/"
+        ]
 
-    def test__series__the_boys(self):
-        url = "https://www.imdb.com/title/tt1190634/"
+        results = Scraper(urls=urls, search_type=Series.TYPE).handle()
 
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.is_subset(attrs=self.series_expected_attrs, results=result)
-
-    def test__series__hunter_x_hunter(self):
-        url = "https://www.imdb.com/title/tt2098220"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.is_subset(attrs=self.series_expected_attrs, results=result)
-
-    def test__series__avatar_the_last_airbender(self):
-        url = "https://www.imdb.com/title/tt0417299/"
-
-        result = self.get_imdb_result(url=url, search_type=Series.TYPE)
-
-        self.is_subset(attrs=self.series_expected_attrs, results=result)
+        for url in urls:
+            self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=results[url]))

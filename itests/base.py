@@ -1,4 +1,4 @@
-from typing import Union, List
+from typing import Union, List, Optional
 
 import requests
 from bs4 import BeautifulSoup
@@ -53,6 +53,16 @@ class BaseTestCase(TestCase):
             results = [results]
         is_subset = all([all([attrs - set(result.keys()), set(result.keys()) - attrs]) for result in results])
         return not is_subset
+
+    @classmethod
+    def take_diff(cls, attrs: set, results: Union[dict, list[dict]]) -> list:
+        if isinstance(results, dict):
+            results = [results]
+
+        differences = []
+        for item in results:
+            differences.extend(list(attrs - set(item.keys())))
+        return differences
 
     # MODELS
 
