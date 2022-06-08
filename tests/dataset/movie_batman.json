@@ -1,0 +1,859 @@
+{
+   "rt_genre":[
+      "Crime",
+      "Adventure",
+      "Drama",
+      "Action"
+   ],
+   "rt_director":{
+      "first_name":"Matt",
+      "last_name":"Reeves"
+   },
+   "rt_director_url":"https://www.rottentomatoes.com/celebrity/matt_reeves",
+   "rt_audience_rate":87,
+   "rt_tomatometer_rate":85,
+   "storyline":"Batman ventures into Gotham City's underworld when a sadistic killer leaves behind a trail of cryptic clues. As the evidence begins to lead closer to home and the scale of the perpetrator's plans become clear, he must forge new relationships, unmask the culprit and bring justice to the abuse of power and corruption that has long plagued the metropolis.",
+   "cast":[
+      {
+         "first_name":"Robert",
+         "last_name":"Pattinson",
+         "character_name":"Bruce Wayne",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1500155/"
+      },
+      {
+         "first_name":"Zoë",
+         "last_name":"Kravitz",
+         "character_name":"Selina Kyle",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2368789/"
+      },
+      {
+         "first_name":"Jeffrey",
+         "last_name":"Wright",
+         "character_name":"Lt. James Gordon",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0942482/"
+      },
+      {
+         "first_name":"Colin",
+         "last_name":"Farrell",
+         "character_name":"Oz",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0268199/"
+      },
+      {
+         "first_name":"Paul",
+         "last_name":"Dano",
+         "character_name":"The Riddler",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0200452/"
+      },
+      {
+         "first_name":"John",
+         "last_name":"Turturro",
+         "character_name":"Carmine Falcone",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0001806/"
+      },
+      {
+         "first_name":"Andy",
+         "last_name":"Serkis",
+         "character_name":"Alfred",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0785227/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"Sarsgaard",
+         "character_name":"District Attorney Gil Colson",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0765597/"
+      },
+      {
+         "first_name":"Barry",
+         "last_name":"Keoghan",
+         "character_name":"Unseen Arkham Prisoner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4422686/"
+      },
+      {
+         "first_name":"Jayme",
+         "last_name":"Lawson",
+         "character_name":"Bella Reál",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11123883/"
+      },
+      {
+         "first_name":"Gil",
+         "last_name":"Perez-Abraham",
+         "character_name":"Officer Martinez",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4909175/"
+      },
+      {
+         "first_name":"Peter",
+         "last_name":"McDonald",
+         "character_name":"Kenzie",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0567945/"
+      },
+      {
+         "first_name":"Con",
+         "last_name":"O'Neill",
+         "character_name":"Chief Mackenzie Bock",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0642126/"
+      },
+      {
+         "first_name":"Alex",
+         "last_name":"Ferns",
+         "character_name":"Commissioner Pete Savage",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0273159/"
+      },
+      {
+         "first_name":"Rupert",
+         "last_name":"Penry-Jones",
+         "character_name":"Mayor Don Mitchell, Jr.",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0672303/"
+      },
+      {
+         "first_name":"Kosha",
+         "last_name":"Engler",
+         "character_name":"Mrs. Mitchell",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1017942/"
+      },
+      {
+         "first_name":"Archie",
+         "last_name":"Barnes",
+         "character_name":"Mitchell's Son",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10706149/"
+      },
+      {
+         "first_name":"Janine",
+         "last_name":"Harouni",
+         "character_name":"Carla",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8940462/"
+      },
+      {
+         "first_name":"Hana",
+         "last_name":"Hrzic",
+         "character_name":"Annika",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10460736/"
+      },
+      {
+         "first_name":"Joseph",
+         "last_name":"Walker",
+         "character_name":"Young Riddler",
+         "imdb_actor_url":"https://www.imdb.com/name/nm13450687/"
+      },
+      {
+         "first_name":"Luke",
+         "last_name":"Roberts",
+         "character_name":"Thomas Wayne",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1074361/"
+      },
+      {
+         "first_name":"Oscar",
+         "last_name":"Novak",
+         "character_name":"Young Bruce Wayne",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10861182/"
+      },
+      {
+         "first_name":"Stella",
+         "last_name":"Stocker",
+         "character_name":"Martha Wayne",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2706152/"
+      },
+      {
+         "first_name":"Sandra",
+         "last_name":"Dickinson",
+         "character_name":"Dory",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0225549/"
+      },
+      {
+         "first_name":"Jack",
+         "last_name":"Bennett",
+         "character_name":"Travis",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2108907/"
+      },
+      {
+         "first_name":"Andre",
+         "last_name":"Nightingale",
+         "character_name":"Ritchie",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3565933/"
+      },
+      {
+         "first_name":"Richard",
+         "last_name":"James-Neale",
+         "character_name":"Glen",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4120348/"
+      },
+      {
+         "first_name":"Lorraine",
+         "last_name":"Tai",
+         "character_name":"Cheri",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6734796/"
+      },
+      {
+         "first_name":"Joseph",
+         "last_name":"Balderrama",
+         "character_name":"Lead Detective",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1692732/"
+      },
+      {
+         "first_name":"James",
+         "last_name":"Eeles",
+         "character_name":"Another Officer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6823770/"
+      },
+      {
+         "first_name":"Angela",
+         "last_name":"Yeoh",
+         "character_name":"Forensic Photographer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8242169/"
+      },
+      {
+         "first_name":"Leemore",
+         "last_name":"Marrett Jr.",
+         "character_name":"Muscle Cop",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3760477/"
+      },
+      {
+         "first_name":"Ezra",
+         "last_name":"Elliott",
+         "character_name":"Tactical Medic",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11508271/"
+      },
+      {
+         "first_name":"Itoya",
+         "last_name":"Osagiede",
+         "character_name":"Hushed G.C.P.D. Detective",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5721861/"
+      },
+      {
+         "first_name":"Stewart",
+         "last_name":"Alexander",
+         "character_name":"FBI Leader",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0991334/"
+      },
+      {
+         "first_name":"Adam",
+         "last_name":"Rojko Vega",
+         "character_name":"SWAT (City Hall)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5517140/"
+      },
+      {
+         "first_name":"Heider",
+         "last_name":"Ali",
+         "character_name":"Officer (City Hall)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4741567/"
+      },
+      {
+         "first_name":"Marcus",
+         "last_name":"Onilude",
+         "character_name":"Traffic Cop (City Hall)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3357018/"
+      },
+      {
+         "first_name":"Elena",
+         "last_name":"Saurel",
+         "character_name":"Detective on Phone",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3008059/"
+      },
+      {
+         "first_name":"Ed",
+         "last_name":"Kear",
+         "character_name":"Surly Cop",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4591704/"
+      },
+      {
+         "first_name":"Sid",
+         "last_name":"Sagar",
+         "character_name":"Digital Forensic Cop",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2874801/"
+      },
+      {
+         "first_name":"Amanda",
+         "last_name":"Blake",
+         "character_name":"Command Crisis Tech",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11346014/"
+      },
+      {
+         "first_name":"Todd",
+         "last_name":"Boyce",
+         "character_name":"Fire Marshall",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0101668/"
+      },
+      {
+         "first_name":"Will",
+         "last_name":"Austin",
+         "character_name":"Traffic Cop",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5993244/"
+      },
+      {
+         "first_name":"Brandon",
+         "last_name":"Bassir",
+         "character_name":"Young Officer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2200326/"
+      },
+      {
+         "first_name":"Chabris",
+         "last_name":"Napier-Lawrence",
+         "character_name":"Cop (Mayor's Memorial)",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5516289/"
+      },
+      {
+         "first_name":"Douglas",
+         "last_name":"Russell",
+         "character_name":"Bitter Nobody",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1245691/"
+      },
+      {
+         "first_name":"Charlie",
+         "last_name":"Carver",
+         "character_name":"The Twins",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3083350/"
+      },
+      {
+         "first_name":"Max",
+         "last_name":"Carver",
+         "character_name":"The Twins",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3083571/"
+      },
+      {
+         "first_name":"Phil",
+         "last_name":"Aizlewood",
+         "character_name":"Falcone Bodyguard",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8834313/"
+      },
+      {
+         "first_name":"Mark",
+         "last_name":"Killeen",
+         "character_name":"Vinnie",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2075330/"
+      },
+      {
+         "first_name":"Philip",
+         "last_name":"Shaun McGuinness",
+         "character_name":"Elevator Guard",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7961549/"
+      },
+      {
+         "first_name":"Lorna",
+         "last_name":"Brown",
+         "character_name":"Doctor",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0114132/"
+      },
+      {
+         "first_name":"Elliot",
+         "last_name":"Warren",
+         "character_name":"Train Gang Leader",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6544326/"
+      },
+      {
+         "first_name":"Jay",
+         "last_name":"Lycurgo",
+         "character_name":"Train Gang Young Member",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10649711/"
+      },
+      {
+         "first_name":"Stefan",
+         "last_name":"Race",
+         "character_name":"Train Gang Member #1",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11115099/"
+      },
+      {
+         "first_name":"Elijah",
+         "last_name":"Baker",
+         "character_name":"Train Gang Member #2",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2959576/"
+      },
+      {
+         "first_name":"Craige",
+         "last_name":"Middleburg",
+         "character_name":"Train Gang Member #3",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7430613/"
+      },
+      {
+         "first_name":"Akie",
+         "last_name":"Kotabe",
+         "character_name":"Lone Train Passenger",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2009056/"
+      },
+      {
+         "first_name":"Spike",
+         "last_name":"Fearn",
+         "character_name":"Vandal",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10514458/"
+      },
+      {
+         "first_name":"Urielle",
+         "last_name":"Klein-Mekongo",
+         "character_name":"Cashier",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11638222/"
+      },
+      {
+         "first_name":"Bronson",
+         "last_name":"Webb",
+         "character_name":"Hooded Gunman",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0916037/"
+      },
+      {
+         "first_name":"Madeleine",
+         "last_name":"Gray",
+         "character_name":"Injured Woman",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9254068/"
+      },
+      {
+         "first_name":"Ste",
+         "last_name":"Johnston",
+         "character_name":"Paparazzi",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6964385/"
+      },
+      {
+         "first_name":"Arthur",
+         "last_name":"Lee",
+         "character_name":"Paparazzo",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6110544/"
+      },
+      {
+         "first_name":"Parry",
+         "last_name":"Glasspool",
+         "character_name":"Scared Drophead",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6015655/"
+      },
+      {
+         "first_name":"Jordan",
+         "last_name":"Coulson",
+         "character_name":"Man in Suit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4534452/"
+      },
+      {
+         "first_name":"Hadas",
+         "last_name":"Gold",
+         "character_name":"Newscaster",
+         "imdb_actor_url":"https://www.imdb.com/name/nm13450688/"
+      },
+      {
+         "first_name":"Pat",
+         "last_name":"Battle",
+         "character_name":"Newscaster",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4793199/"
+      },
+      {
+         "first_name":"Bobby",
+         "last_name":"Cuza",
+         "character_name":"Newscaster",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8416667/"
+      },
+      {
+         "first_name":"Dean",
+         "last_name":"Meminger",
+         "character_name":"Newscaster",
+         "imdb_actor_url":"https://www.imdb.com/name/nm13216937/"
+      },
+      {
+         "first_name":"Roma",
+         "last_name":"Torre",
+         "character_name":"Newscaster",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0868405/"
+      },
+      {
+         "first_name":"Mike",
+         "last_name":"Capozzola",
+         "character_name":"Mediator",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8831029/"
+      },
+      {
+         "first_name":"Amanda",
+         "last_name":"Hurwitz",
+         "character_name":"Counterwoman",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0403787/"
+      },
+      {
+         "first_name":"Joshua",
+         "last_name":"Eldridge-Smith",
+         "character_name":"Patrol Cop",
+         "imdb_actor_url":"https://www.imdb.com/name/nm12727250/"
+      },
+      {
+         "first_name":"Daniel",
+         "last_name":"Rainford",
+         "character_name":"Suspicious Man",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10340537/"
+      },
+      {
+         "first_name":"Nathalie",
+         "last_name":"Armin",
+         "character_name":"ATF Leader",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0035480/"
+      },
+      {
+         "first_name":"Jose",
+         "last_name":"Palma",
+         "character_name":"Command Post #1",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8462585/"
+      },
+      {
+         "first_name":"Kazeem",
+         "last_name":"Tosin Amore",
+         "character_name":"Command Post #2",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7417369/"
+      },
+      {
+         "first_name":"Dave",
+         "last_name":"Simon",
+         "character_name":"Police Chief Hanrahan",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6078944/"
+      },
+      {
+         "first_name":"Rodrig",
+         "last_name":"Andrisan",
+         "character_name":"Funeral VIP",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4364362/"
+      },
+      {
+         "first_name":"Eduardo",
+         "last_name":"Arrufat-Reboso",
+         "character_name":"GCPD Sargeant Renouf",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7722533/"
+      },
+      {
+         "first_name":"Kiran",
+         "last_name":"Asahan",
+         "character_name":"Press Woman",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5967118/"
+      },
+      {
+         "first_name":"Maggie",
+         "last_name":"Bakir",
+         "character_name":"FBI Agent",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2156923/"
+      },
+      {
+         "first_name":"Amy",
+         "last_name":"Clare Beales",
+         "character_name":"Special Agent 2",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5827547/"
+      },
+      {
+         "first_name":"Douglas",
+         "last_name":"Bunn",
+         "character_name":"Gangster",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7586734/"
+      },
+      {
+         "first_name":"Tony",
+         "last_name":"Christian",
+         "character_name":"Emoji Drophead",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1290161/"
+      },
+      {
+         "first_name":"Ruth",
+         "last_name":"Clarson-Horrocks",
+         "character_name":"Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9916443/"
+      },
+      {
+         "first_name":"Bern",
+         "last_name":"Collaço",
+         "character_name":"Detective",
+         "imdb_actor_url":"https://www.imdb.com/name/nm0171625/"
+      },
+      {
+         "first_name":"Andreea",
+         "last_name":"Helen David",
+         "character_name":"Detective",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7204833/"
+      },
+      {
+         "first_name":"Nick",
+         "last_name":"Davison",
+         "character_name":"Orphanage Opening Guest",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7618414/"
+      },
+      {
+         "first_name":"Craig",
+         "last_name":"Douglas",
+         "character_name":"Pallbearer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5940174/"
+      },
+      {
+         "first_name":"Evan",
+         "last_name":"A. Dunn",
+         "character_name":"Police Officer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9728295/"
+      },
+      {
+         "first_name":"Daniel",
+         "last_name":"Eghan",
+         "character_name":"Banker",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7303783/"
+      },
+      {
+         "first_name":"Hayden",
+         "last_name":"Ellingworth",
+         "character_name":"Bystander",
+         "imdb_actor_url":"https://www.imdb.com/name/nm12114683/"
+      },
+      {
+         "first_name":"Darcie",
+         "last_name":"Ellson",
+         "character_name":"Funeral Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11200051/"
+      },
+      {
+         "first_name":"Joseph",
+         "last_name":"L Geist",
+         "character_name":"VIP Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11797631/"
+      },
+      {
+         "first_name":"Albert",
+         "last_name":"Giannitelli",
+         "character_name":"E.S.U Police",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6897938/"
+      },
+      {
+         "first_name":"Susan",
+         "last_name":"Gillias",
+         "character_name":"FBI",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5938446/"
+      },
+      {
+         "first_name":"George",
+         "last_name":"Graham",
+         "character_name":"GCPD Cop",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5515625/"
+      },
+      {
+         "first_name":"Rachel",
+         "last_name":"Handshaw",
+         "character_name":"Corporation Executive",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5564735/"
+      },
+      {
+         "first_name":"Juke",
+         "last_name":"Hardy",
+         "character_name":"EMS Paramedic",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8645371/"
+      },
+      {
+         "first_name":"Metin",
+         "last_name":"Hassan",
+         "character_name":"VIP Mafia Family",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9112737/"
+      },
+      {
+         "first_name":"Simon",
+         "last_name":"Jago",
+         "character_name":"Club Dancer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5354437/"
+      },
+      {
+         "first_name":"Yasmin",
+         "last_name":"J. James",
+         "character_name":"Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4118987/"
+      },
+      {
+         "first_name":"Tobias",
+         "last_name":"James-Samuels",
+         "character_name":"SRG Swat Police",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6556096/"
+      },
+      {
+         "first_name":"Adnan",
+         "last_name":"Kundi",
+         "character_name":"Funeral Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8958189/"
+      },
+      {
+         "first_name":"Erran",
+         "last_name":"Lake",
+         "character_name":"Club Dancer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3434365/"
+      },
+      {
+         "first_name":"Mickey",
+         "last_name":"Lewis",
+         "character_name":"ESU Swat Police",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6118829/"
+      },
+      {
+         "first_name":"Teresa",
+         "last_name":"Mahoney",
+         "character_name":"Police High Rank Officer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm2972606/"
+      },
+      {
+         "first_name":"Tiago",
+         "last_name":"Martins",
+         "character_name":"Journalist",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6515672/"
+      },
+      {
+         "first_name":"Obie",
+         "last_name":"Matthew",
+         "character_name":"Funeral Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm1975399/"
+      },
+      {
+         "first_name":"Nichola",
+         "last_name":"Jean Mazur",
+         "character_name":"VIP",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5683938/"
+      },
+      {
+         "first_name":"Kenny-Lee",
+         "last_name":"Mbanefo",
+         "character_name":"News Reporter",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8728573/"
+      },
+      {
+         "first_name":"Tony",
+         "last_name":"McCarthy",
+         "character_name":"Anarchist",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11105476/"
+      },
+      {
+         "first_name":"Bharat",
+         "last_name":"Mistri",
+         "character_name":"Mourner in Black Suit",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5126775/"
+      },
+      {
+         "first_name":"Sri",
+         "last_name":"Moorthy",
+         "character_name":"SRG Swat Police",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10299282/"
+      },
+      {
+         "first_name":"Nick",
+         "last_name":"Owenford",
+         "character_name":"Orphanage Patron",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4016944/"
+      },
+      {
+         "first_name":"Richard",
+         "last_name":"Price",
+         "character_name":"GCPD Officer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3764470/"
+      },
+      {
+         "first_name":"Zoltan",
+         "last_name":"Rencsar",
+         "character_name":"VIP Mourner-Spact",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11658882/"
+      },
+      {
+         "first_name":"Paul",
+         "last_name":"Riddell",
+         "character_name":"Gotham City Senator",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9309101/"
+      },
+      {
+         "first_name":"Will",
+         "last_name":"Rowlands",
+         "character_name":"Thug",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9555373/"
+      },
+      {
+         "first_name":"Iana",
+         "last_name":"Saliuk",
+         "character_name":"Hospitality Girl",
+         "imdb_actor_url":"https://www.imdb.com/name/nm12087065/"
+      },
+      {
+         "first_name":"Bernardo",
+         "last_name":"Santos",
+         "character_name":"FBI Agent",
+         "imdb_actor_url":"https://www.imdb.com/name/nm7441016/"
+      },
+      {
+         "first_name":"Kemal",
+         "last_name":"Shah",
+         "character_name":"Detective Lujack",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10329936/"
+      },
+      {
+         "first_name":"Eugene",
+         "last_name":"Shawn",
+         "character_name":"Police Officer",
+         "imdb_actor_url":"https://www.imdb.com/name/nm10194407/"
+      },
+      {
+         "first_name":"Richard",
+         "last_name":"Stanley",
+         "character_name":"Passerby",
+         "imdb_actor_url":"https://www.imdb.com/name/nm6386603/"
+      },
+      {
+         "first_name":"Jimmy",
+         "last_name":"Star",
+         "character_name":"Funeral Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm3046500/"
+      },
+      {
+         "first_name":"Alfredo",
+         "last_name":"Tavares",
+         "character_name":"Forensic",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9378323/"
+      },
+      {
+         "first_name":"Vic",
+         "last_name":"Waghorn",
+         "character_name":"Gotham Fire Chief Sheddon",
+         "imdb_actor_url":"https://www.imdb.com/name/nm4880315/"
+      },
+      {
+         "first_name":"Stuart",
+         "last_name":"Whelan",
+         "character_name":"FBI",
+         "imdb_actor_url":"https://www.imdb.com/name/nm8004657/"
+      },
+      {
+         "first_name":"Paul",
+         "last_name":"Whelligan",
+         "character_name":"VIP Mourner",
+         "imdb_actor_url":"https://www.imdb.com/name/nm5131834/"
+      },
+      {
+         "first_name":"Chosen",
+         "last_name":"Wilkins",
+         "character_name":"Guard 2",
+         "imdb_actor_url":"https://www.imdb.com/name/nm11646175/"
+      },
+      {
+         "first_name":"Daniel",
+         "last_name":"Joseph Woolf",
+         "character_name":"GCPD Officier",
+         "imdb_actor_url":"https://www.imdb.com/name/nm9281009/"
+      }
+   ],
+   "https://www.imdb.com/title/tt1877830/":{
+      "imdb_genre":[
+         "Action",
+         "Crime",
+         "Drama",
+         "Mystery"
+      ],
+      "imdb_director":{
+         "first_name":"Matt",
+         "last_name":"Reeves"
+      },
+      "imdb_director_url":"https://www.imdb.com/name/nm0716257/",
+      "run_time":10560,
+      "imdb_popularity":12,
+      "country":[
+         "United States",
+         "Spain"
+      ],
+      "language":[
+         "English",
+         "Spanish"
+      ],
+      "title":"The Batman",
+      "usa_ow_amount":134008624,
+      "usa_ow_currency":"USD",
+      "ww_amount":770343137,
+      "ww_currency":"USD",
+      "metacritic_score":72,
+      "imdb_vote_count":502165,
+      "imdb_rate":7.9,
+      "wins":2,
+      "nominations":7,
+      "oscar_wins":0,
+      "oscar_nominations":0
+   },
+   "imdb_url":"https://www.imdb.com/title/tt1877830/",
+   "rotten_tomatoes_url":"https://www.rottentomatoes.com/m/the_batman"
+}

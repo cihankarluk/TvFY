@@ -10,8 +10,9 @@ class SearchServiceTestCase(BaseTestCase):
         expected_list = [
             'https://www.imdb.com/title/tt1190634/fullcredits',
             'https://www.imdb.com/title/tt1190634/awards',
+            'https://www.imdb.com/title/tt1190634/ratings',
             'https://www.imdb.com/title/tt1190634/episodes?season=1',
-            'https://www.imdb.com/title/tt1190634/'
+            'https://www.imdb.com/title/tt1190634/',
         ]
 
         google_data = {"imdb_url": "https://www.imdb.com/title/tt1190634/"}
@@ -24,6 +25,7 @@ class SearchServiceTestCase(BaseTestCase):
         expected_list = [
             'https://www.imdb.com/title/tt1190634/fullcredits',
             'https://www.imdb.com/title/tt1190634/awards',
+            'https://www.imdb.com/title/tt1190634/ratings',
             'https://www.imdb.com/title/tt1190634/'
         ]
 

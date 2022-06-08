@@ -10,8 +10,9 @@ from tests.base import BaseTestCase
 class MovieServiceTestCase(BaseTestCase):
     def setUp(self) -> None:
         super(MovieServiceTestCase, self).setUp()
-        self.movie_data = self.read_file("movie_lotr.json", is_json=True)
-        self.updated_movie_data = self.read_file("movie_lotr_updated.json", is_json=True)
+        self.movie_data = self.read_file("movie_batman.json", is_json=True)
+        self.imdb_url = self.movie_data["imdb_url"]
+        self.updated_movie_data = self.read_file("movie_batman_updated.json", is_json=True)
 
     def test__check_source_urls(self):
         """
@@ -79,7 +80,11 @@ class MovieServiceTestCase(BaseTestCase):
     def test__create_movie(self):
         movie_data = {"title": "The Lord of the Rings: The Fellowship of the Ring"}
 
-        MovieService.create_movie(movie_data=movie_data, search_data=self.movie_data)
+        MovieService.create_movie(
+            movie_data=movie_data,
+            imdb_data=self.movie_data[self.imdb_url],
+            search_data=self.movie_data
+        )
 
         movie_query = Movie.objects.filter(title="The Lord of the Rings: The Fellowship of the Ring")
         self.assertTrue(movie_query.exists())
@@ -107,10 +112,11 @@ class MovieServiceTestCase(BaseTestCase):
             "imdb_director",
             "imdb_director_url",
             "cast",
+            self.imdb_url,
         }
         MovieService.create_or_update_movie(search_data=self.movie_data)
 
-        movie_query = Movie.objects.filter(title="The Lord of the Rings: The Fellowship of the Ring")
+        movie_query = Movie.objects.filter(title=self.movie_data[self.imdb_url]["title"])
         self.assertTrue(movie_query.exists())
         movie = movie_query.get()
         attribute_errors = set()
@@ -119,13 +125,23 @@ class MovieServiceTestCase(BaseTestCase):
                 attribute = getattr(movie, key)
                 if isinstance(attribute, str):
                     self.assertEqual(attribute, value)
-                elif isinstance(attribute, int):
-                    self.assertEqual(attribute, int(value))
                 else:
                     # Country and Language
                     self.assertEqual(2, attribute.count())
             except AttributeError:
                 attribute_errors.add(key)
+
+        for key, value in self.movie_data[self.imdb_url].items():
+            try:
+                attribute = getattr(movie, key)
+                if isinstance(attribute, str):
+                    self.assertEqual(attribute, value)
+                else:
+                    # Country and Language
+                    self.assertEqual(2, attribute.count())
+            except AttributeError:
+                attribute_errors.add(key)
+
         self.assertFalse(expected_attribute_errors - attribute_errors)
         self.assertEqual(4, movie.genres.count())
 
@@ -134,10 +150,10 @@ class MovieServiceTestCase(BaseTestCase):
         wins is increased from 121 to 420
         """
         MovieService.create_or_update_movie(search_data=self.movie_data)
-        initial_movie = Movie.objects.get(imdb_url=self.movie_data["imdb_url"])
+        initial_movie = Movie.objects.get(imdb_url=self.imdb_url)
 
         MovieService.create_or_update_movie(search_data=self.updated_movie_data)
-        updated_movie = Movie.objects.get(imdb_url=self.movie_data["imdb_url"])
+        updated_movie = Movie.objects.get(imdb_url=self.imdb_url)
 
         self.assertNotEqual(initial_movie.wins, updated_movie.wins)
         self.assertEqual(420, updated_movie.wins)

@@ -24,7 +24,7 @@ class MovieViewSetTestCase(BaseTestCase):
 
     def setUp(self) -> None:
         super(MovieViewSetTestCase, self).setUp()
-        movie_data = self.read_file("movie_lotr.json", is_json=True)
+        movie_data = self.read_file("movie_batman.json", is_json=True)
         self.movie = MovieService.create_or_update_movie(search_data=movie_data)
 
     def test__list(self):
@@ -289,7 +289,7 @@ class MovieViewSetTestCase(BaseTestCase):
     def test__list__filter_director_full_name(self):
         baker.make(Movie)
 
-        response = self.client.get(self.movie_list_url, data={"director_full_name": "Peter Jacks"})
+        response = self.client.get(self.movie_list_url, data={"director_full_name": self.movie.director.full_name})
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
@@ -407,21 +407,25 @@ class MovieViewSetTestCase(BaseTestCase):
             "title",
             "storyline",
             "release_date",
-            "run_time",
-            "rt_tomatometer_rate",
-            "rt_audience_rate",
-            "imdb_popularity",
-            "imdb_rate",
-            "imdb_vote_count",
             "wins",
             "nominations",
-            "budget",
-            "budget_currency",
-            "usa_opening_weekend",
-            "usa_opening_weekend_currency",
-            "ww_gross",
+            "oscar_wins",
+            "oscar_nominations",
+            "run_time",
+            "imdb_rate",
+            "imdb_vote_count",
+            "imdb_popularity",
             "imdb_url",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
             "rotten_tomatoes_url",
+            "budget_amount",
+            "budget_currency",
+            "usa_ow_amount",
+            "usa_ow_currency",
+            "ww_amount",
+            "ww_currency",
+            "metacritic_score",
             "director",
             "genres",
             "country",
@@ -439,11 +443,9 @@ class MovieViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_result = {
-            "status_code": 404,
-            "code": "MOVIE_NOT_FOUND",
-            "error_message": {
-                "detail": "Movie with notExists code does not exists."
-            }
+            'code': 404,
+            'type': 'MovieNotFoundError',
+            'reason': 'Movie with notExists code does not exists.'
         }
         response = self.client.get(
             self.get_movie_detail_url("notExists"),
@@ -468,11 +470,9 @@ class MovieViewSetTestCase(BaseTestCase):
 
     def test__cast__not_exists(self):
         expected_result = {
-            "status_code": 404,
-            "code": "MOVIE_NOT_FOUND",
-            "error_message": {
-                "detail": "Movie with notExists code does not exists."
-            }
+            'code': 404,
+            'type': 'MovieNotFoundError',
+            'reason': 'Movie with notExists code does not exists.'
         }
         response = self.client.get(
             self.get_movie_detail_url("notExists"),

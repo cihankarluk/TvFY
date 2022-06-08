@@ -40,16 +40,16 @@ class MovieService:
         return movie
 
     @classmethod
-    def create_movie(cls, movie_data: dict, search_data: dict) -> Movie:
+    def create_movie(cls, movie_data: dict, imdb_data: dict, search_data: dict) -> Movie:
         """
         Create movie and casts with them.
         """
         movie = Movie.objects.create(**movie_data)
-        for genre in GenreService.get_genre_ids(search_data=search_data):
+        for genre in GenreService.get_genre_ids(search_data=imdb_data):
             movie.genres.add(genre)
-        for country in CountryService.get_or_create_multiple_country(search_data=search_data):
+        for country in CountryService.get_or_create_multiple_country(search_data=imdb_data):
             movie.country.add(country)
-        for language in LanguageService.get_or_create_multiple_language(search_data=search_data):
+        for language in LanguageService.get_or_create_multiple_language(search_data=imdb_data):
             movie.language.add(language)
         MovieCastService.bulk_create_movie_cast(search_data=search_data, movie=movie)
 
@@ -70,23 +70,29 @@ class MovieService:
     def create_or_update_movie(cls, search_data: dict) -> Movie:
         cls.check_source_urls(search_data=search_data)
 
+        imdb_data = search_data[search_data["imdb_url"]]
+
         movie_data = {
-            "title": search_data["title"],
+            "title": imdb_data["title"],
             "storyline": search_data.get("storyline"),
-            "release_date": search_data.get("release_date"),
-            "run_time": search_data.get("run_time"),
+            "release_date": imdb_data.get("release_date"),
+            "run_time": imdb_data.get("run_time"),
             "rt_tomatometer_rate": search_data.get("rt_tomatometer_rate"),
             "rt_audience_rate": search_data.get("rt_audience_rate"),
-            "imdb_popularity": search_data.get("imdb_popularity"),
-            "imdb_rate": search_data.get("imdb_rate"),
-            "imdb_vote_count": search_data.get("imdb_vote_count"),
-            "wins": search_data.get("wins"),
-            "nominations": search_data.get("nominations"),
-            "budget": search_data.get("budget"),
-            "budget_currency": search_data.get("budget_currency"),
-            "usa_opening_weekend": search_data.get("usa_opening_weekend"),
-            "usa_opening_weekend_currency": search_data.get("usa_opening_weekend_currency"),
-            "ww_gross": search_data.get("ww_gross"),
+            "imdb_popularity": imdb_data.get("imdb_popularity"),
+            "imdb_rate": imdb_data.get("imdb_rate"),
+            "imdb_vote_count": imdb_data.get("imdb_vote_count"),
+            "wins": imdb_data.get("wins"),
+            "nominations": imdb_data.get("nominations"),
+            "oscar_wins": imdb_data.get("oscar_wins"),
+            "oscar_nominations": imdb_data.get("oscar_nominations"),
+            "budget_amount": imdb_data.get("budget_amount"),
+            "budget_currency": imdb_data.get("budget_currency"),
+            "usa_ow_amount": imdb_data.get("usa_ow_amount"),
+            "usa_ow_currency": imdb_data.get("usa_ow_currency"),
+            "ww_amount": imdb_data.get("ww_amount"),
+            "ww_currency": imdb_data.get("ww_currency"),
+            "metacritic_score": imdb_data.get("metacritic_score"),
             "imdb_url": search_data.get("imdb_url"),
             "rotten_tomatoes_url": search_data.get("rotten_tomatoes_url"),
             "director": DirectorService.get_or_create_director(search_data=search_data),
@@ -95,7 +101,7 @@ class MovieService:
         if movie := cls.check_movie_exists(search_data=search_data):
             movie = cls.update_movie(movie=movie, movie_data=movie_data)
         else:
-            movie = cls.create_movie(movie_data=movie_data, search_data=search_data)
+            movie = cls.create_movie(movie_data=movie_data, imdb_data=imdb_data, search_data=search_data)
 
         return movie
 
@@ -103,7 +109,7 @@ class MovieService:
 class MovieCastService:
 
     @classmethod
-    def bulk_create_movie_cast(cls, search_data: dict, movie: Movie):
+    def bulk_create_movie_cast(cls, movie: Movie, search_data: dict):
         """
         This method creates Actor in same time if the actor is not registered to db.
         """

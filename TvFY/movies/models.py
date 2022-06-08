@@ -22,6 +22,8 @@ class Movie(AuditMixin):
 
     wins = models.PositiveIntegerField(db_column="wins", null=True)
     nominations = models.PositiveIntegerField(db_column="nominations", null=True)
+    oscar_wins = models.PositiveIntegerField(db_column="oscar_wins", null=True)
+    oscar_nominations = models.PositiveIntegerField(db_column="oscar_nominations", null=True)
 
     imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
     imdb_vote_count = models.PositiveIntegerField(db_column="imdb_vote_count", null=True)
@@ -32,11 +34,14 @@ class Movie(AuditMixin):
     rt_audience_rate = models.PositiveIntegerField(db_column="rt_audience_rate", null=True)
     rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True, unique=True, db_index=True)
 
-    budget = models.PositiveIntegerField(db_column="budget", null=True)
-    budget_currency = models.CharField(db_column="budget_currency", max_length=255, null=True)
-    usa_opening_weekend = models.PositiveIntegerField(db_column="usa_opening_weekend", null=True)
-    usa_opening_weekend_currency = models.CharField(db_column="usa_opening_weekend_currency", max_length=255, null=True)
-    ww_gross = models.PositiveIntegerField(db_column="ww_gross", null=True)
+    budget_amount = models.PositiveIntegerField(db_column="budget_amount", null=True)
+    budget_currency = models.CharField(db_column="budget_currency", max_length=3, null=True)
+    usa_ow_amount = models.PositiveIntegerField(db_column="usa_ow_amount", null=True)
+    usa_ow_currency = models.CharField(db_column="usa_ow_currency", max_length=3, null=True)
+    ww_amount = models.PositiveIntegerField(db_column="ww_amount", null=True)
+    ww_currency = models.CharField(db_column="ww_currency", max_length=3, null=True)
+
+    metacritic_score = models.PositiveIntegerField(db_column="metacritic_score", null=True)
 
     director = models.ForeignKey(to=Director, db_column="director", on_delete=models.CASCADE, null=True)
     genres = models.ManyToManyField(to=Genre, db_column="genres")
