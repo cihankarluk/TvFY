@@ -1,4 +1,6 @@
-from TvFY.core.exceptions import NotAbleToFindSeriesSourceUrl
+from unittest.mock import patch
+
+from TvFY.director.service import DirectorService
 from TvFY.series.models import Series, SeriesCast, Episode, Season
 from TvFY.series.service import SeriesService, SeriesCastService, SeriesSeasonEpisodeService
 from tests.base import BaseTestCase
@@ -11,26 +13,40 @@ class SeriesServiceTestCase(BaseTestCase):
         self.search_data = self.read_file("series_the_boys.json", is_json=True)
         self.updated_search_data = self.read_file("series_the_boys_updated.json", is_json=True)
 
-    def test__check_source_urls(self):
-        """
-        Expect to not raise any errors.
-        """
-        search_data = {"imdb_url": "test"}
-        result = SeriesService.check_source_urls(search_data=search_data)
-        self.assertIsNone(result)
+    def test__prepare_series_data(self):
+        expected_attrs = {
+            'imdb_genre',
+            'imdb_director',
+            'imdb_director_url',
+            'run_time',
+            'imdb_popularity',
+            'country',
+            'language',
+            'release_date',
+            'imdb_title',
+            'is_active',
+            'imdb_vote_count',
+            'imdb_rate',
+            'episode_count',
+            'season_count',
+            'wins',
+            'nominations',
+            'oscar_wins',
+            'oscar_nominations',
+            'cast',
+            'imdb_url',
+            'season=1',
+            'rt_genre',
+            'rt_tomatometer_rate',
+            'rt_audience_rate',
+            'tv_network',
+            'rt_storyline',
+            'rotten_tomatoes_url'
+        }
 
-        search_data = {"rotten_tomatoes_url": "test"}
-        result = SeriesService.check_source_urls(search_data=search_data)
-        self.assertIsNone(result)
+        result = SeriesService.prepare_series_data(search_data=self.search_data)
 
-        search_data = {"imdb_url": "test", "rotten_tomatoes_url": "test"}
-        result = SeriesService.check_source_urls(search_data=search_data)
-        self.assertIsNone(result)
-
-    def test__check_source_url__raise_NotAbleToFindMovieSourceUrl(self):
-        search_data = {}
-        with self.assertRaises(NotAbleToFindSeriesSourceUrl):
-            SeriesService.check_source_urls(search_data=search_data)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=result))
 
     def test__get_series__imdb_url(self):
         series = self.create_series()[0]
@@ -53,46 +69,61 @@ class SeriesServiceTestCase(BaseTestCase):
 
     def test__check_series_exists__imdb_url(self):
         series = self.create_series()[0]
-        search_data = {"imdb_url": series.imdb_url}
+        series_data = {"imdb_url": series.imdb_url}
 
-        result = SeriesService.check_series_exists(search_data=search_data)
+        result = SeriesService.check_series_exists(series_data=series_data)
 
         self.assertEqual(series, result)
 
     def test__check_series_exists__rotten_tomatoes_url(self):
         series = self.create_series()[0]
-        search_data = {"rotten_tomatoes_url": series.rotten_tomatoes_url}
+        series_data = {"rotten_tomatoes_url": series.rotten_tomatoes_url}
 
-        result = SeriesService.check_series_exists(search_data=search_data)
+        result = SeriesService.check_series_exists(series_data=series_data)
 
         self.assertEqual(series, result)
 
     def test__check_series_exists__not_exists(self):
-        search_data = {}
+        series_data = {}
 
-        result = SeriesService.check_series_exists(search_data=search_data)
+        result = SeriesService.check_series_exists(series_data=series_data)
 
         self.assertIsNone(result)
 
-    def test__create_series(self):
-        series_data = {"title": "The Boys"}
+    def test__create_series_model_data(self):
+        expected_attrs = {
+            'title',
+            'storyline',
+            'release_date',
+            'end_date',
+            'run_time',
+            'is_active',
+            'season_count',
+            'wins',
+            'nominations',
+            'oscar_wins',
+            'oscar_nominations',
+            'tv_network',
+            'imdb_rate',
+            'imdb_vote_count',
+            'imdb_popularity',
+            'rt_tomatometer_rate',
+            'rt_audience_rate',
+            'metacritic_score',
+            'imdb_url',
+            'rotten_tomatoes_url',
+            'creator',
+        }
+        series_data = SeriesService.prepare_series_data(self.search_data)
 
-        SeriesService.create_series(series_data=series_data, search_data=self.search_data)
+        result = SeriesService.create_series_model_data(series_data=series_data)
 
-        series_query = Series.objects.filter(title="The Boys")
-        self.assertTrue(series_query.exists())
-        series = series_query.get()
-        self.assertEqual(1, series.language.count())
-        self.assertEqual(1, series.country.count())
-        self.assertEqual(1, series.genres.count())
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=result))
 
-        series_cast_query = SeriesCast.objects.all()
-        self.assertEqual(4, series_cast_query.count())
-        series_episode_query = Episode.objects.all()
-        self.assertEqual(8, series_episode_query.count())
-
-    def test__update_series(self):
-        series_data = {"title": "The Boys", "imdb_rate": 8.7}
+    @patch.object(DirectorService, "get_or_create_director")
+    def test__update_series(self, mock_get_or_create_director):
+        mock_get_or_create_director.return_value = self.create_director(count=1)[0]
+        series_data = {"imdb_title": "The Boys", "imdb_rate": 8.7}
         series = self.create_series()[0]
 
         updated_series = SeriesService.update_series(series=series, series_data=series_data)
@@ -101,33 +132,57 @@ class SeriesServiceTestCase(BaseTestCase):
         self.assertEqual("The Boys", updated_series.title)
         self.assertEqual(8.7, updated_series.imdb_rate)
 
+    def test__create_series(self):
+        series_data = SeriesService.prepare_series_data(self.search_data)
+
+        SeriesService.create_series(series_data=series_data)
+
+        series_query = Series.objects.filter(title="The Boys")
+        self.assertTrue(series_query.exists())
+        series = series_query.get()
+        self.assertEqual(1, series.language.count())
+        self.assertEqual(1, series.country.count())
+        self.assertEqual(4, series.genres.count())
+
+        series_cast_query = SeriesCast.objects.all()
+        self.assertEqual(4, series_cast_query.count())
+        series_episode_query = Episode.objects.all()
+        self.assertEqual(8, series_episode_query.count())
+
     def test__create_or_update_series__create_series(self):
         expected_attribute_errors = {
-            "rt_genre",
-            "imdb_director",
-            "imdb_director_url",
-            "cast",
+            'cast',
+            'episode_count',
+            'imdb_director',
+            'imdb_director_url',
+            'imdb_genre',
+            'imdb_rate',
+            'imdb_title',
+            'release_date',
+            'rt_genre',
+            'rt_storyline',
+            'season=1'
         }
+        series_data = SeriesService.prepare_series_data(search_data=self.search_data)
+
         SeriesService.create_or_update_series(search_data=self.search_data)
 
         series_query = Series.objects.filter(title="The Boys")
         self.assertTrue(series_query.exists())
         series = series_query.get()
         attribute_errors = set()
-        for key, value in self.search_data.items():
+        for key, value in series_data.items():
             try:
                 attribute = getattr(series, key)
-                if isinstance(attribute, str):
+                if isinstance(attribute, str) or isinstance(attribute, int):
                     self.assertEqual(attribute, value)
-                elif isinstance(attribute, int):
-                    self.assertEqual(attribute, int(value))
                 else:
                     # Country and Language
                     self.assertEqual(1, attribute.count())
             except AttributeError:
                 attribute_errors.add(key)
         self.assertFalse(expected_attribute_errors - attribute_errors)
-        self.assertEqual(1, series.genres.count())
+        self.assertEqual(4, series.genres.count())
 
     def test__create_or_update_movie__update_movie(self):
         """
@@ -197,8 +252,8 @@ class SeriesCastServiceTestCase(BaseTestCase):
             },
         ]
         actor_map = {
-            "https://test1.com": "test1",
-            "https://test2.com": "test2",
+            "https://test1.com": {"actor": self.actor},
+            "https://test2.com": {"actor": self.actor},
         }
         actor1 = self.create_actor(index_start=200, count=1, imdb_url="https://test1.com")[0]
         actor2 = self.create_actor(index_start=201, count=1, imdb_url="https://test2.com")[0]
@@ -221,24 +276,27 @@ class SeriesCastServiceTestCase(BaseTestCase):
         self.assertEqual("Test 1", result.first().character_name)
 
     def test__create_or_update_series_cast__empty_search_data(self):
-        search_data = {}
+        series_data = {}
 
-        SeriesCastService.create_or_update_series_cast(series=self.series, search_data=search_data)
+        SeriesCastService.create_or_update_series_cast(series=self.series, series_data=series_data)
 
         series_cast_query = SeriesCast.objects.all()
         self.assertEqual(0, series_cast_query.count())
 
     def test__create_or_update_series_cast(self):
-        SeriesCastService.create_or_update_series_cast(series=self.series, search_data=self.search_data)
+        series_data = SeriesService.prepare_series_data(self.search_data)
+        updated_series_data = SeriesService.prepare_series_data(self.updated_search_data)
+
+        SeriesCastService.create_or_update_series_cast(series=self.series, series_data=series_data)
 
         series_cast_query = SeriesCast.objects.all()
         self.assertEqual(4, series_cast_query.count())
-        self.assertEqual(24, series_cast_query.first().episode_count)
+        self.assertEqual(25, series_cast_query.first().episode_count)
 
-        SeriesCastService.create_or_update_series_cast(series=self.series, search_data=self.updated_search_data)
+        SeriesCastService.create_or_update_series_cast(series=self.series, series_data=updated_series_data)
 
         series_cast_query = SeriesCast.objects.all()
-        self.assertEqual(4, series_cast_query.count())
+        self.assertEqual(5, series_cast_query.count())
         self.assertEqual(48, series_cast_query.first().episode_count)
 
 
@@ -283,7 +341,8 @@ class SeriesSeasonEpisodeServiceTestCase(BaseTestCase):
 
     def test__create_or_update_series_season_episodes(self):
         SeriesSeasonEpisodeService.create_or_update_series_season_episodes(
-            series=self.series, search_data=self.search_data, season_number="1",
+            series=self.series,
+            search_data=self.search_data["https://www.imdb.com/title/tt1190634/episodes?season=1"],
         )
 
         season_query = Season.objects.filter(imdb_url="https://www.imdb.com/title/tt1190634/episodes?season=1")
@@ -294,7 +353,8 @@ class SeriesSeasonEpisodeServiceTestCase(BaseTestCase):
         self.assertEqual(8.5, episode_query.get(title="Cherry").imdb_rate)
 
         SeriesSeasonEpisodeService.create_or_update_series_season_episodes(
-            series=self.series, search_data=self.updated_search_data, season_number="1",
+            series=self.series,
+            search_data=self.updated_search_data["https://www.imdb.com/title/tt1190634/episodes?season=1"],
         )
 
         season_query = Season.objects.filter(imdb_url="https://www.imdb.com/title/tt1190634/episodes?season=1")

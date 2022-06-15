@@ -1,5 +1,4 @@
-from django.db import models, transaction, IntegrityError
-from django.db.models.utils import resolve_callables
+from django.db import models
 
 from TvFY.core.managers import ManagerMixin
 

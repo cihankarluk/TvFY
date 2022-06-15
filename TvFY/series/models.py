@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 from TvFY.actor.models import Actor
@@ -20,35 +19,32 @@ class Series(AuditMixin):
     storyline = models.TextField(db_column="storyline", null=True)
     release_date = models.DateTimeField(db_column="release_date", null=True)
     end_date = models.DateTimeField(db_column="end_date", null=True)
-    run_time = models.IntegerField(db_column="run_time", null=True)
+    run_time = models.PositiveIntegerField(db_column="run_time", null=True)
 
     is_active = models.BooleanField(db_column="is_active", null=True)
-    season_count = models.IntegerField(db_column="season_count", null=True)
-    wins = models.IntegerField(db_column="wins", null=True)
-    nominations = models.IntegerField(db_column="nominations", null=True)
-    tv_network = ArrayField(models.CharField(max_length=32), db_column="tv_network", null=True)
+    season_count = models.PositiveIntegerField(db_column="season_count", null=True)
+    wins = models.PositiveIntegerField(db_column="wins", null=True)
+    nominations = models.PositiveIntegerField(db_column="nominations", null=True)
+    oscar_wins = models.PositiveIntegerField(db_column="oscar_wins", null=True)
+    oscar_nominations = models.PositiveIntegerField(db_column="oscar_nominations", null=True)
+    tv_network = models.CharField(db_column="tv_network", max_length=255, null=True)
 
     imdb_rate = models.FloatField(db_column="imdb_rate", null=True)
-    imdb_vote_count = models.IntegerField(db_column="imdb_vote_count", null=True)
-    imdb_popularity = models.IntegerField(db_column="imdb_popularity", null=True)
+    imdb_vote_count = models.PositiveIntegerField(db_column="imdb_vote_count", null=True)
+    imdb_popularity = models.PositiveIntegerField(db_column="imdb_popularity", null=True)
     imdb_url = models.URLField(db_column="imdb_url", null=True)
 
-    rt_tomatometer_rate = models.IntegerField(db_column="rt_tomatometer_rate", null=True)
-    rt_audience_rate = models.IntegerField(db_column="rt_audience_rate", null=True)
+    rt_tomatometer_rate = models.PositiveIntegerField(db_column="rt_tomatometer_rate", null=True)
+    rt_audience_rate = models.PositiveIntegerField(db_column="rt_audience_rate", null=True)
     rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True)
 
-    tv_com_rate = models.FloatField(db_column="tv_com_rate", null=True)
-    tv_com_url = models.URLField(db_column="tv_com_url", null=True)
-
+    metacritic_score = models.PositiveIntegerField(db_column="metacritic_score", null=True)
     creator = models.ForeignKey(to=Director, db_column="creator", on_delete=models.SET_NULL, null=True)
     genres = models.ManyToManyField(to=Genre, db_column="tvfy_code")
     country = models.ManyToManyField(to=Country, db_column="tvfy_code")
     language = models.ManyToManyField(to=Language, db_column="tvfy_code")
 
     objects = SeriesManager()
-
-    class Meta:
-        ordering = ("id",)
 
     def __str__(self):
         return self.title

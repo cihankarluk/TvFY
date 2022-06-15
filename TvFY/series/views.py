@@ -93,7 +93,7 @@ class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         series: Series = self.get_object()
 
         season_obj = get_object_or_404(series.season_set.all(), **{"season": kwargs["season_id"]})
-        episodes = season_obj.episode_set.all()
+        episodes = season_obj.episode_set.order_by("episode").all()
 
         serializer = self.get_serializer(episodes, many=True)
 

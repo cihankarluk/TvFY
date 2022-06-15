@@ -13,7 +13,7 @@ def main():
 
 
 @main.command()
-def update_directors():
+def update_series_seasons():
     logger.info("Started to update season episodes.")
     SeriesSeasonEpisodeService.scrap_and_update_episodes()
     logger.info("Ended to update season episodes.")

@@ -28,6 +28,41 @@ class SeriesViewSetTestCase(BaseTestCase):
         series_data = self.read_file("series_the_boys.json", is_json=True)
         self.series = SeriesService.create_or_update_series(search_data=series_data)
 
+    def test__list(self):
+        expected_attrs = {
+            "tvfy_code",
+            "title",
+            "storyline",
+            "release_date",
+            "end_date",
+            "run_time",
+            "is_active",
+            "season_count",
+            "wins",
+            "nominations",
+            "oscar_wins",
+            "oscar_nominations",
+            "tv_network",
+            "imdb_rate",
+            "imdb_vote_count",
+            "imdb_popularity",
+            "imdb_url",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
+            "rotten_tomatoes_url",
+            "metacritic_score",
+            "creator",
+            "genres",
+            "country",
+            "language",
+        }
+
+        response = self.client.get(self.series_list_url)
+        json_response = response.json()
+
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(self.is_subset(attrs=expected_attrs, results=json_response["results"]))
+
     def test__retrieve(self):
         expected_attrs = {
             "tvfy_code",
@@ -40,6 +75,8 @@ class SeriesViewSetTestCase(BaseTestCase):
             "season_count",
             "wins",
             "nominations",
+            "oscar_wins",
+            "oscar_nominations",
             "tv_network",
             "imdb_rate",
             "imdb_vote_count",
@@ -48,8 +85,7 @@ class SeriesViewSetTestCase(BaseTestCase):
             "rt_tomatometer_rate",
             "rt_audience_rate",
             "rotten_tomatoes_url",
-            "tv_com_rate",
-            "tv_com_url",
+            "metacritic_score",
             "creator",
             "genres",
             "country",

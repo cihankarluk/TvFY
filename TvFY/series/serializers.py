@@ -37,6 +37,8 @@ class SeriesListSerializer(serializers.ModelSerializer):
             "season_count",
             "wins",
             "nominations",
+            "oscar_wins",
+            "oscar_nominations",
             "tv_network",
             "imdb_rate",
             "imdb_vote_count",
@@ -45,8 +47,7 @@ class SeriesListSerializer(serializers.ModelSerializer):
             "rt_tomatometer_rate",
             "rt_audience_rate",
             "rotten_tomatoes_url",
-            "tv_com_rate",
-            "tv_com_url",
+            "metacritic_score",
             "creator",
             "genres",
             "country",
@@ -75,6 +76,8 @@ class SeriesDetailSerializer(SeriesListSerializer):
             "season_count",
             "wins",
             "nominations",
+            "oscar_wins",
+            "oscar_nominations",
             "tv_network",
             "imdb_rate",
             "imdb_vote_count",
@@ -83,8 +86,7 @@ class SeriesDetailSerializer(SeriesListSerializer):
             "rt_tomatometer_rate",
             "rt_audience_rate",
             "rotten_tomatoes_url",
-            "tv_com_rate",
-            "tv_com_url",
+            "metacritic_score",
             "creator",
             "genres",
             "country",
@@ -107,7 +109,6 @@ class SeriesSeasonSerializer(serializers.ModelSerializer):
 
 
 class SeriesSeasonEpisodeSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Episode
         fields = (
