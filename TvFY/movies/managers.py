@@ -1,18 +1,11 @@
 from django.db import models
 
-from TvFY.core.helpers import get_random_string
+from TvFY.core.managers import ManagerMixin
 
 
-class MovieManager(models.Manager):
-
-    @property
-    def create_movie_code(self):
-        movie_code = f"{self.model.PREFIX}-{get_random_string(8)}"
-        if super().get_queryset().filter(tvfy_code=movie_code).exists():
-            return self.create_movie_code
-        return movie_code
+class MovieManager(ManagerMixin, models.Manager):
 
     def create(self, **movie_data):
-        movie_data.update({"tvfy_code": self.create_movie_code})
+        movie_data.update({"tvfy_code": self.create_tvfy_code()})
         movie = super(MovieManager, self).create(**movie_data)
         return movie

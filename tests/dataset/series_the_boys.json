@@ -1,146 +1,161 @@
 {
-  "rt_genre": [
-    "Drama"
-  ],
-  "rt_tomatometer_rate": "91",
-  "rt_audience_rate": 84,
-  "network": [
-    "Prime Video"
-  ],
-  "storyline": "Superheroes are often as popular as celebrities, as influential as politicians, and sometimes even as revered as gods. But that's when they're using their powers for good. What happens when the heroes go rogue and start abusing their powers? When it's the powerless against the super powerful, the Boys head out on a heroic quest to expose the truth about the Seven and Vought, the multibillion-dollar conglomerate that manages the superheroes and covers up their dirty secrets. Based on the comic book series of the same name.",
-  "wins": 8,
-  "nominations": 54,
-  "https://www.imdb.com/title/tt1190634/episodes?season=1": {
-    "1": [
-      {
-        "title": "The Name of the Game",
-        "storyline": "When a Supe kills the love of his life, A/V salesman Hughie Campbell teams up with Billy Butcher, a vigilante hell-bent on punishing corrupt Supes -- and Hughie's life will never be the same again.",
-        "imdb_rate": 8.7,
-        "imdb_vote_count": 0,
-        "episode": 1,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
+   "https://www.rottentomatoes.com/tv/the_boys_2019":{
+      "rt_genre":[
+         "Action"
+      ],
+      "rt_tomatometer_rate":93,
+      "rt_audience_rate":85,
+      "tv_network":"Prime Video",
+      "rt_storyline":"Superheroes are often as popular as celebrities, as influential as politicians, and sometimes even as revered as gods. But that's when they're using their powers for good. What happens when the heroes go rogue and start abusing their powers? When it's the powerless against the super powerful, the Boys head out on a heroic quest to expose the truth about the Seven and Vought, the multibillion-dollar conglomerate that manages the superheroes and covers up their dirty secrets. Based on the comic book series of the same name."
+   },
+   "https://www.imdb.com/title/tt1190634/episodes?season=1":{
+      "1":[
+         {
+            "title":"The Name of the Game",
+            "storyline":"When a Supe kills the love of his life, A/V salesman Hughie Campbell teams up with Billy Butcher, a vigilante hell-bent on punishing corrupt Supes -- and Hughie's life will never be the same again.",
+            "imdb_rate":8.7,
+            "imdb_vote_count":12507,
+            "episode":1,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"Cherry",
+            "storyline":"The Boys get themselves a Superhero, Starlight gets payback, Homelander gets naughty, and a Senator gets naughtier.",
+            "imdb_rate":8.5,
+            "imdb_vote_count":10610,
+            "episode":2,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"Get Some",
+            "storyline":"It's the race of the century. A-Train versus Shockwave, vying for the title of World's Fastest Man. Meanwhile, the Boys are reunited and it feels so good.",
+            "imdb_rate":8.4,
+            "imdb_vote_count":9921,
+            "episode":3,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"The Female of the Species",
+            "storyline":"On a very special episode of The Boys... an hour of guts, gutterballs, airplane hijackings, madness, ghosts, and one very intriguing Female. Oh, and lots of heart -- both in the sentimental sense, and in the gory literal sense.",
+            "imdb_rate":8.7,
+            "imdb_vote_count":10101,
+            "episode":4,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"Good for the Soul",
+            "storyline":"The Boys head to the \"Believe\" Expo to follow a promising lead in their ongoing war against the Supes. There might -- MIGHT -- be a homicidal infant, but you'll have to see for yourself.",
+            "imdb_rate":8.4,
+            "imdb_vote_count":9651,
+            "episode":5,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"The Innocents",
+            "storyline":"SUPER IN AMERICA (2019). Vought Studios. Genre: Reality. Starring: Homelander, Queen Maeve, Black Noir, The Deep, A-Train, Starlight, Tara Reid, Billy Zane.",
+            "imdb_rate":8.2,
+            "imdb_vote_count":9061,
+            "episode":6,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"The Self-Preservation Society",
+            "storyline":"Never trust a washed-up Supe -- the Boys learn this lesson the hard way. Meanwhile, Homelander digs into his past, Starlight discovers that love hurts, and if you're ever in Sandusky, Ohio and a girl asks if she can touch your gills, say NO.",
+            "imdb_rate":8.8,
+            "imdb_vote_count":9272,
+            "episode":7,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         },
+         {
+            "title":"You Found Me",
+            "storyline":"Season Finale Time! Questions answered! Secrets revealed! Conflicts... conflicted! Characters exploded! And so much more!",
+            "imdb_rate":9.0,
+            "imdb_vote_count":11023,
+            "episode":8,
+            "release_date":"2019-07-26",
+            "imdb_url":"https://www.imdb.com/title/tt1190634/episodes?season=1"
+         }
+      ]
+   },
+   "https://www.imdb.com/title/tt1190634/fullcredits":{
+      "cast":[
+         {
+            "first_name":"Karl",
+            "last_name":"Urban",
+            "character_name":"Billy Butcher",
+            "episode_count":25,
+            "start_acting":"2019-01-01",
+            "end_acting":"2023-01-01",
+            "imdb_actor_url":"https://www.imdb.com/name/nm0881631/"
+         },
+         {
+            "first_name":"Jack",
+            "last_name":"Quaid",
+            "character_name":"Hughie Campbell",
+            "episode_count":25,
+            "start_acting":"2019-01-01",
+            "end_acting":"2023-01-01",
+            "imdb_actor_url":"https://www.imdb.com/name/nm4425051/"
+         },
+         {
+            "first_name":"Antony",
+            "last_name":"Starr",
+            "character_name":"Homelander",
+            "episode_count":24,
+            "start_acting":"2019-01-01",
+            "end_acting":"2022-01-01",
+            "imdb_actor_url":"https://www.imdb.com/name/nm1102278/"
+         },
+         {
+            "first_name":"Erin",
+            "last_name":"Moriarty",
+            "character_name":"Annie January",
+            "episode_count":24,
+            "start_acting":"2019-01-01",
+            "end_acting":"2022-01-01",
+            "imdb_actor_url":"https://www.imdb.com/name/nm3929195/"
+         }
+      ]
+   },
+   "https://www.imdb.com/title/tt1190634/":{
+      "imdb_genre":[
+         "Action",
+         "Crime",
+         "Drama",
+         "Sci-Fi"
+      ],
+      "imdb_director":{
+         "first_name":"Eric",
+         "last_name":"Kripke"
       },
-      {
-        "title": "Cherry",
-        "storyline": "The Boys get themselves a Superhero, Starlight gets payback, Homelander gets naughty, and a Senator gets naughtier.",
-        "imdb_rate": 8.5,
-        "imdb_vote_count": 0,
-        "episode": 2,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      },
-      {
-        "title": "Get Some",
-        "storyline": "It's the race of the century. A-Train versus Shockwave, vying for the title of World's Fastest Man. Meanwhile, the Boys are reunited and it feels so good.",
-        "imdb_rate": 8.4,
-        "imdb_vote_count": 0,
-        "episode": 3,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      },
-      {
-        "title": "The Female of the Species",
-        "storyline": "On a very special episode of The Boys... an hour of guts, gutterballs, airplane hijackings, madness, ghosts, and one very intriguing Female. Oh, and lots of heart -- both in the sentimental sense, and in the gory literal sense.",
-        "imdb_rate": 8.7,
-        "imdb_vote_count": 0,
-        "episode": 4,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      },
-      {
-        "title": "Good for the Soul",
-        "storyline": "The Boys head to the \"Believe\" Expo to follow a promising lead in their ongoing war against the Supes. There might -- MIGHT -- be a homicidal infant, but you\\'ll have to see for yourself.",
-        "imdb_rate": 8.4,
-        "imdb_vote_count": 0,
-        "episode": 5,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      },
-      {
-        "title": "The Innocents",
-        "storyline": "Now informed, The Boys know Vought has used super charities to smuggle Compound-V (disguised as Polio vaccines) to make super-babies since 1971. Annie learns that Ashley was fired, and Stillwell demands she comply with her designed image. Annie refuses, remarking that firing her after reporting a sexual assault would hurt Vought. Stillwell, aware it was Deep, has him apologize publicly and transfers him to Sandusky, Ohio for a sabbatical. Butcher brings Hughie to a collateral damage survivors support group, but leaves after yelling at them for doing nothing to get ...",
-        "imdb_rate": 8.2,
-        "imdb_vote_count": 0,
-        "episode": 6,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      },
-      {
-        "title": "The Self-Preservation Society",
-        "storyline": "Never trust a washed-up Supe -- the Boys learn this lesson the hard way. Meanwhile, Homelander digs into his past, Starlight discovers that love hurts, and if you're ever in Sandusky, Ohio and a girl asks if she can touch your gills, say NO.",
-        "imdb_rate": 8.8,
-        "imdb_vote_count": 0,
-        "episode": 7,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      },
-      {
-        "title": "You Found Me",
-        "storyline": "Season Finale Time! Questions answered! Secrets revealed! Conflicts... conflicted! Characters exploded! And so much more!",
-        "imdb_rate": 9.0,
-        "imdb_vote_count": 0,
-        "episode": 8,
-        "release_date": "2019-07-26",
-        "imdb_url": "https://www.imdb.com/title/tt1190634/episodes?season=1"
-      }
-    ],
-    "season_count": 3
-  },
-  "imdb_director": {
-    "first_name": "Eric",
-    "last_name": "Kripke"
-  },
-  "imdb_director_url": "https://www.imdb.com/name/nm0471392/?ref_=tt_ov_wr",
-  "run_time": 60,
-  "imdb_popularity": 16,
-  "country": [
-    "United States"
-  ],
-  "language": [
-    "English"
-  ],
-  "release_date": "2019-07-26",
-  "title": "The Boys",
-  "is_active": false,
-  "cast": [
-    {
-      "first_name": "Karl",
-      "last_name": "Urban",
-      "character_name": "Billy Butcher",
-      "episode_count": 24,
-      "start_acting": "2019-01-01",
-      "end_acting": "2022-01-01",
-      "imdb_actor_url": "https://www.imdb.com/name/nm0881631/"
-    },
-    {
-      "first_name": "Jack",
-      "last_name": "Quaid",
-      "character_name": "Hughie Campbell",
-      "episode_count": 24,
-      "start_acting": "2019-01-01",
-      "end_acting": "2022-01-01",
-      "imdb_actor_url": "https://www.imdb.com/name/nm4425051/"
-    },
-    {
-      "first_name": "Antony",
-      "last_name": "Starr",
-      "character_name": "Homelander",
-      "episode_count": 24,
-      "start_acting": "2019-01-01",
-      "end_acting": "2022-01-01",
-      "imdb_actor_url": "https://www.imdb.com/name/nm1102278/"
-    },
-    {
-      "first_name": "Erin",
-      "last_name": "Moriarty",
-      "character_name": "Annie January",
-      "episode_count": 24,
-      "start_acting": "2019-01-01",
-      "end_acting": "2022-01-01",
-      "imdb_actor_url": "https://www.imdb.com/name/nm3929195/"
-    }
-  ],
-  "imdb_url": "https://www.imdb.com/title/tt1190634/",
-  "rotten_tomatoes_url": "https://www.rottentomatoes.com/tv/the_boys_2019"
+      "imdb_director_url":"https://www.imdb.com/name/nm0471392/",
+      "run_time":3600,
+      "imdb_popularity":2,
+      "country":[
+         "United States"
+      ],
+      "language":[
+         "English"
+      ],
+      "release_date":"2019-07-26",
+      "imdb_title":"The Boys",
+      "is_active":true,
+      "imdb_vote_count":378672,
+      "imdb_rate":8.7,
+      "episode_count":25,
+      "season_count":4,
+      "wins":8,
+      "nominations":54,
+      "oscar_wins":0,
+      "oscar_nominations":6
+   },
+   "imdb_url":"https://www.imdb.com/title/tt1190634/",
+   "rotten_tomatoes_url":"https://www.rottentomatoes.com/tv/the_boys_2019"
 }

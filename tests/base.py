@@ -253,7 +253,6 @@ class BaseTestCase(TestCase):
             cls,
             index_start=0,
             count=10,
-            tvfy_code=None,
             title=None,
             storyline=None,
             release_date=None,
@@ -263,6 +262,8 @@ class BaseTestCase(TestCase):
             season_count=None,
             wins=None,
             nominations=None,
+            oscar_wins=None,
+            oscar_nominations=None,
             tv_network=None,
             imdb_rate=None,
             imdb_vote_count=None,
@@ -271,15 +272,13 @@ class BaseTestCase(TestCase):
             rt_tomatometer_rate=None,
             rt_audience_rate=None,
             rotten_tomatoes_url=None,
-            tv_com_rate=None,
-            tv_com_url=None,
+            metacritic_score=None,
             creator=None,
     ) -> List[Series]:
         series = []
         for index in range(index_start, count + index_start, 1):
             series.append(baker.make(
                 Series,
-                tvfy_code=tvfy_code or f"{tvfy_code}_{index}",
                 title=title or f"{title}_{index}",
                 storyline=storyline,
                 release_date=release_date,
@@ -289,6 +288,8 @@ class BaseTestCase(TestCase):
                 season_count=season_count,
                 wins=wins,
                 nominations=nominations,
+                oscar_wins=oscar_wins,
+                oscar_nominations=oscar_nominations,
                 tv_network=tv_network,
                 imdb_rate=imdb_rate,
                 imdb_vote_count=imdb_vote_count,
@@ -297,8 +298,7 @@ class BaseTestCase(TestCase):
                 rt_tomatometer_rate=rt_tomatometer_rate,
                 rt_audience_rate=rt_audience_rate,
                 rotten_tomatoes_url=rotten_tomatoes_url or f"{rotten_tomatoes_url}/{index}",
-                tv_com_rate=tv_com_rate,
-                tv_com_url=tv_com_url,
+                metacritic_score=metacritic_score,
                 creator=creator,
             ))
         return series

@@ -30,8 +30,10 @@ class Movie(AuditMixin):
     imdb_popularity = models.PositiveIntegerField(db_column="imdb_popularity", null=True)
     imdb_url = models.URLField(db_column="imdb_url", null=True, unique=True, db_index=True)
 
-    rt_tomatometer_rate = models.PositiveIntegerField(db_column="rt_tomatometer_rate", null=True)
     rt_audience_rate = models.PositiveIntegerField(db_column="rt_audience_rate", null=True)
+    rt_audience_count = models.PositiveIntegerField(db_column="rt_audience_count", null=True)
+    rt_tomatometer_rate = models.PositiveIntegerField(db_column="rt_tomatometer_rate", null=True)
+    rt_tomatometer_count = models.PositiveIntegerField(db_column="rt_tomatometer_count", null=True)
     rotten_tomatoes_url = models.URLField(db_column="rotten_tomatoes_url", null=True, unique=True, db_index=True)
 
     budget_amount = models.PositiveIntegerField(db_column="budget_amount", null=True)
