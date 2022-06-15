@@ -20,11 +20,16 @@ class GoogleScrapper:
         result = {"imdb_url": imdb_url} if imdb_url else {}
         return result
 
-    @staticmethod
-    def get_rotten_tomatoes_url(content: str) -> dict:
-        regex_pattern = r"https://www.rottentomatoes.com/.+/.+?(?=&)"
+    @classmethod
+    def get_rotten_tomatoes_url(cls, content: str, u_rotten_tomatoes_url=None) -> dict:
+        result = {}
+
+        regex_pattern = r"https://www.rottentomatoes.com/(.*?)&"
         rotten_tomatoes_url = regex_search(content=content, pattern=regex_pattern)
-        result = {"rotten_tomatoes_url": rotten_tomatoes_url} if rotten_tomatoes_url else {}
+        if rotten_tomatoes_url:
+            rotten_tomatoes_url = rotten_tomatoes_url[:len(rotten_tomatoes_url) - 1]
+            result = {"rotten_tomatoes_url": rotten_tomatoes_url}
+
         return result
 
     @staticmethod

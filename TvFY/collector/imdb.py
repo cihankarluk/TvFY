@@ -25,13 +25,13 @@ class IMDBEpisodes:
     soup: BeautifulSoup
 
     def get_imdb_vote_count(self, episode_data: BeautifulSoup) -> int:
-        vote_count = 0
+        vote_count = None
 
         soup_selection = {
             "soup": episode_data,
-            "method": self.find_all,
-            "id": "bySeason",
-            "class": "current",
+            "method": self.find,
+            "tag": "span",
+            "class": "ipl-rating-star__total-votes",
         }
         if css_selection := self.soup_selection(**soup_selection):
             vote_count = int("".join(re.findall(r"\d+", css_selection.text)))
@@ -144,16 +144,21 @@ class IMDBCast:
             for cast in css_selection.find_all("tr"):
                 if character := cast.find("td", class_="character"):
                     if self.search_type == Movie.TYPE:
-                        cast_information = {"character_name": character.a.text}
+                        try:
+                            cast_information = {"character_name": character.a.text}
+                        except AttributeError:
+                            # Case for a.text is not accessible.
+                            # In that case character does not have character name and no need to save.
+                            continue
                     else:
                         cast_information = self.cast_information(character.get_text(" sp "))
-                    if not cast_information:
-                        continue
+                        if not cast_information:
+                            continue
 
                     actor_detail = cast.find("td", class_="").a
                     actor = self.get_name(actor_detail.text.strip())
                     actor.update(cast_information)
-                    actor.update({"imdb_actor_url": f'{self.BASE_URL}{actor_detail["href"]}'})
+                    actor.update({"imdb_actor_url": f'{self.BASE_URL}{actor_detail["href"].split("?")[0]}'})
                     results.append(actor)
             cast = {"cast": results}
 
@@ -344,7 +349,7 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             creator = {
                 "creator": css_selection.a.text.strip(),
-                "imdb_creator_url": f'{self.BASE_URL}{css_selection.a["href"]}',
+                "imdb_creator_url": f'{self.BASE_URL}{css_selection.a["href"].split("?")[0]}',
             }
 
         return creator
@@ -394,7 +399,7 @@ class IMDBHomePage:
             "data-testid": "hero-rating-bar__popularity__score",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            imdb_popularity = {"imdb_popularity": int(css_selection.text)}
+            imdb_popularity = {"imdb_popularity": int(css_selection.text.replace(",", ""))}
 
         return imdb_popularity
 
@@ -461,7 +466,7 @@ class IMDBHomePage:
             "data-testid": "hero-title-block__title",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            title = {"title": css_selection.text.strip()}
+            title = {"imdb_title": css_selection.text.strip()}
 
         return title
 
@@ -536,12 +541,12 @@ class IMDBHomePage:
             "id": "__NEXT_DATA__",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            data = json.loads(css_selection.next_element)
-            ww_data = data["props"]["pageProps"]["mainColumnData"]["worldwideGross"]["total"]
-            ww_gross.update({
-                "ww_amount": ww_data["amount"],
-                "ww_currency": ww_data["currency"]
-            })
+            data = json.loads(css_selection.next_element)["props"]["pageProps"]
+            if ww_data := data["mainColumnData"]["worldwideGross"]:
+                ww_gross.update({
+                    "ww_amount": ww_data["total"]["amount"],
+                    "ww_currency": ww_data["total"]["currency"],
+                })
         return ww_gross
 
     @property
@@ -647,17 +652,16 @@ class IMDBBase(
         self.search_type = search_type
 
     def run(self) -> dict[str, ...]:
-        logger.warning(f"Imdb scrapping started for {self.url}")
+        logger.warning(f"IMDB web scrapping started for {self.url}")
         result = {}
+        result[self.url] = {}
         if self.EPISODES in self.url:
-            result[self.url] = {}
             result[self.url].update(self.get_episodes)
         elif self.CAST in self.url:
-            result.update(self.get_cast)
+            result[self.url].update(self.get_cast)
         elif self.AWARDS in self.url:
             result.update(self.get_actor_awards)
         elif self.PERSONAL_DATA in self.url:
-            result[self.url] = {}
             result[self.url].update(self.get_birth_date)
             result[self.url].update(self.get_born_place)
             result[self.url].update(self.get_death_date)
@@ -665,7 +669,6 @@ class IMDBBase(
             result[self.url].update(self.get_person_awards)
             result[self.url].update(self.get_perks)
         elif self.search_type == Movie.TYPE:
-            result[self.url] = {}
             result[self.url].update(self.get_genre)
             result[self.url].update(self.get_director)
             result[self.url].update(self.get_runtime)
@@ -681,7 +684,6 @@ class IMDBBase(
             result[self.url].update(self.get_ratings_score)
             result[self.url].update(self.get_awards)
         elif self.search_type == Series.TYPE:
-            result[self.url] = {}
             result[self.url].update(self.get_genre)
             result[self.url].update(self.get_creator)
             result[self.url].update(self.get_director)
@@ -695,5 +697,6 @@ class IMDBBase(
             result[self.url].update(self.get_metacritic_score)
             result[self.url].update(self.get_ratings_score)
             result[self.url].update(self.get_season_episode_count)
+            result[self.url].update(self.get_awards)
 
         return result

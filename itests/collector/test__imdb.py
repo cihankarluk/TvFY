@@ -19,13 +19,20 @@ class IMDBEpisodesTestCase(BaseTestCase):
     def test__1(self):
         urls = [
             "https://www.imdb.com/title/tt2098220/episodes?season=1",
-            "https://www.imdb.com/title/tt0409591/episodes?season=1",
         ]
 
         result = Scraper(urls=urls).handle()
 
         for url in urls:
             self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result[url]['1']))
+
+        episode_data = result[urls[0]]["1"][0]
+        self.assertTrue(episode_data["title"])
+        self.assertTrue(len(episode_data["storyline"]))
+        self.assertTrue(episode_data["imdb_rate"])
+        self.assertTrue(episode_data["imdb_vote_count"])
+        self.assertTrue(episode_data["episode"])
+        self.assertTrue(episode_data["release_date"])
 
     def test__2(self):
         # This case is for season entered to imdb however no episodes are released yet.
@@ -53,7 +60,7 @@ class IMDBCastTestCase(BaseTestCase):
 
         result = Scraper(urls=[url]).handle()
 
-        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result["cast"]))
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result[url]["cast"]))
 
     def test__2(self):
         expected_attrs = {
@@ -66,7 +73,7 @@ class IMDBCastTestCase(BaseTestCase):
 
         result = Scraper(urls=[url], search_type=Movie.TYPE).handle()
 
-        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result["cast"]))
+        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result[url]["cast"]))
 
 
 class IMDBAwardsTestCase(BaseTestCase):
@@ -147,7 +154,7 @@ class IMDBHomePageTestCase(BaseTestCase):
             'country',
             'language',
             'release_date',
-            'title',
+            'imdb_title',
             'budget_amount',
             'budget_currency',
             'usa_ow_amount',
@@ -184,7 +191,7 @@ class IMDBHomePageTestCase(BaseTestCase):
             'country',
             'language',
             'release_date',
-            'title',
+            'imdb_title',
             'budget_amount',
             'budget_currency',
             'ww_amount',
@@ -211,7 +218,7 @@ class IMDBHomePageTestCase(BaseTestCase):
             'country',
             'language',
             'release_date',
-            'title',
+            'imdb_title',
             'usa_ow_amount',
             'usa_ow_currency',
             'ww_amount',
@@ -246,7 +253,7 @@ class IMDBHomePageTestCase(BaseTestCase):
             'country',
             'language',
             'release_date',
-            'title',
+            'imdb_title',
             'is_active',
             'end_date',
             'imdb_vote_count',
@@ -272,7 +279,7 @@ class IMDBHomePageTestCase(BaseTestCase):
             'country',
             'language',
             'release_date',
-            'title',
+            'imdb_title',
             'is_active',
             'end_date',
             'imdb_vote_count',

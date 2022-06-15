@@ -9,7 +9,7 @@ from TvFY.actor.models import Actor
 from TvFY.collector.base import Scraper
 from TvFY.collector.google import GoogleScrapper
 from TvFY.collector.imdb import IMDBBase
-from TvFY.collector.tomatoes import TomatoesBase
+from TvFY.collector.tomatoes import RottenTomatoesBase
 from TvFY.director.models import Director
 from TvFY.series.models import Series, SeriesCast, Season, Episode
 
@@ -27,7 +27,7 @@ class BaseTestCase(TestCase):
     def get_tomatoes_result(cls, url: str, search_type: str) -> dict:
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
-        cls_ = TomatoesBase(soup=soup, url=url, search_type=search_type)
+        cls_ = RottenTomatoesBase(soup=soup, url=url, search_type=search_type)
         result = cls_.run()
         return result
 
@@ -154,6 +154,8 @@ class BaseTestCase(TestCase):
             season_count=None,
             wins=None,
             nominations=None,
+            oscar_wins=None,
+            oscar_nominations=None,
             tv_network=None,
             imdb_rate=None,
             imdb_vote_count=None,
@@ -162,8 +164,7 @@ class BaseTestCase(TestCase):
             rt_tomatometer_rate=None,
             rt_audience_rate=None,
             rotten_tomatoes_url=None,
-            tv_com_rate=None,
-            tv_com_url=None,
+            metacritic_score=None,
             creator=None,
     ) -> Series:
         series = baker.make(
@@ -177,6 +178,8 @@ class BaseTestCase(TestCase):
             season_count=season_count,
             wins=wins,
             nominations=nominations,
+            oscar_wins=oscar_wins,
+            oscar_nominations=oscar_nominations,
             tv_network=tv_network,
             imdb_rate=imdb_rate,
             imdb_vote_count=imdb_vote_count,
@@ -185,8 +188,7 @@ class BaseTestCase(TestCase):
             rt_tomatometer_rate=rt_tomatometer_rate,
             rt_audience_rate=rt_audience_rate,
             rotten_tomatoes_url=rotten_tomatoes_url or f"{rotten_tomatoes_url}",
-            tv_com_rate=tv_com_rate,
-            tv_com_url=tv_com_url,
+            metacritic_score=metacritic_score,
             creator=creator,
         )
         return series

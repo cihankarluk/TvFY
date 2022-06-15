@@ -8,7 +8,8 @@ import backoff
 from bs4 import BeautifulSoup
 
 from TvFY.collector.imdb import IMDBBase
-from TvFY.collector.tomatoes import TomatoesBase
+from TvFY.collector.tomatoes import RottenTomatoesBase
+from TvFY.core.helpers import giveup_handler
 
 logger = logging.getLogger("main")
 
@@ -26,7 +27,7 @@ class Scraper:
     @staticmethod
     def scrapper_class(url: str, soup: dict, search_type: str):
         scrapper_map = {
-            "www.rottentomatoes.com": TomatoesBase,
+            "www.rottentomatoes.com": RottenTomatoesBase,
             "www.imdb.com": IMDBBase,
         }
         base_url = urlparse(url).netloc
@@ -36,7 +37,12 @@ class Scraper:
 
     @backoff.on_exception(backoff.expo, (aiohttp.ClientError, AssertionError), max_tries=2)
     async def fetch_html(self, url: str):
-        search_response = await self.session.get(url)
+        headers = {"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}  # noqa: E501
+        if "imdb" in url:
+            headers.update({
+               "accept-language": "en-US,en;q=0.9",
+            })
+        search_response = await self.session.get(url, headers=headers)
         assert search_response.status == 200
         return search_response
 

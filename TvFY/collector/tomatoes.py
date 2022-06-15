@@ -1,3 +1,5 @@
+import json
+
 from bs4 import BeautifulSoup
 
 from TvFY.collector.helpers import SoupSelectionMixin
@@ -5,7 +7,7 @@ from TvFY.movies.models import Movie
 from TvFY.series.models import Series
 
 
-class TomatoesMovieHomePage:
+class RottenTomatoesMovieHomePage:
     find: str
     soup_selection: classmethod
     soup: BeautifulSoup
@@ -13,7 +15,7 @@ class TomatoesMovieHomePage:
     BASE_URL: str
 
     @property
-    def get_movie_genre(self) -> dict:
+    def get_movie_genre(self) -> dict[str, list[str]]:
         genres = {}
 
         soup_selection = {
@@ -29,7 +31,7 @@ class TomatoesMovieHomePage:
         return genres
 
     @property
-    def get_movie_director(self) -> dict:
+    def get_movie_director(self) -> dict[str, str]:
         director = {}
 
         soup_selection = {
@@ -47,25 +49,43 @@ class TomatoesMovieHomePage:
         return director
 
     @property
-    def get_movie_ratings(self) -> dict:
+    def get_movie_ratings(self) -> dict[str, int]:
         ratings = {}
 
         soup_selection = {
             "soup": self.soup,
             "method": self.find,
-            "class": "scoreboard",
-            "data-qa": "score-panel",
+            "tag": "script",
+            "id": "score-details-json",
         }
         if css_selection := self.soup_selection(**soup_selection):
+            data = json.loads(css_selection.next_element)["scoreboard"]
             ratings = {
-                "rt_audience_rate": int(css_selection["audiencescore"]),
-                "rt_tomatometer_rate": int(css_selection["tomatometerscore"]),
+                "rt_audience_rate": data["audienceScore"],
+                "rt_audience_count": data["audienceCount"],
+                "rt_tomatometer_rate": data["tomatometerScore"],
+                "rt_tomatometer_count": data["tomatometerCount"],
             }
 
         return ratings
 
+    @property
+    def get_movie_title(self) -> dict[str, str]:
+        rt_title = {}
 
-class TomatoesSeriesHomePage:
+        soup_selection = {
+            "soup": self.soup,
+            "method": self.find,
+            "tag": "h1",
+            "class": "scoreboard__title",
+        }
+        if css_selection := self.soup_selection(**soup_selection):
+            rt_title = {"rt_title": css_selection.text}
+
+        return rt_title
+
+
+class RottenTomatoesSeriesHomePage:
     find: str
     soup_selection: classmethod
     soup: BeautifulSoup
@@ -82,13 +102,13 @@ class TomatoesSeriesHomePage:
             "data-qa": "tomatometer",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            average_tomatometer = {"rt_tomatometer_rate": css_selection.get_text(strip=True).replace("%", "")}
+            average_tomatometer = {"rt_tomatometer_rate": int(css_selection.get_text(strip=True).replace("%", ""))}
 
         return average_tomatometer
 
     @property
-    def get_series_audience_rate(self) -> dict:
-        audience_rate = {"rt_audience_rate": None}
+    def get_series_audience_rate(self) -> dict[str, int]:
+        audience_rate = {}
 
         soup_selection = {
             "soup": self.soup,
@@ -103,7 +123,7 @@ class TomatoesSeriesHomePage:
         return audience_rate
 
     @property
-    def get_series_genre(self) -> dict:
+    def get_series_genre(self) -> dict[str, list[str]]:
         genre = {}
 
         soup_selection = {
@@ -118,8 +138,8 @@ class TomatoesSeriesHomePage:
         return genre
 
     @property
-    def get_series_network(self) -> dict:
-        network = {}
+    def get_series_tv_network(self) -> dict[str, list[str]]:
+        tv_network = {}
 
         soup_selection = {
             "soup": self.soup,
@@ -128,12 +148,12 @@ class TomatoesSeriesHomePage:
             "data-qa": "series-details-network",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            network = {"network": css_selection.get_text(strip=True)}
+            tv_network = {"tv_network": css_selection.get_text(strip=True)}
 
-        return network
+        return tv_network
 
     @property
-    def get_storyline(self) -> dict:
+    def get_storyline(self) -> dict[str, str]:
         storyline = {}
 
         soup_selection = {
@@ -143,12 +163,16 @@ class TomatoesSeriesHomePage:
             "id": "movieSynopsis",
         }
         if css_selection := self.soup_selection(**soup_selection):
-            storyline = {"storyline": css_selection.get_text(strip=True)}
+            storyline = {"rt_storyline": css_selection.get_text(strip=True)}
 
         return storyline
 
 
-class TomatoesBase(TomatoesMovieHomePage, TomatoesSeriesHomePage, SoupSelectionMixin):
+class RottenTomatoesBase(
+    RottenTomatoesMovieHomePage,
+    RottenTomatoesSeriesHomePage,
+    SoupSelectionMixin
+):
     BASE_URL = "https://www.rottentomatoes.com"
 
     def __init__(self, soup: BeautifulSoup, url: str, search_type: str):
@@ -156,20 +180,19 @@ class TomatoesBase(TomatoesMovieHomePage, TomatoesSeriesHomePage, SoupSelectionM
         self.url = url
         self.search_type = search_type
 
-    def run(self) -> dict:
-        """
-        Generated Keys: 'rt_genre', 'rt_tomatometer_rate', 'rt_audience_rate', 'network', 'storyline'
-        """
+    def run(self) -> dict[str, ...]:
         result = {}
+        result[self.url] = {}
         if self.search_type == Movie.TYPE:
-            result.update(self.get_movie_genre)
-            result.update(self.get_movie_director)
-            result.update(self.get_movie_ratings)
-            result.update(self.get_storyline)
+            result[self.url].update(self.get_movie_genre)
+            result[self.url].update(self.get_movie_director)
+            result[self.url].update(self.get_movie_ratings)
+            result[self.url].update(self.get_storyline)
+            result[self.url].update(self.get_movie_title)
         elif self.search_type == Series.TYPE:
-            result.update(self.get_series_genre)
-            result.update(self.get_series_average_tomatometer)
-            result.update(self.get_series_audience_rate)
-            result.update(self.get_series_network)
-            result.update(self.get_storyline)
+            result[self.url].update(self.get_series_genre)
+            result[self.url].update(self.get_series_average_tomatometer)
+            result[self.url].update(self.get_series_audience_rate)
+            result[self.url].update(self.get_series_tv_network)
+            result[self.url].update(self.get_storyline)
         return result
