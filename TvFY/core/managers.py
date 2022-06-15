@@ -2,7 +2,7 @@ from TvFY.core.helpers import get_random_string
 
 
 class ManagerMixin:
-    def create_tvfy_code(self):
+    def create_tvfy_code(self) -> str:
         tvfy_code = f"{self.model.PREFIX}-{get_random_string(8)}"
         if super().get_queryset().filter(tvfy_code=tvfy_code).exists():
             return self.create_tvfy_code()
