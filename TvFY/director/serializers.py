@@ -40,14 +40,19 @@ class DirectorMovieSerializer(serializers.ModelSerializer):
             "release_date",
             "wins",
             "nominations",
+            "oscar_wins",
+            "oscar_nominations",
             "run_time",
             "imdb_rate",
             "imdb_vote_count",
             "imdb_popularity",
             "imdb_url",
             "rt_tomatometer_rate",
+            "rt_tomatometer_count",
             "rt_audience_rate",
+            "rt_audience_count",
             "rotten_tomatoes_url",
+            "metacritic_score",
         )
 
 
@@ -66,6 +71,8 @@ class DirectorSeriesSerializer(serializers.ModelSerializer):
             "season_count",
             "wins",
             "nominations",
+            "oscar_wins",
+            "oscar_nominations",
             "tv_network",
             "imdb_rate",
             "imdb_vote_count",
@@ -74,8 +81,7 @@ class DirectorSeriesSerializer(serializers.ModelSerializer):
             "rt_tomatometer_rate",
             "rt_audience_rate",
             "rotten_tomatoes_url",
-            "tv_com_rate",
-            "tv_com_url",
+            "metacritic_score",
         )
 
 

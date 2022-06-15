@@ -83,11 +83,9 @@ class DirectorViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_response = {
-            "status_code": 404,
-            "code": "DIRECTOR_NOT_FOUND",
-            "error_message": {
-                "detail": "Director with notExists code does not exists."
-            }
+            'code': 404,
+            'type': 'DirectorNotFoundError',
+            'reason': 'Director with notExists code does not exists.'
         }
 
         response = self.client.get(
