@@ -14,10 +14,11 @@ class GenreService:
         Genre.objects.bulk_create(genres)
 
     @classmethod
-    def get_genre_ids(cls, search_data: dict) -> QuerySet:
+    def get_genre_ids(cls, search_data: dict[str, ...]) -> QuerySet:
         genres = set()
         for key, value in search_data.items():
             if "genre" in key:
                 genres.update(set(value))
         genre_ids = Genre.objects.filter(name__in=genres).values_list("id", flat=True)
+
         return genre_ids
