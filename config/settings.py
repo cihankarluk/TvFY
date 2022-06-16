@@ -10,13 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import logging
-import os
 from pathlib import Path
 
 import environ
-from dotenv import load_dotenv
-
-load_dotenv()
 
 env = environ.Env()
 
@@ -27,16 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
-APP_ENV = os.getenv("APP_STATE")
+APP_ENV = env("APP_STATE")
 logging.warning(f"Using {APP_ENV} environment.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG_STATES = ("TEST", "DEV")
 DEBUG = APP_ENV in DEBUG_STATES
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
 
 # Application definition
 
@@ -98,11 +94,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "tvfy",
-        "USER": "postgres",
-        "PASSWORD": "",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        "NAME": env("DATABASE_NAME"),
+        "USER": env("DATABASE_USER"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("DATABASE_HOST"),
+        "PORT": env("DATABASE_PORT"),
     }
 }
 

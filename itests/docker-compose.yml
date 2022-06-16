@@ -10,3 +10,21 @@ services:
       POSTGRES_USER: tvfy
       POSTGRES_DB: tvfy
       POSTGRES_PASSWORD: tvfy
+
+  migration:
+    build: ..
+    command: python manage.py migrate --noinput
+    container_name: migrations
+    depends_on:
+      - postgres
+    restart: on-failure
+
+  api:
+    build: ..
+    image: tvfy
+    command: python manage.py runserver 0.0.0.0:5000
+    ports:
+      - 5000:5000
+    depends_on:
+      - migration
+    tty: true

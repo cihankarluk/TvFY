@@ -1,11 +1,12 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="TvFY",
     use_scm_version=True,
-    setup_requires=["setuptools_scm"],
+    setup_requires=["setuptools_scm", "setuptools"],
     url="https://github.com/cihankarluk/TvFY.git",
     description="TvFY is simply app for chill.",
+    packages=find_packages(include=["tvfy*"]),
     author="Cihan Karluk",
     author_email="cihankarluk@gmail.com",
     install_requires=[
@@ -14,7 +15,7 @@ setup(
         "django-filter",
         "django-environ",
         "python-dotenv==0.19.0",
-        "psycopg2-binary==2.9.1",
+        "psycopg2==2.9.3",
         "django-rest-framework==0.1.0",
         "requests==2.24.0",
         "beautifulsoup4==4.9.3",
@@ -24,14 +25,16 @@ setup(
         "django-extensions==3.1.3",
         "aiohttp==3.7.4",
         "pytest-django",
+        "drf-yasg",
+        "django-click==2.3.0",
     ],
-    python_requires=">=3.8.0",
+    python_requires=">=3.9.0",
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Django",
         "Operating System :: OS Independent",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Internet :: WWW/HTTP",
     ],
 )
