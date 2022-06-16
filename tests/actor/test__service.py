@@ -26,7 +26,7 @@ class ActorServiceTestCase(BaseTestCase):
             "last_name": "test_2",
             "imdb_actor_url": "https://www.test.com/name/2/"
         }]
-        actor = self.create_actor(count=1)[0]
+        actor = self.create_actor(count=1, imdb_url="https://www.test.com/name/0/")[0]
 
         return_value = ActorService.create_multiple_actor(cast_data=cast_data)
 
@@ -60,7 +60,7 @@ class ActorServiceTestCase(BaseTestCase):
         }
         actor = self.create_actor(count=1)[0]
 
-        ActorService.update_actor(actor_data=actor_data, actor=actor)
+        ActorService.update_actor(actor_obj=actor, actor_data=actor_data)
 
         actor.refresh_from_db()
         for key, value in actor_data.items():

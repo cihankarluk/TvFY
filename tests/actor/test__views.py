@@ -81,11 +81,9 @@ class ActorViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_response = {
-            "status_code": 404,
-            "code": "ACTOR_NOT_FOUND",
-            "error_message": {
-                "detail": "Actor with notExists code does not exists."
-            }
+            'code': 404,
+            'type': 'ActorNotFoundError',
+            'reason': 'Actor with notExists code does not exists.'
         }
 
         response = self.client.get(
