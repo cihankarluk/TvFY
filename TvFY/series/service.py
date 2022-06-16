@@ -7,7 +7,6 @@ from TvFY.actor.models import Actor
 from TvFY.actor.service import ActorService
 from TvFY.collector.base import Scraper
 from TvFY.collector.imdb import IMDBBase
-from TvFY.core.exceptions import NotAbleToFindSeriesSourceUrl
 from TvFY.country.service import CountryService
 from TvFY.director.service import DirectorService
 from TvFY.genre.service import GenreService

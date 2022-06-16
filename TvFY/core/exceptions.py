@@ -13,12 +13,8 @@ class SeriesDoesNotExist(ValidationError):
     code = "SERIES_DOES_NOT_EXISTS"
 
 
-class NotAbleToFindMovieSourceUrl(ValidationError):
-    code = "MOVIE_SOURCE_URL_NOT_FOUND"
-
-
-class NotAbleToFindSeriesSourceUrl(ValidationError):
-    code = "SERIES_SOURCE_URL_NOT_FOUND"
+class SourceUrlNotFound(ValidationError):
+    code = "SOURCE_URL_NOT_FOUND"
 
 
 class NotAbleToFindDirectorSourceUrl(ValidationError):
