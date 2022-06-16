@@ -6,8 +6,6 @@ from tests.base import BaseTestCase
 class GenreServiceTestCase(BaseTestCase):
 
     def test__load_genres(self):
-        GenreService.load_genres()
-
         genre_query = Genre.objects.all()
 
         self.assertEqual(28, genre_query.count())

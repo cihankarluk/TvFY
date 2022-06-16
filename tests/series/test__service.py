@@ -167,7 +167,7 @@ class SeriesServiceTestCase(BaseTestCase):
 
         SeriesService.create_or_update_series(search_data=self.search_data)
 
-        series_query = Series.objects.filter(title="The Boys")
+        series_query = Series.objects.filter(title=series_data["imdb_title"])
         self.assertTrue(series_query.exists())
         series = series_query.get()
         attribute_errors = set()
@@ -184,7 +184,7 @@ class SeriesServiceTestCase(BaseTestCase):
         self.assertFalse(expected_attribute_errors - attribute_errors)
         self.assertEqual(4, series.genres.count())
 
-    def test__create_or_update_movie__update_movie(self):
+    def test__create_or_update_series__update_series(self):
         """
         wins is increased from 8 to 420
         """
