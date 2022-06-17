@@ -10,23 +10,29 @@ setup(
     author="Cihan Karluk",
     author_email="cihankarluk@gmail.com",
     install_requires=[
-        "django",
-        "djangorestframework",
-        "django-filter",
-        "django-environ",
-        "python-dotenv==0.19.0",
-        "psycopg2==2.9.3",
+        # DJANGO
+        "django==4.0.4",
+        "djangorestframework==3.13.1",
+        "django-filter==22.1",
+        "django-environ==0.9.0",
         "django-rest-framework==0.1.0",
+        "django-extensions==3.1.3",
+        "pytest-django==4.5.2",
+        "django-click==2.3.0",
+        "model-bakery==1.3.2",
+
+        # DATABASE
+        "psycopg2==2.9.3",
+
+        # OTHERS
+        "python-dotenv==0.19.0",
         "requests==2.24.0",
         "beautifulsoup4==4.9.3",
         "backoff==2.0.1",
         "pre-commit==2.10.0",
-        "model-bakery==1.3.2",
-        "django-extensions==3.1.3",
         "aiohttp==3.7.4",
-        "pytest-django",
         "drf-yasg",
-        "django-click==2.3.0",
+        "coverage",
     ],
     python_requires=">=3.9.0",
     classifiers=[

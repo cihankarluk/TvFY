@@ -1,3 +1,19 @@
 [tool.black]
 line-length = 120
 target-version = ['py39']
+exclude = '''
+/(
+  | migrations
+)/
+'''
+
+[tool.mypy]
+python_version = 3.9
+plugins = ["mypy_django_plugin.main"]
+ignore_missing_imports = "True"
+exclude = [
+    'TvFY.*.migrations.*',
+]
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"
