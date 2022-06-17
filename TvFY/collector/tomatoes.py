@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 from bs4 import BeautifulSoup
 
@@ -180,7 +181,7 @@ class RottenTomatoesBase(
         self.url = url
         self.search_type = search_type
 
-    def run(self) -> dict[str, ...]:
+    def run(self) -> dict[str, Any]:
         result = {}
         result[self.url] = {}
         if self.search_type == Movie.TYPE:

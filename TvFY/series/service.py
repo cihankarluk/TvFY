@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Any
 from urllib.parse import urljoin
 
 from django.db.models import QuerySet
@@ -17,7 +17,7 @@ from TvFY.series.models import Episode, Season, Series, SeriesCast
 class SeriesService:
 
     @classmethod
-    def prepare_series_data(cls, search_data: dict[str, ...]) -> dict[str, ...]:
+    def prepare_series_data(cls, search_data: dict[str, Any]) -> dict[str, Any]:
         series_data = {}
 
         if imdb_url := search_data.get("imdb_url"):
@@ -32,7 +32,7 @@ class SeriesService:
         return series_data
 
     @classmethod
-    def get_series(cls, filter_map: dict[str, ...]) -> Optional[Series]:
+    def get_series(cls, filter_map: dict[str, Any]) -> Optional[Series]:
         series = None
         series_query = Series.objects.filter(**filter_map)
         if series_query.exists():
@@ -41,7 +41,7 @@ class SeriesService:
         return series
 
     @classmethod
-    def check_series_exists(cls, series_data: dict[str, ...]) -> Optional[Series]:
+    def check_series_exists(cls, series_data: dict[str, Any]) -> Optional[Series]:
         series = None
         if imdb_url := series_data.get("imdb_url"):
             series = cls.get_series(filter_map={"imdb_url": imdb_url})
@@ -51,7 +51,7 @@ class SeriesService:
         return series
 
     @classmethod
-    def create_series_model_data(cls, series_data: dict[str, ...]) -> dict[str, ...]:
+    def create_series_model_data(cls, series_data: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare data for series model.
         """
@@ -81,7 +81,7 @@ class SeriesService:
         return movie_model_data
 
     @classmethod
-    def update_series(cls, series: Series, series_data: dict[str, ...]) -> Series:
+    def update_series(cls, series: Series, series_data: dict[str, Any]) -> Series:
         series_model_data = cls.create_series_model_data(series_data=series_data)
         for field, value in series_model_data.items():
             setattr(series, field, value)
@@ -90,7 +90,7 @@ class SeriesService:
         return series
 
     @classmethod
-    def create_series(cls, series_data: dict[str, ...]) -> Series:
+    def create_series(cls, series_data: dict[str, Any]) -> Series:
         series_model_data = cls.create_series_model_data(series_data=series_data)
         series = Series.objects.create(**series_model_data)
         for genre in GenreService.get_genre_ids(search_data=series_data):
@@ -107,7 +107,7 @@ class SeriesService:
         return series
 
     @classmethod
-    def create_or_update_series(cls, search_data: dict[str, ...]) -> Series:
+    def create_or_update_series(cls, search_data: dict[str, Any]) -> Series:
         series_data = cls.prepare_series_data(search_data=search_data)
 
         if series := cls.check_series_exists(series_data=series_data):
@@ -122,7 +122,7 @@ class SeriesCastService:
 
     @classmethod
     def get_series_cast_query(
-            cls, series: Series, cast_data_list: List[dict], actor_map: dict[str, dict[str, ...]]
+            cls, series: Series, cast_data_list: List[dict], actor_map: dict[str, dict[str, Any]]
     ) -> QuerySet:
         """
         Filter SeriesCast objects to later decide create or update.
@@ -137,13 +137,13 @@ class SeriesCastService:
         return series_cast_query
 
     @classmethod
-    def update_series_cast(cls, series_cast: SeriesCast, cast_data: dict[str, ...]):
+    def update_series_cast(cls, series_cast: SeriesCast, cast_data: dict[str, Any]):
         for field, value in cast_data.items():
             setattr(series_cast, field, value)
         series_cast.save()
 
     @classmethod
-    def create_series_cast(cls, series: Series, actor: Actor, cast_data: dict[str, ...]) -> SeriesCast:
+    def create_series_cast(cls, series: Series, actor: Actor, cast_data: dict[str, Any]) -> SeriesCast:
         series_cast = SeriesCast(
             character_name=cast_data["character_name"],
             episode_count=cast_data["episode_count"],
@@ -156,7 +156,7 @@ class SeriesCastService:
         return series_cast
 
     @classmethod
-    def create_or_update_series_cast(cls, series: Series, series_data: dict[str, ...]):
+    def create_or_update_series_cast(cls, series: Series, series_data: dict[str, Any]):
         cast_data_list = series_data.get("cast", [])
         actor_map = ActorService.create_multiple_actor(cast_data=cast_data_list)
         series_cast_query = cls.get_series_cast_query(series=series, cast_data_list=cast_data_list, actor_map=actor_map)
@@ -176,20 +176,20 @@ class SeriesCastService:
 class SeriesSeasonEpisodeService:
 
     @classmethod
-    def get_episode_query(cls, season: Season, season_data: List[dict[str, ...]]) -> QuerySet:
+    def get_episode_query(cls, season: Season, season_data: List[dict[str, Any]]) -> QuerySet:
         episode_names = [episode_data["title"] for episode_data in season_data]
         episode_query = Episode.objects.filter(season=season, title__in=episode_names)
 
         return episode_query
 
     @classmethod
-    def update_episode(cls, episode: Episode, episode_data: dict[str, ...]):
+    def update_episode(cls, episode: Episode, episode_data: dict[str, Any]):
         for field, value, in episode_data.items():
             setattr(episode, field, value)
         episode.save()
 
     @classmethod
-    def create_episode(cls, season: Season, episode_data: dict[str, ...]) -> Episode:
+    def create_episode(cls, season: Season, episode_data: dict[str, Any]) -> Episode:
         episode = Episode(
             title=episode_data["title"],
             storyline=episode_data.get("storyline"),
@@ -203,7 +203,7 @@ class SeriesSeasonEpisodeService:
         return episode
 
     @classmethod
-    def create_or_update_series_season_episodes(cls, series: Series, search_data: dict[str, ...]):
+    def create_or_update_series_season_episodes(cls, series: Series, search_data: dict[str, Any]):
         for season_number, season_data in search_data.items():
             season, _ = Season.objects.get_or_create(
                 season=season_number,

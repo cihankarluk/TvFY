@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db.models import QuerySet
 
 from TvFY.core.helpers import read_file
@@ -14,7 +16,7 @@ class GenreService:
         Genre.objects.bulk_create(genres)
 
     @classmethod
-    def get_genre_ids(cls, search_data: dict[str, ...]) -> QuerySet:
+    def get_genre_ids(cls, search_data: dict[str, Any]) -> QuerySet:
         genres = set()
         for key, value in search_data.items():
             if "genre" in key:

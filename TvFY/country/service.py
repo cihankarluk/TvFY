@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from TvFY.country.models import Country
 
@@ -11,7 +11,7 @@ class CountryService:
         return country_object
 
     @classmethod
-    def get_or_create_multiple_country(cls, search_data: dict[str, ...]) -> List[Country]:
+    def get_or_create_multiple_country(cls, search_data: dict[str, Any]) -> List[Country]:
         country_objects = []
         for country in search_data.get("country", []):
             country_objects.append(cls.get_or_create_country(country_name=country))

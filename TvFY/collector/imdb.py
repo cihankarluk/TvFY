@@ -4,7 +4,7 @@ import re
 import urllib.parse as urlparse
 from collections import defaultdict
 from datetime import datetime
-from typing import Union, Optional
+from typing import Union, Optional, Any
 from urllib.parse import parse_qs
 
 from bs4 import BeautifulSoup
@@ -24,7 +24,7 @@ class IMDBEpisodes:
     soup_selection: classmethod
     soup: BeautifulSoup
 
-    def get_imdb_vote_count(self, episode_data: BeautifulSoup) -> int:
+    def get_imdb_vote_count(self, episode_data: BeautifulSoup) -> Optional[int]:
         vote_count = None
 
         soup_selection = {
@@ -63,7 +63,7 @@ class IMDBEpisodes:
         return episode_release_date
 
     @property
-    def get_episodes(self) -> dict[str, ...]:
+    def get_episodes(self) -> dict[str, Any]:
         episodes = {}
 
         soup_selection = {
@@ -106,7 +106,7 @@ class IMDBCast:
     BASE_URL: str
 
     @staticmethod
-    def cast_information(cast_data: str) -> Union[bool, dict[str, ...]]:
+    def cast_information(cast_data: str) -> Union[bool, dict[str, Any]]:
         # info: '17 episodes, 2019-2022'
         cast_data_list = cast_data.split(" sp ")
 
@@ -131,7 +131,7 @@ class IMDBCast:
 
     @property
     def get_cast(self) -> dict[str, list[dict[str, str]]]:
-        cast = {}
+        cast_result = {}
 
         soup_selection = {
             "soup": self.soup,
@@ -160,9 +160,9 @@ class IMDBCast:
                     actor.update(cast_information)
                     actor.update({"imdb_actor_url": f'{self.BASE_URL}{actor_detail["href"].split("?")[0]}'})
                     results.append(actor)
-            cast = {"cast": results}
+            cast_result = {"cast": results}
 
-        return cast
+        return cast_result
 
 
 class IMDBAwards:
@@ -272,12 +272,12 @@ class IMDBPersonalData:
         }
         if css_selection := self.soup_selection(**soup_selection):
             oscar_data = css_selection[0].get_text(strip=True)
-            search = regex_search(oscar_data, r"\d{1,2}")
-            if "Won" in oscar_data:
-                result.update({"oscars": search})
-            elif len(css_selection) > 1:
+            search: Optional[int] = regex_search(oscar_data, r"\d{1,2}")
+            if search and "Won" in oscar_data:
+                result["oscars"] = search
+            elif search and len(css_selection) > 1:
                 # If there is no oscar wins and nominations
-                result.update({"oscar_nominations": search})
+                result["oscar_nominations"] = search
 
             try:
                 wins, nominations = re.findall(r"\d+", css_selection[-1].get_text(strip=True))
@@ -286,7 +286,8 @@ class IMDBPersonalData:
                 wins = 0
                 nominations = re.findall(r"\d+", css_selection[-1].get_text(strip=True))[0]
 
-            result.update({"wins": wins, "nominations": nominations})
+            result["wins"] = wins
+            result["nominations"] = nominations
 
         return result
 
@@ -471,7 +472,7 @@ class IMDBHomePage:
         return title
 
     @property
-    def get_is_active(self) -> dict[str, bool]:
+    def get_is_active(self) -> dict[str, Union[datetime, bool]]:
         is_active = {"is_active": True}
 
         soup_selection = {
@@ -483,10 +484,8 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             data = json.loads(css_selection.next_element)["props"]["pageProps"]
             if end_year := data["aboveTheFoldData"]["releaseYear"].get("endYear"):
-                is_active.update({
-                    "end_date": get_date_time(date=str(end_year), pattern="%Y"),
-                    "is_active": False
-                })
+                is_active["end_date"] = get_date_time(date=str(end_year), pattern="%Y")
+                is_active["is_active"] = False
 
         return is_active
 
@@ -651,10 +650,9 @@ class IMDBBase(
         self.url = url
         self.search_type = search_type
 
-    def run(self) -> dict[str, ...]:
+    def run(self) -> dict[str, Any]:
         logger.warning(f"IMDB web scrapping started for {self.url}")
-        result = {}
-        result[self.url] = {}
+        result = {self.url: {}}
         if self.EPISODES in self.url:
             result[self.url].update(self.get_episodes)
         elif self.CAST in self.url:

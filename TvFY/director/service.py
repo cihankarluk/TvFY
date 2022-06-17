@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from TvFY.collector.base import Scraper
 from TvFY.core.exceptions import NotAbleToFindDirectorSourceUrl
@@ -9,7 +9,7 @@ from TvFY.director.models import Director
 class DirectorService:
 
     @classmethod
-    def check_source_urls(cls, search_data: dict[str, ...]):
+    def check_source_urls(cls, search_data: dict[str, Any]):
         """
         At least one of them concur to find data about that movie.
         """
@@ -19,7 +19,7 @@ class DirectorService:
             )
 
     @classmethod
-    def get_director(cls, filter_map: dict[str, ...]) -> Optional[Director]:
+    def get_director(cls, filter_map: dict[str, Any]) -> Optional[Director]:
         director = None
         director_query = Director.objects.filter(**filter_map)
         if director_query.exists():
@@ -28,7 +28,7 @@ class DirectorService:
         return director
 
     @classmethod
-    def get_or_create_director(cls, search_data: dict[str, ...]) -> Optional[Director]:
+    def get_or_create_director(cls, search_data: dict[str, Any]) -> Optional[Director]:
         """
         This method only initialize director.
         """
@@ -55,7 +55,7 @@ class DirectorService:
         return director
 
     @classmethod
-    def update_director(cls, director_obj: Director, director_data: dict[str, ...]):
+    def update_director(cls, director_obj: Director, director_data: dict[str, Any]):
         if born_at := director_data.pop("born_at", None):
             director_obj.born_at = CountryService.get_or_create_country(country_name=born_at)
         if died_at := director_data.pop("died_at", None):

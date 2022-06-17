@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Any
 
 from TvFY.language.models import Language
 
@@ -11,7 +11,7 @@ class LanguageService:
         return language_object
 
     @classmethod
-    def get_or_create_multiple_language(cls, search_data: dict[str, ...]) -> List[Language]:
+    def get_or_create_multiple_language(cls, search_data: dict[str, Any]) -> List[Language]:
         language_objects = []
         for language in search_data.get("language", []):
             language_objects.append(cls.get_or_create_language(language_name=language))

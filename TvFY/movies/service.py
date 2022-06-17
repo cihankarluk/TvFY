@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from TvFY.actor.service import ActorService
 from TvFY.country.service import CountryService
@@ -11,7 +11,7 @@ from TvFY.movies.models import Movie, MovieCast
 class MovieService:
 
     @classmethod
-    def prepare_movie_data(cls, search_data: dict[str, ...]) -> dict[str, ...]:
+    def prepare_movie_data(cls, search_data: dict[str, Any]) -> dict[str, Any]:
         movie_data = {}
 
         if imdb_url := search_data.get("imdb_url"):
@@ -25,7 +25,7 @@ class MovieService:
         return movie_data
 
     @classmethod
-    def get_movie(cls, filter_map: dict[str, ...]) -> Optional[Movie]:
+    def get_movie(cls, filter_map: dict[str, Any]) -> Optional[Movie]:
         movie = None
         movie_query = Movie.objects.filter(**filter_map)
         if movie_query.exists():
@@ -34,7 +34,7 @@ class MovieService:
         return movie
 
     @classmethod
-    def check_movie_exists(cls, movie_data: dict[str, ...]) -> Optional[Movie]:
+    def check_movie_exists(cls, movie_data: dict[str, Any]) -> Optional[Movie]:
         movie = None
         if imdb_url := movie_data.get("imdb_url"):
             movie = cls.get_movie(filter_map={"imdb_url": imdb_url})
@@ -44,7 +44,7 @@ class MovieService:
         return movie
 
     @classmethod
-    def create_movie_model_data(cls, movie_data: dict[str, ...]) -> dict[str, ...]:
+    def create_movie_model_data(cls, movie_data: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare data for movie model.
         """
@@ -79,7 +79,7 @@ class MovieService:
         return movie_model_data
 
     @classmethod
-    def update_movie(cls, movie: Movie, movie_data: dict[str, ...]) -> Movie:
+    def update_movie(cls, movie: Movie, movie_data: dict[str, Any]) -> Movie:
         """
         Genre, Country, Language, Director fields are expected to not change.
         In that sense we only update movie model fields.
@@ -92,7 +92,7 @@ class MovieService:
         return movie
 
     @classmethod
-    def create_movie(cls, movie_data: dict[str, ...]) -> Movie:
+    def create_movie(cls, movie_data: dict[str, Any]) -> Movie:
         """
         Create movie and casts with them.
         """
@@ -109,7 +109,7 @@ class MovieService:
         return movie
 
     @classmethod
-    def create_or_update_movie(cls, search_data: dict[str, ...]) -> Movie:
+    def create_or_update_movie(cls, search_data: dict[str, Any]) -> Movie:
         movie_data = cls.prepare_movie_data(search_data=search_data)
 
         if movie := cls.check_movie_exists(movie_data=movie_data):
@@ -123,7 +123,7 @@ class MovieService:
 class MovieCastService:
 
     @classmethod
-    def bulk_create_movie_cast(cls, movie: Movie, movie_data: dict[str, ...]):
+    def bulk_create_movie_cast(cls, movie: Movie, movie_data: dict[str, Any]):
         """
         This method creates Actor in same time if the actor is not registered to db.
         """

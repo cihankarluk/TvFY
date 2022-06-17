@@ -3,6 +3,7 @@ import os
 import re
 from datetime import datetime
 from threading import local
+from typing import Optional, Union
 from uuid import uuid4
 
 from django.core import validators
@@ -36,9 +37,10 @@ def read_file(path, is_json=False):
         return file
 
 
-def regex_search(content: str, pattern: str) -> str:
+def regex_search(content: str, pattern: str) -> Optional[Union[str, int]]:
     try:
-        search_string = re.search(pattern, content).group()
+        if search_string := re.search(pattern, content):
+            search_string = search_string.group()
     except AttributeError:
         search_string = None
     return search_string
