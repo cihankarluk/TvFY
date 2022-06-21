@@ -20,6 +20,9 @@ setup(
         "pytest-django==4.5.2",
         "django-click==2.3.0",
         "model-bakery==1.3.2",
+        "django-allauth==0.51.0",
+        "djangorestframework-simplejwt==5.2.0",
+        "dj-rest-auth==2.2.4",
 
         # DATABASE
         "psycopg2==2.9.3",

@@ -9,16 +9,6 @@ from uuid import uuid4
 from django.core import validators
 from django.utils.deconstruct import deconstructible
 
-_threadlocals = local()
-
-
-@deconstructible
-class UnicodeUsernameValidator(validators.RegexValidator):
-    regex = r"^[\w.@+-]+$"
-    message = "Enter a valid username. This value may contain only letters, " "numbers, and @/./+/-/_ characters."
-
-    flags = 0
-
 
 def get_date_time(date: str, pattern: str) -> datetime:
     return datetime.strptime(date, pattern)

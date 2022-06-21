@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import datetime
 import logging
 from pathlib import Path
 
@@ -43,9 +44,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "django_extensions",
     "drf_yasg",
-    "TvFY.account",
+    "rest_framework.authtoken",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+
+    "TvFY.user",
     "TvFY.actor",
     "TvFY.collector",
     "TvFY.core",
@@ -122,10 +129,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
+        "TvFY.core.auth.backends.AllowOnlyCustomerJWTCookieAuthenticationBackend"
     ],
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
+    ),
     "EXCEPTION_HANDLER": "TvFY.core.exception_handler.exception_handler",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "PAGE_SIZE": 500,
 }
 
@@ -147,8 +158,37 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-AUTH_USER_MODEL = "account.Account"
+AUTH_USER_MODEL = "user.Account"
 
+
+# ALL AUTH
+EMAIL_VERIFICATION = False
+ACCOUNT_LOGOUT_ON_GET = True
+PASSWORD_RESET_TIMEOUT = 60 * 60 * 24 * 3  # 3 Days
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+# EMAIL
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "cihankarlukedu@gmail.com"
+EMAIL_HOST_PASSWORD = "..."
+EMAIL_SUBJECT_PREFIX = "[TVFY Prod]"
+SITE_ID = 1
+
+# djangorestframework-SIMPLE_JWT
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = "Jwt"
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=60 * 60),
+    "AUTH_HEADER_TYPES": ("JWT",),
+    "UPDATE_LAST_LOGIN": True,
+}
 
 LOGGING = {
     "version": 1,
