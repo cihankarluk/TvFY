@@ -9,9 +9,7 @@ UserModel = get_user_model()
 
 class AllowOnlyCustomerAllauthAuthenticationBackend(AllauthAuthenticationBackend):
     def authenticate(self, request, **credentials):
-        user = super().authenticate(request, **credentials)
-        request.user2 = user
-        return user
+        return super().authenticate(request, **credentials)
 
 
 class AllowOnlyCustomerJWTCookieAuthenticationBackend(JWTCookieAuthentication):
@@ -19,5 +17,5 @@ class AllowOnlyCustomerJWTCookieAuthenticationBackend(JWTCookieAuthentication):
         authenticate_ = super().authenticate(request)
         if authenticate_ is not None:
             user, _ = authenticate_
-            request.user2 = user
+            request.user = user
             return authenticate_
