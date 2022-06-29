@@ -172,7 +172,7 @@ class RottenTomatoesSeriesHomePage:
 class RottenTomatoesBase(
     RottenTomatoesMovieHomePage,
     RottenTomatoesSeriesHomePage,
-    SoupSelectionMixin
+    SoupSelectionMixin,
 ):
     BASE_URL = "https://www.rottentomatoes.com"
 

@@ -19,12 +19,25 @@ class Director(AuditMixin):
     imdb_url = models.URLField(db_column="imdb_url", null=True, unique=True)
     rt_url = models.URLField(db_column="rt_url", null=True, unique=True)
     born_date = models.DateTimeField(db_column="born_date", null=True)
-    born_at = models.ForeignKey(Country, db_column="born_at", on_delete=models.SET_NULL, null=True,
-                                related_name="d_born_at")
+    born_at = models.ForeignKey(
+        Country,
+        db_column="born_at",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="d_born_at",
+    )
     died_date = models.DateTimeField(db_column="died_date", null=True)
-    died_at = models.ForeignKey(Country, db_column="died_at", on_delete=models.SET_NULL, null=True,
-                                related_name="d_died_at")
-    perks = ArrayField(models.CharField(db_column="perks", max_length=32, blank=True), null=True)
+    died_at = models.ForeignKey(
+        Country,
+        db_column="died_at",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="d_died_at",
+    )
+    perks = ArrayField(
+        models.CharField(db_column="perks", max_length=32, blank=True),
+        null=True,
+    )
     oscars = models.PositiveSmallIntegerField(db_column="oscars", null=True)
     oscar_nominations = models.PositiveSmallIntegerField(db_column="oscar_nominations", null=True)
     wins = models.PositiveSmallIntegerField(db_column="wins", null=True)

@@ -13,7 +13,6 @@ from TvFY.series.service import SeriesService
 
 
 class SearchService:
-
     @classmethod
     def get_urls(cls, google_data: dict[str, str], search_type: str) -> list[str]:
         urls = []
@@ -33,7 +32,10 @@ class SearchService:
 
     @classmethod
     def scrap(
-            cls, valid_data: dict[str, str], search_urls: list[str], google_results: dict[str, str]
+        cls,
+        valid_data: dict[str, str],
+        search_urls: list[str],
+        google_results: dict[str, str],
     ) -> Union[SeriesListSerializer, MovieListSerializer]:
         if valid_data["type"] == Series.TYPE:
             scrapping_cls = Scraper(urls=search_urls, search_type=Series.TYPE)

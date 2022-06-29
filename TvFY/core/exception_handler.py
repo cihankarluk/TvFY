@@ -6,7 +6,6 @@ from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.views import set_rollback
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -29,14 +28,14 @@ def exception_handler(exc, context):
         data = {
             "code": status_code,
             "type": exc.__class__.__name__,
-            "reason": exc.detail
+            "reason": exc.detail,
         }
     else:
         status_code = 500
         data = {
             "code": -1,
             "type": "UnexpectedException",
-            "reason": "An unexpected error has occurred."
+            "reason": "An unexpected error has occurred.",
         }
 
         # this line is a MUST for mail_admins handler to catch errors and send mail

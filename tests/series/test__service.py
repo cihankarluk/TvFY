@@ -1,47 +1,46 @@
 from unittest.mock import patch
 
-from TvFY.director.service import DirectorService
-from TvFY.series.models import Series, SeriesCast, Episode, Season
-from TvFY.series.service import SeriesService, SeriesCastService, SeriesSeasonEpisodeService
 from tests.base import BaseTestCase
+from TvFY.director.service import DirectorService
+from TvFY.series.models import Episode, Season, Series, SeriesCast
+from TvFY.series.service import SeriesCastService, SeriesSeasonEpisodeService, SeriesService
 
 
 class SeriesServiceTestCase(BaseTestCase):
-
     def setUp(self) -> None:
-        super(SeriesServiceTestCase, self).setUp()
+        super().setUp()
         self.search_data = self.read_file("series_the_boys.json", is_json=True)
         self.updated_search_data = self.read_file("series_the_boys_updated.json", is_json=True)
 
     def test__prepare_series_data(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'imdb_popularity',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'is_active',
-            'imdb_vote_count',
-            'imdb_rate',
-            'episode_count',
-            'season_count',
-            'wins',
-            'nominations',
-            'oscar_wins',
-            'oscar_nominations',
-            'cast',
-            'imdb_url',
-            'season=1',
-            'rt_genre',
-            'rt_tomatometer_rate',
-            'rt_audience_rate',
-            'tv_network',
-            'rt_storyline',
-            'rotten_tomatoes_url'
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "imdb_popularity",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "is_active",
+            "imdb_vote_count",
+            "imdb_rate",
+            "episode_count",
+            "season_count",
+            "wins",
+            "nominations",
+            "oscar_wins",
+            "oscar_nominations",
+            "cast",
+            "imdb_url",
+            "season=1",
+            "rt_genre",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
+            "tv_network",
+            "rt_storyline",
+            "rotten_tomatoes_url",
         }
 
         result = SeriesService.prepare_series_data(search_data=self.search_data)
@@ -92,27 +91,27 @@ class SeriesServiceTestCase(BaseTestCase):
 
     def test__create_series_model_data(self):
         expected_attrs = {
-            'title',
-            'storyline',
-            'release_date',
-            'end_date',
-            'run_time',
-            'is_active',
-            'season_count',
-            'wins',
-            'nominations',
-            'oscar_wins',
-            'oscar_nominations',
-            'tv_network',
-            'imdb_rate',
-            'imdb_vote_count',
-            'imdb_popularity',
-            'rt_tomatometer_rate',
-            'rt_audience_rate',
-            'metacritic_score',
-            'imdb_url',
-            'rotten_tomatoes_url',
-            'creator',
+            "title",
+            "storyline",
+            "release_date",
+            "end_date",
+            "run_time",
+            "is_active",
+            "season_count",
+            "wins",
+            "nominations",
+            "oscar_wins",
+            "oscar_nominations",
+            "tv_network",
+            "imdb_rate",
+            "imdb_vote_count",
+            "imdb_popularity",
+            "rt_tomatometer_rate",
+            "rt_audience_rate",
+            "metacritic_score",
+            "imdb_url",
+            "rotten_tomatoes_url",
+            "creator",
         }
         series_data = SeriesService.prepare_series_data(self.search_data)
 
@@ -151,17 +150,17 @@ class SeriesServiceTestCase(BaseTestCase):
 
     def test__create_or_update_series__create_series(self):
         expected_attribute_errors = {
-            'cast',
-            'episode_count',
-            'imdb_director',
-            'imdb_director_url',
-            'imdb_genre',
-            'imdb_rate',
-            'imdb_title',
-            'release_date',
-            'rt_genre',
-            'rt_storyline',
-            'season=1'
+            "cast",
+            "episode_count",
+            "imdb_director",
+            "imdb_director_url",
+            "imdb_genre",
+            "imdb_rate",
+            "imdb_title",
+            "release_date",
+            "rt_genre",
+            "rt_storyline",
+            "season=1",
         }
         series_data = SeriesService.prepare_series_data(search_data=self.search_data)
 
@@ -185,9 +184,7 @@ class SeriesServiceTestCase(BaseTestCase):
         self.assertEqual(4, series.genres.count())
 
     def test__create_or_update_series__update_series(self):
-        """
-        wins is increased from 8 to 420
-        """
+        """wins is increased from 8 to 420."""
         SeriesService.create_or_update_series(search_data=self.search_data)
         initial_series = Series.objects.get(imdb_url=self.search_data["imdb_url"])
 
@@ -200,7 +197,7 @@ class SeriesServiceTestCase(BaseTestCase):
 
 class SeriesCastServiceTestCase(BaseTestCase):
     def setUp(self) -> None:
-        super(SeriesCastServiceTestCase, self).setUp()
+        super().setUp()
         self.series = self.create_series()[0]
         self.actor = self.create_actor()[0]
         self.search_data = self.read_file("series_the_boys.json", is_json=True)
@@ -261,7 +258,13 @@ class SeriesCastServiceTestCase(BaseTestCase):
         actor4 = self.create_actor(index_start=203, count=1, imdb_url="https://test4.com")[0]
         series1 = self.create_series(index_start=200, count=1)[0]
 
-        self.create_series_cast(index_start=200, count=1, actor=actor1, series=series1, character_name="Test 1")
+        self.create_series_cast(
+            index_start=200,
+            count=1,
+            actor=actor1,
+            series=series1,
+            character_name="Test 1",
+        )
         self.create_series_cast(index_start=201, count=1, actor=actor2, series=series1)
         self.create_series_cast(index_start=202, count=1, actor=actor3, series=series1)
         self.create_series_cast(index_start=203, count=1, actor=actor4, series=self.series)
@@ -302,7 +305,7 @@ class SeriesCastServiceTestCase(BaseTestCase):
 
 class SeriesSeasonEpisodeServiceTestCase(BaseTestCase):
     def setUp(self) -> None:
-        super(SeriesSeasonEpisodeServiceTestCase, self).setUp()
+        super().setUp()
         self.series = self.create_series(count=1, season_count=1)[0]
         self.season = self.create_season(series=self.series, count=1)[0]
         self.episode = self.create_episode(season=self.season, count=1)[0]
@@ -332,7 +335,11 @@ class SeriesSeasonEpisodeServiceTestCase(BaseTestCase):
         ]
         episode1 = self.create_episode(season=self.season, index_start=100, title="test1", count=1)[0]
         self.create_episode(season=self.season, index_start=110, title="test2", count=1)
-        self.create_episode(season=self.create_season(index_start=120, count=1)[0], index_start=101, count=1)
+        self.create_episode(
+            season=self.create_season(index_start=120, count=1)[0],
+            index_start=101,
+            count=1,
+        )
 
         result = SeriesSeasonEpisodeService.get_episode_query(season=self.season, season_data=season_data)
 

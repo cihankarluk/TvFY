@@ -1,9 +1,8 @@
-from TvFY.director.models import Director
 from tests.base import BaseTestCase
+from TvFY.director.models import Director
 
 
 class DirectorManagerTestCase(BaseTestCase):
-
     def test__create(self):
         director_data = {
             "first_name": "test_first_name",

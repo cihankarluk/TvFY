@@ -6,9 +6,6 @@ from threading import local
 from typing import Optional, Union
 from uuid import uuid4
 
-from django.core import validators
-from django.utils.deconstruct import deconstructible
-
 _threadlocals = local()
 
 

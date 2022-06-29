@@ -1,10 +1,9 @@
+from tests.base import BaseTestCase
 from TvFY.language.models import Language
 from TvFY.language.service import LanguageService
-from tests.base import BaseTestCase
 
 
 class LanguageServiceTestCase(BaseTestCase):
-
     def test__get_or_create_language(self):
         language_object = LanguageService.get_or_create_language(language_name="Turkish")
 

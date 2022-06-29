@@ -1,5 +1,4 @@
-"""
-ASGI config for TvFY project.
+"""ASGI config for TvFY project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

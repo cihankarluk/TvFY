@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="TvFY",
@@ -23,10 +23,8 @@ setup(
         "django-allauth==0.51.0",
         "djangorestframework-simplejwt==5.2.0",
         "dj-rest-auth==2.2.4",
-
         # DATABASE
         "psycopg2==2.9.3",
-
         # OTHERS
         "python-dotenv==0.19.0",
         "requests==2.24.0",

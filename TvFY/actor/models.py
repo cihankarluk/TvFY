@@ -16,11 +16,21 @@ class Actor(AuditMixin):
     full_name = models.CharField(db_column="full_name", max_length=255, db_index=True)
     imdb_url = models.URLField(db_column="imdb_url", unique=True)
     born_date = models.DateTimeField(db_column="born_date", null=True)
-    born_at = models.ForeignKey(to=Country, db_column="born_at", on_delete=models.SET_NULL, null=True,
-                                related_name="a_born_at")
+    born_at = models.ForeignKey(
+        to=Country,
+        db_column="born_at",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="a_born_at",
+    )
     died_date = models.DateTimeField(db_column="died_date", null=True)
-    died_at = models.ForeignKey(to=Country, db_column="died_at", on_delete=models.SET_NULL, null=True,
-                                related_name="a_died_at")
+    died_at = models.ForeignKey(
+        to=Country,
+        db_column="died_at",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="a_died_at",
+    )
     perks = ArrayField(models.CharField(db_column="perks", max_length=32), null=True)
     oscars = models.PositiveSmallIntegerField(db_column="oscars", null=True)
     oscar_nominations = models.PositiveSmallIntegerField(db_column="oscar_nominations", null=True)

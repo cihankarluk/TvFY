@@ -12,4 +12,12 @@ class AccountAdmin(UserAdmin):
         super().__init__(*args, **kwargs)
         self.opts.verbose_name_plural = "Accounts"
 
-    list_display = ("username", "email", "first_name", "last_name", "is_active", "is_staff", "is_superuser")
+    list_display = (
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "is_active",
+        "is_staff",
+        "is_superuser",
+    )

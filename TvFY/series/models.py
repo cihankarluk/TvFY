@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg
 
 from TvFY.actor.models import Actor
 from TvFY.core.models import AuditMixin
@@ -7,7 +7,7 @@ from TvFY.country.models import Country
 from TvFY.director.models import Director
 from TvFY.genre.models import Genre
 from TvFY.language.models import Language
-from TvFY.series.managers import SeriesManager, SeriesCastManager, SeriesEpisodeCastManager, SeriesSeasonManager
+from TvFY.series.managers import SeriesCastManager, SeriesEpisodeCastManager, SeriesManager, SeriesSeasonManager
 
 
 class Series(AuditMixin):
@@ -85,11 +85,11 @@ class Season(models.Model):
         # Returns average rate for that season
         return self.episode_set.aggregate(Avg("imdb_rate"))["imdb_rate__avg"]
 
-    def get_episodes_max_imdb_rate(self) -> 'Episode':
+    def get_episodes_max_imdb_rate(self) -> "Episode":
         # Returns maximum imdb_rate episode
         return self.episode_set.order_by("-imdb_rate").first()
 
-    def get_episodes_min_imdb_rate(self) -> 'Episode':
+    def get_episodes_min_imdb_rate(self) -> "Episode":
         # Returns minimum imdb_rate episode
         return self.episode_set.order_by("imdb_rate").first()
 

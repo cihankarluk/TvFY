@@ -4,7 +4,7 @@ import re
 import urllib.parse as urlparse
 from collections import defaultdict
 from datetime import datetime
-from typing import Union, Optional, Any
+from typing import Any, Optional, Union
 from urllib.parse import parse_qs
 
 from bs4 import BeautifulSoup
@@ -330,9 +330,7 @@ class IMDBHomePage:
         }
         if css_selection := self.soup_selection(**soup_selection):
             data = json.loads(css_selection.next_element)["props"]["pageProps"]
-            genre_list = [
-                item["text"] for item in data["aboveTheFoldData"]["genres"]["genres"]
-            ]
+            genre_list = [item["text"] for item in data["aboveTheFoldData"]["genres"]["genres"]]
             genres = {"imdb_genre": genre_list}
 
         return genres
@@ -502,10 +500,12 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             data = json.loads(css_selection.next_element)["props"]["pageProps"]
             if production_budget := data["mainColumnData"]["productionBudget"]:
-                budget.update({
-                    "budget_amount": production_budget["budget"]["amount"],
-                    "budget_currency": production_budget["budget"]["currency"]
-                })
+                budget.update(
+                    {
+                        "budget_amount": production_budget["budget"]["amount"],
+                        "budget_currency": production_budget["budget"]["currency"],
+                    }
+                )
 
         return budget
 
@@ -522,10 +522,12 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             data = json.loads(css_selection.next_element)
             if uaw_data := data["props"]["pageProps"]["mainColumnData"].get("openingWeekendGross"):
-                usa_opening_weekend.update({
-                    "usa_ow_amount": uaw_data["gross"]["total"]["amount"],
-                    "usa_ow_currency": uaw_data["gross"]["total"]["currency"],
-                })
+                usa_opening_weekend.update(
+                    {
+                        "usa_ow_amount": uaw_data["gross"]["total"]["amount"],
+                        "usa_ow_currency": uaw_data["gross"]["total"]["currency"],
+                    }
+                )
 
         return usa_opening_weekend
 
@@ -542,10 +544,12 @@ class IMDBHomePage:
         if css_selection := self.soup_selection(**soup_selection):
             data = json.loads(css_selection.next_element)["props"]["pageProps"]
             if ww_data := data["mainColumnData"]["worldwideGross"]:
-                ww_gross.update({
-                    "ww_amount": ww_data["total"]["amount"],
-                    "ww_currency": ww_data["total"]["currency"],
-                })
+                ww_gross.update(
+                    {
+                        "ww_amount": ww_data["total"]["amount"],
+                        "ww_currency": ww_data["total"]["currency"],
+                    }
+                )
         return ww_gross
 
     @property
@@ -601,13 +605,15 @@ class IMDBHomePage:
                 "wins": data["mainColumnData"]["wins"]["total"],
                 "nominations": data["mainColumnData"]["nominations"]["total"],
                 "oscar_wins": 0,
-                "oscar_nominations": 0
+                "oscar_nominations": 0,
             }
             if prestigious_awards := data["mainColumnData"]["prestigiousAwardSummary"]:
-                awards.update({
-                    "oscar_wins": prestigious_awards.get("wins", 0),
-                    "oscar_nominations": prestigious_awards.get("nominations", 0),
-                })
+                awards.update(
+                    {
+                        "oscar_wins": prestigious_awards.get("wins", 0),
+                        "oscar_nominations": prestigious_awards.get("nominations", 0),
+                    }
+                )
 
         return awards
 

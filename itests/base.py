@@ -1,4 +1,4 @@
-from typing import Union, List, Optional
+from typing import List, Union
 
 import requests
 from bs4 import BeautifulSoup
@@ -11,7 +11,7 @@ from TvFY.collector.google import GoogleScrapper
 from TvFY.collector.imdb import IMDBBase
 from TvFY.collector.tomatoes import RottenTomatoesBase
 from TvFY.director.models import Director
-from TvFY.series.models import Series, SeriesCast, Season, Episode
+from TvFY.series.models import Episode, Season, Series, SeriesCast
 
 
 class BaseTestCase(TestCase):
@@ -45,10 +45,8 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def is_subset(cls, attrs: set, results: Union[dict, list]) -> bool:
-        """
-        Take diff of expected attrs and results from scrapping if diff are
-         different from the expected attrs returns False.
-        """
+        """Take diff of expected attrs and results from scrapping if diff are
+        different from the expected attrs returns False."""
         if isinstance(results, dict):
             results = [results]
         is_subset = all([all([attrs - set(result.keys()), set(result.keys()) - attrs]) for result in results])
@@ -68,21 +66,21 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def create_actor(
-            cls,
-            first_name="",
-            last_name="",
-            full_name="",
-            imdb_url="https://www.test.com/name/",
-            born_date=None,
-            born_at=None,
-            died_date=None,
-            died_at=None,
-            perks=None,
-            oscars=None,
-            oscar_nominations=None,
-            wins=None,
-            nominations=None,
-            is_updated=False,
+        cls,
+        first_name="",
+        last_name="",
+        full_name="",
+        imdb_url="https://www.test.com/name/",
+        born_date=None,
+        born_at=None,
+        died_date=None,
+        died_at=None,
+        perks=None,
+        oscars=None,
+        oscar_nominations=None,
+        wins=None,
+        nominations=None,
+        is_updated=False,
     ) -> Actor:
         actor = baker.make(
             Actor,
@@ -105,22 +103,22 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def create_director(
-            cls,
-            first_name="",
-            last_name="",
-            full_name="",
-            imdb_url="https://www.test.com/name/",
-            rt_url=None,
-            born_date=None,
-            born_at=None,
-            died_date=None,
-            died_at=None,
-            perks=None,
-            oscars=None,
-            oscar_nominations=None,
-            wins=None,
-            nominations=None,
-            is_updated=False,
+        cls,
+        first_name="",
+        last_name="",
+        full_name="",
+        imdb_url="https://www.test.com/name/",
+        rt_url=None,
+        born_date=None,
+        born_at=None,
+        died_date=None,
+        died_at=None,
+        perks=None,
+        oscars=None,
+        oscar_nominations=None,
+        wins=None,
+        nominations=None,
+        is_updated=False,
     ) -> Director:
         director = baker.make(
             Director,
@@ -144,28 +142,28 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def create_series(
-            cls,
-            title=None,
-            storyline=None,
-            release_date=None,
-            end_date=None,
-            run_time=None,
-            is_active=None,
-            season_count=None,
-            wins=None,
-            nominations=None,
-            oscar_wins=None,
-            oscar_nominations=None,
-            tv_network=None,
-            imdb_rate=None,
-            imdb_vote_count=None,
-            imdb_popularity=None,
-            imdb_url=None,
-            rt_tomatometer_rate=None,
-            rt_audience_rate=None,
-            rotten_tomatoes_url=None,
-            metacritic_score=None,
-            creator=None,
+        cls,
+        title=None,
+        storyline=None,
+        release_date=None,
+        end_date=None,
+        run_time=None,
+        is_active=None,
+        season_count=None,
+        wins=None,
+        nominations=None,
+        oscar_wins=None,
+        oscar_nominations=None,
+        tv_network=None,
+        imdb_rate=None,
+        imdb_vote_count=None,
+        imdb_popularity=None,
+        imdb_url=None,
+        rt_tomatometer_rate=None,
+        rt_audience_rate=None,
+        rotten_tomatoes_url=None,
+        metacritic_score=None,
+        creator=None,
     ) -> Series:
         series = baker.make(
             Series,
@@ -195,13 +193,13 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def create_series_cast(
-            cls,
-            character_name="",
-            episode_count=None,
-            start_acting=None,
-            end_acting=None,
-            series=None,
-            actor=None,
+        cls,
+        character_name="",
+        episode_count=None,
+        start_acting=None,
+        end_acting=None,
+        series=None,
+        actor=None,
     ) -> SeriesCast:
         series_cast = baker.make(
             SeriesCast,
@@ -216,10 +214,10 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def create_season(
-            cls,
-            season=None,
-            imdb_url=None,
-            series=None,
+        cls,
+        season=None,
+        imdb_url=None,
+        series=None,
     ) -> Season:
         season = baker.make(
             Season,
@@ -231,14 +229,14 @@ class BaseTestCase(TestCase):
 
     @classmethod
     def create_episode(
-            cls,
-            title=None,
-            storyline=None,
-            release_date=None,
-            imdb_rate=None,
-            imdb_vote_count=None,
-            episode=None,
-            season=None,
+        cls,
+        title=None,
+        storyline=None,
+        release_date=None,
+        imdb_rate=None,
+        imdb_vote_count=None,
+        episode=None,
+        season=None,
     ) -> Episode:
         episode = baker.make(
             Episode,
@@ -251,4 +249,3 @@ class BaseTestCase(TestCase):
             season=season or cls.create_season(),
         )
         return episode
-

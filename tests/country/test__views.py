@@ -7,7 +7,7 @@ class CountryViewSetTestCase(BaseTestCase):
     country_list_url = reverse("country-list")
 
     def setUp(self) -> None:
-        super(CountryViewSetTestCase, self).setUp()
+        super().setUp()
         self.create_models()
 
     def test__list(self):

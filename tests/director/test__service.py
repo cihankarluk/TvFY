@@ -1,14 +1,11 @@
+from tests.base import BaseTestCase
 from TvFY.core.exceptions import NotAbleToFindDirectorSourceUrl
 from TvFY.director.service import DirectorService
-from tests.base import BaseTestCase
 
 
 class DirectorServiceTestCase(BaseTestCase):
-
     def test__check_source_urls(self):
-        """
-        Expect to not raise any errors.
-        """
+        """Expect to not raise any errors."""
         search_data = {"imdb_director_url": "test"}
         result = DirectorService.check_source_urls(search_data=search_data)
         self.assertIsNone(result)
@@ -21,7 +18,7 @@ class DirectorServiceTestCase(BaseTestCase):
         result = DirectorService.check_source_urls(search_data=search_data)
         self.assertIsNone(result)
 
-    def test__check_source_url__raise_NotAbleToFindDirectorSourceUrl(self):
+    def test__check_source_url__raise_NotAbleToFindDirectorSourceUrl(self):  # noqa: N802
         search_data = {}
         with self.assertRaises(NotAbleToFindDirectorSourceUrl):
             DirectorService.check_source_urls(search_data=search_data)
@@ -40,7 +37,10 @@ class DirectorServiceTestCase(BaseTestCase):
 
     def test__get_or_create_director__imdb_url(self):
         search_data = {
-            "imdb_director": {"first_name": "imdb_first_name", "last_name": "imdb_last_name"},
+            "imdb_director": {
+                "first_name": "imdb_first_name",
+                "last_name": "imdb_last_name",
+            },
             "imdb_director_url": "https://www.test.com/name/test/",
         }
 
@@ -53,7 +53,10 @@ class DirectorServiceTestCase(BaseTestCase):
 
     def test__get_or_create_director__rt_url(self):
         search_data = {
-            "rt_director": {"first_name": "rt_first_name", "last_name": "rt_last_name"},
+            "rt_director": {
+                "first_name": "rt_first_name",
+                "last_name": "rt_last_name",
+            },
             "rt_director_url": "https://www.test.com/name/test/",
         }
 
@@ -66,7 +69,10 @@ class DirectorServiceTestCase(BaseTestCase):
 
     def test__get_or_create_director__imdb_url_rt_url(self):
         search_data = {
-            "imdb_director": {"first_name": "imdb_first_name", "last_name": "imdb_last_name"},
+            "imdb_director": {
+                "first_name": "imdb_first_name",
+                "last_name": "imdb_last_name",
+            },
             "imdb_director_url": "https://www.test.com/name/test/",
             "rt_director_url": "https://www.rt-test.com/name/test/",
         }
@@ -82,7 +88,10 @@ class DirectorServiceTestCase(BaseTestCase):
         director = self.create_director()[0]
 
         search_data = {
-            "imdb_director": {"first_name": "imdb_first_name", "last_name": "imdb_last_name"},
+            "imdb_director": {
+                "first_name": "imdb_first_name",
+                "last_name": "imdb_last_name",
+            },
             "imdb_director_url": director.imdb_url,
         }
 
@@ -105,7 +114,7 @@ class DirectorServiceTestCase(BaseTestCase):
             "oscar_nominations": 20,
             "wins": 420,
             "nominations": 10,
-            "is_updated": True
+            "is_updated": True,
         }
         director = self.create_director(count=1)[0]
 

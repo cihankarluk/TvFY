@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from TvFY.core.models import AuditMixin
 from TvFY.movies.models import Movie
-from TvFY.series.models import Series, Season
+from TvFY.series.models import Season, Series
 
 
 class Account(AbstractUser):
@@ -22,8 +22,17 @@ class Account(AbstractUser):
 
 
 class UserMovies(AuditMixin):
-    user = models.ForeignKey(to=Account, db_column="user", on_delete=models.CASCADE)
-    movie = models.ForeignKey(to=Movie, to_field="tvfy_code", db_column="movie", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        to=Account,
+        db_column="user",
+        on_delete=models.CASCADE,
+    )
+    movie = models.ForeignKey(
+        to=Movie,
+        to_field="tvfy_code",
+        db_column="movie",
+        on_delete=models.CASCADE,
+    )
 
     is_watched = models.BooleanField(db_column="is_watched")
     is_going_to_watch = models.BooleanField(db_column="is_going_to_watch")
@@ -33,9 +42,22 @@ class UserMovies(AuditMixin):
 
 
 class UserSeries(AuditMixin):
-    user = models.ForeignKey(to=Account, db_column="user", on_delete=models.CASCADE)
-    series = models.ForeignKey(to=Series, to_field="tvfy_code", db_column="series", on_delete=models.CASCADE)
-    watched_season = models.ForeignKey(to=Season, db_column="watched_season", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        to=Account,
+        db_column="user",
+        on_delete=models.CASCADE,
+    )
+    series = models.ForeignKey(
+        to=Series,
+        to_field="tvfy_code",
+        db_column="series",
+        on_delete=models.CASCADE,
+    )
+    watched_season = models.ForeignKey(
+        to=Season,
+        db_column="watched_season",
+        on_delete=models.CASCADE,
+    )
 
     last_watched_episode = models.PositiveSmallIntegerField(db_column="last_watched_episode", null=True)
 

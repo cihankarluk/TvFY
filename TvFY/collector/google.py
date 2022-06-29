@@ -27,7 +27,7 @@ class GoogleScrapper:
         regex_pattern = r"https://www.rottentomatoes.com/(.*?)&"
         rotten_tomatoes_url = regex_search(content=content, pattern=regex_pattern)
         if rotten_tomatoes_url:
-            rotten_tomatoes_url = rotten_tomatoes_url[:len(rotten_tomatoes_url) - 1]
+            rotten_tomatoes_url = rotten_tomatoes_url[: len(rotten_tomatoes_url) - 1]
             result = {"rotten_tomatoes_url": rotten_tomatoes_url}
 
         return result

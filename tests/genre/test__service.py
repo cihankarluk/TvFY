@@ -1,10 +1,9 @@
+from tests.base import BaseTestCase
 from TvFY.genre.models import Genre
 from TvFY.genre.service import GenreService
-from tests.base import BaseTestCase
 
 
 class GenreServiceTestCase(BaseTestCase):
-
     def test__load_genres(self):
         genre_query = Genre.objects.all()
 
@@ -23,4 +22,3 @@ class GenreServiceTestCase(BaseTestCase):
         result = GenreService.get_genre_ids(search_data=search_data)
 
         self.assertFalse(result.exists())
-

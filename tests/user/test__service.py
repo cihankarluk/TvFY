@@ -1,11 +1,10 @@
+from tests.base import BaseTestCase
 from TvFY.core.exceptions import MovieNotFoundError
 from TvFY.user.models import UserMovies, UserSeries
 from TvFY.user.service import UserService
-from tests.base import BaseTestCase
 
 
 class UserServiceTestCase(BaseTestCase):
-
     def test__create_or_update_user_movie__create(self):
         movie = self.create_movie(count=1)[0]
         request_data = {
@@ -81,7 +80,11 @@ class UserServiceTestCase(BaseTestCase):
             "is_going_to_watch": True,
         }
 
-        UserService.update_user_series(user_series=user_series, last_watched_episode=10, request_data=request_data)
+        UserService.update_user_series(
+            user_series=user_series,
+            last_watched_episode=10,
+            request_data=request_data,
+        )
 
         user_series.refresh_from_db()
         self.assertEqual(10, user_series.last_watched_episode)
@@ -101,7 +104,7 @@ class UserServiceTestCase(BaseTestCase):
             series=series,
             watched_season=season,
             last_watched_episode=10,
-            request_data=request_data
+            request_data=request_data,
         )
 
         us_query = UserSeries.objects.filter(user=self.account, series=series)
@@ -150,7 +153,10 @@ class UserServiceTestCase(BaseTestCase):
         us_query = UserSeries.objects.filter(user=self.account, series=series)
         self.assertTrue(us_query.exists())
         self.assertEqual(us_query.get(), updated_user_series)
-        self.assertNotEqual(user_series.last_watched_episode, updated_user_series.last_watched_episode)
+        self.assertNotEqual(
+            user_series.last_watched_episode,
+            updated_user_series.last_watched_episode,
+        )
 
     def test__create_or_update_user_series__create_multiple(self):
         series = self.create_series(count=1)[0]

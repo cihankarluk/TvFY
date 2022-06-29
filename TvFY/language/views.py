@@ -9,5 +9,5 @@ from TvFY.language.serializers import LanguageListSerializer
 class LanguageViewSet(GenericViewSet, ListModelMixin):
     queryset = Language.objects.all()
     serializer_class = LanguageListSerializer
-    filter_backends = SearchFilter,
-    search_fields = "name",
+    filter_backends = (SearchFilter,)
+    search_fields = ("name",)

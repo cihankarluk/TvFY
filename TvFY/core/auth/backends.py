@@ -1,8 +1,6 @@
 from allauth.account.auth_backends import AuthenticationBackend as AllauthAuthenticationBackend
 from dj_rest_auth.jwt_auth import JWTCookieAuthentication
 from django.contrib.auth import get_user_model
-from rest_framework import exceptions
-
 
 UserModel = get_user_model()
 

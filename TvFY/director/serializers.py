@@ -31,7 +31,6 @@ class DirectorListSerializer(serializers.ModelSerializer):
 
 
 class DirectorMovieSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Movie
         fields = (
@@ -57,7 +56,6 @@ class DirectorMovieSerializer(serializers.ModelSerializer):
 
 
 class DirectorSeriesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Series
         fields = (

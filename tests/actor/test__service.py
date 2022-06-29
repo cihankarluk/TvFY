@@ -1,10 +1,9 @@
+from tests.base import BaseTestCase
 from TvFY.actor.models import Actor
 from TvFY.actor.service import ActorService
-from tests.base import BaseTestCase
 
 
 class ActorServiceTestCase(BaseTestCase):
-
     def test__create_actor(self):
         actor_data = {
             "first_name": "test",
@@ -17,15 +16,18 @@ class ActorServiceTestCase(BaseTestCase):
         self.assertEqual(Actor.objects.get(imdb_url=actor_data["imdb_actor_url"]), actor)
 
     def test__create_multiple_actor(self):
-        cast_data = [{
-            "first_name": "test",
-            "last_name": "test",
-            "imdb_actor_url": "https://www.test.com/name/0/",
-        }, {
-            "first_name": "test_2",
-            "last_name": "test_2",
-            "imdb_actor_url": "https://www.test.com/name/2/"
-        }]
+        cast_data = [
+            {
+                "first_name": "test",
+                "last_name": "test",
+                "imdb_actor_url": "https://www.test.com/name/0/",
+            },
+            {
+                "first_name": "test_2",
+                "last_name": "test_2",
+                "imdb_actor_url": "https://www.test.com/name/2/",
+            },
+        ]
         actor = self.create_actor(count=1, imdb_url="https://www.test.com/name/0/")[0]
 
         return_value = ActorService.create_multiple_actor(cast_data=cast_data)
@@ -56,7 +58,7 @@ class ActorServiceTestCase(BaseTestCase):
             "oscar_nominations": 20,
             "wins": 420,
             "nominations": 10,
-            "is_updated": True
+            "is_updated": True,
         }
         actor = self.create_actor(count=1)[0]
 

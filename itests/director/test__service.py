@@ -1,10 +1,10 @@
-from TvFY.director.service import DirectorService
 from itests.base import BaseTestCase
+from TvFY.director.service import DirectorService
 
 
 class DirectorServiceItestCase(BaseTestCase):
     def setUp(self) -> None:
-        super(DirectorServiceItestCase, self).setUp()
+        super().setUp()
         self.director_cb = self.create_director(imdb_url="https://www.imdb.com/name/nm0000288/")
         self.director_cn = self.create_director(imdb_url="https://www.imdb.com/name/nm0634240/")
         self.director_ek = self.create_director(imdb_url="https://www.imdb.com/name/nm0471392/", is_updated=True)

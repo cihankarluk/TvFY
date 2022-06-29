@@ -42,7 +42,13 @@ class ActorSeriesCastSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SeriesCast
-        fields = "character_name", "series_title", "episode_count", "start_acting", "end_acting"
+        fields = (
+            "character_name",
+            "series_title",
+            "episode_count",
+            "start_acting",
+            "end_acting",
+        )
 
 
 class ActorDetailSerializer(serializers.ModelSerializer):

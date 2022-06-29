@@ -1,4 +1,4 @@
-from typing import Optional, List, Any
+from typing import Any, List, Optional
 from urllib.parse import urljoin
 
 from django.db.models import QuerySet
@@ -15,7 +15,6 @@ from TvFY.series.models import Episode, Season, Series, SeriesCast
 
 
 class SeriesService:
-
     @classmethod
     def prepare_series_data(cls, search_data: dict[str, Any]) -> dict[str, Any]:
         series_data = {}
@@ -52,9 +51,7 @@ class SeriesService:
 
     @classmethod
     def create_series_model_data(cls, series_data: dict[str, Any]) -> dict[str, Any]:
-        """
-        Prepare data for series model.
-        """
+        """Prepare data for series model."""
         movie_model_data = {
             "title": series_data.get("imdb_title") or series_data.get("rt_title"),
             "storyline": series_data.get("rt_storyline"),
@@ -101,7 +98,8 @@ class SeriesService:
             series.language.add(language)
         SeriesCastService.create_or_update_series_cast(series=series, series_data=series_data)
         SeriesSeasonEpisodeService.create_or_update_series_season_episodes(
-            series=series, search_data=series_data["season=1"],
+            series=series,
+            search_data=series_data["season=1"],
         )
 
         return series
@@ -119,19 +117,19 @@ class SeriesService:
 
 
 class SeriesCastService:
-
     @classmethod
     def get_series_cast_query(
-            cls, series: Series, cast_data_list: List[dict], actor_map: dict[str, dict[str, Any]]
+        cls,
+        series: Series,
+        cast_data_list: List[dict],
+        actor_map: dict[str, dict[str, Any]],
     ) -> QuerySet:
-        """
-        Filter SeriesCast objects to later decide create or update.
-        """
+        """Filter SeriesCast objects to later decide create or update."""
         character_names = [cast_data["character_name"] for cast_data in cast_data_list]
         series_cast_query = SeriesCast.objects.filter(
             series=series,
             character_name__in=character_names,
-            actor__imdb_url__in=list(actor_map.keys())
+            actor__imdb_url__in=list(actor_map.keys()),
         )
 
         return series_cast_query
@@ -174,7 +172,6 @@ class SeriesCastService:
 
 
 class SeriesSeasonEpisodeService:
-
     @classmethod
     def get_episode_query(cls, season: Season, season_data: List[dict[str, Any]]) -> QuerySet:
         episode_names = [episode_data["title"] for episode_data in season_data]
@@ -184,7 +181,10 @@ class SeriesSeasonEpisodeService:
 
     @classmethod
     def update_episode(cls, episode: Episode, episode_data: dict[str, Any]):
-        for field, value, in episode_data.items():
+        for (
+            field,
+            value,
+        ) in episode_data.items():
             setattr(episode, field, value)
         episode.save()
 
@@ -240,7 +240,7 @@ class SeriesSeasonEpisodeService:
         results = Scraper(urls=list(url_map.keys())).handle()
 
         for imdb_url, search_result in results.items():
-            for key, value in search_result.items():
+            for _, value in search_result.items():
                 if value and isinstance(value, list):
                     series = Series.objects.get(imdb_url=f"{imdb_url.rsplit('/', 1)[0]}/")
                     cls.create_or_update_series_season_episodes(

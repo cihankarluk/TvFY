@@ -28,4 +28,4 @@ class AuditMixin(models.Model):
             self.created_at = self.updated_at
             self.created_by = self.updated_by
 
-        super(AuditMixin, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)

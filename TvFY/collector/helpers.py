@@ -10,7 +10,11 @@ class SoupSelectionMixin:
     soup: BeautifulSoup
 
     def soup_selection(
-            self, soup: BeautifulSoup, method: str, tag: Optional[str] = None, **kwargs
+        self,
+        soup: BeautifulSoup,
+        method: str,
+        tag: Optional[str] = None,
+        **kwargs,
     ) -> Optional[BeautifulSoup]:
         if method == self.select_one:
             css_selection = soup.select_one(**kwargs)

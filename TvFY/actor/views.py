@@ -6,21 +6,19 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from TvFY.actor.models import Actor
-from TvFY.actor.serializers import ActorListSerializer, ActorDetailSerializer
+from TvFY.actor.serializers import ActorDetailSerializer, ActorListSerializer
 from TvFY.core.exceptions import ActorNotFoundError
 
 
 class ActorViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = (
-        Actor.objects.prefetch_related(
-            "seriescast_set", "moviecast_set"
-        ).select_related(
-            "born_at", "died_at"
-        ).order_by("-created_at")
+        Actor.objects.prefetch_related("seriescast_set", "moviecast_set")
+        .select_related("born_at", "died_at")
+        .order_by("-created_at")
     )
     serializer_class = ActorListSerializer
-    filter_backends = SearchFilter,
-    search_fields = "full_name",
+    filter_backends = (SearchFilter,)
+    search_fields = ("full_name",)
     lookup_field = "tvfy_code"
 
     def get_serializer_class(self):
@@ -30,7 +28,7 @@ class ActorViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_object(self):
         try:
-            actor = super(ActorViewSet, self).get_object()
+            actor = super().get_object()
         except Http404:
             raise ActorNotFoundError(f"Actor with {self.kwargs['tvfy_code']} code does not exists.")
         return actor

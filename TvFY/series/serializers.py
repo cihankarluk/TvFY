@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from TvFY.actor.serializers import ActorListSerializer
-from TvFY.series.models import Series, SeriesCast, Season, Episode
+from TvFY.series.models import Episode, Season, Series, SeriesCast
 
 
 class SeriesCastSerializer(serializers.ModelSerializer):

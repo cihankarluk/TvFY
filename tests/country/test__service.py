@@ -1,10 +1,9 @@
+from tests.base import BaseTestCase
 from TvFY.country.models import Country
 from TvFY.country.service import CountryService
-from tests.base import BaseTestCase
 
 
 class CountryServiceTestCase(BaseTestCase):
-
     def test__get_or_create_language(self):
         country_object = CountryService.get_or_create_country(country_name="Turkey")
 

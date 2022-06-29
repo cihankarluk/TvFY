@@ -20,6 +20,10 @@ class SearchViewSet(GenericViewSet, CreateModelMixin):
         SearchService.check_source_url_exists(google_results=google_results, valid_data=valid_data)
 
         search_urls = SearchService.get_urls(google_data=google_results, search_type=valid_data["type"])
-        serialized = SearchService.scrap(valid_data=valid_data, search_urls=search_urls, google_results=google_results)
+        serialized = SearchService.scrap(
+            valid_data=valid_data,
+            search_urls=search_urls,
+            google_results=google_results,
+        )
 
         return Response(serialized.data, status=HTTP_200_OK)

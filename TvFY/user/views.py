@@ -1,6 +1,6 @@
 from dj_rest_auth.app_settings import JWTSerializer
 from dj_rest_auth.registration.views import RegisterView, ResendEmailVerificationView, VerifyEmailView
-from dj_rest_auth.views import LogoutView, LoginView, PasswordResetView, PasswordResetConfirmView, PasswordChangeView
+from dj_rest_auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetConfirmView, PasswordResetView
 from drf_yasg import openapi
 from drf_yasg.openapi import Schema
 from drf_yasg.utils import swagger_auto_schema
@@ -9,102 +9,114 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from TvFY.user.serializers import UserMovieCreateOrUpdateSerializer, UserMovieGetMoviesSerializer, \
-    UserMovieCreateOrUpdateRequestSerializer, UserSeriesCreateOrUpdateRequestSerializer, \
-    UserSeriesCreateOrUpdateSerializer, UserSeriesGetSeriesSerializer
+from TvFY.user.serializers import (
+    UserMovieCreateOrUpdateRequestSerializer,
+    UserMovieCreateOrUpdateSerializer,
+    UserMovieGetMoviesSerializer,
+    UserSeriesCreateOrUpdateRequestSerializer,
+    UserSeriesCreateOrUpdateSerializer,
+    UserSeriesGetSeriesSerializer,
+)
 from TvFY.user.service import UserService
 
 
 class UserSignupView(RegisterView):
-
     @swagger_auto_schema(responses={200: JWTSerializer})
     def post(self, request, *args, **kwargs):
-        return super(UserSignupView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserLoginView(LoginView):
-
     @swagger_auto_schema(responses={200: JWTSerializer})
     def post(self, request, *args, **kwargs):
-        return super(UserLoginView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserLogoutView(LogoutView):
-    allowed_methods = "GET",
+    allowed_methods = ("GET",)
 
 
 class UserPasswordResetView(PasswordResetView):
-
-    @swagger_auto_schema(responses={200: Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'detail': openapi.Schema(
-                type=openapi.TYPE_STRING,
-                example="Password reset e-mail has been sent."
-            )}
-    )})
+    @swagger_auto_schema(
+        responses={
+            200: Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "detail": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="Password reset e-mail has been sent.",
+                    )
+                },
+            )
+        }
+    )
     def post(self, request, *args, **kwargs):
-        return super(UserPasswordResetView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserPasswordResetConfirmView(PasswordResetConfirmView):
-
-    @swagger_auto_schema(responses={200: Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'detail': openapi.Schema(
-                type=openapi.TYPE_STRING,
-                example="Password has been reset with the new password."
-            )}
-    )})
+    @swagger_auto_schema(
+        responses={
+            200: Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "detail": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="Password has been reset with the new password.",
+                    )
+                },
+            )
+        }
+    )
     def post(self, request, *args, **kwargs):
-        return super(UserPasswordResetConfirmView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserPasswordChangeView(PasswordChangeView):
-
-    @swagger_auto_schema(responses={200: Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'detail': openapi.Schema(
-                type=openapi.TYPE_STRING,
-                example="New password has been saved."
-            )}
-    )})
+    @swagger_auto_schema(
+        responses={
+            200: Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    "detail": openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        example="New password has been saved.",
+                    )
+                },
+            )
+        }
+    )
     def post(self, request, *args, **kwargs):
-        return super(UserPasswordChangeView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserResendEmailVerificationView(ResendEmailVerificationView):
-
-    @swagger_auto_schema(responses={200: Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'detail': openapi.Schema(
-                type=openapi.TYPE_STRING,
-                example="ok"
-            )}
-    )})
+    @swagger_auto_schema(
+        responses={
+            200: Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={"detail": openapi.Schema(type=openapi.TYPE_STRING, example="ok")},
+            )
+        }
+    )
     def post(self, request, *args, **kwargs):
-        return super(UserResendEmailVerificationView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserVerifyEmailView(VerifyEmailView):
-
-    @swagger_auto_schema(responses={200: Schema(
-        type=openapi.TYPE_OBJECT,
-        properties={
-            'detail': openapi.Schema(
-                type=openapi.TYPE_STRING,
-                example="ok"
-            )}
-    )})
+    @swagger_auto_schema(
+        responses={
+            200: Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={"detail": openapi.Schema(type=openapi.TYPE_STRING, example="ok")},
+            )
+        }
+    )
     def post(self, request, *args, **kwargs):
-        return super(UserVerifyEmailView, self).post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class UserViewSet(GenericViewSet):
-
     def get_serializer_class(self):
         if self.action == "user_movies":
             if self.request.method == "GET":
@@ -119,10 +131,7 @@ class UserViewSet(GenericViewSet):
 
         return self.serializer_class
 
-    @swagger_auto_schema(
-        method="post",
-        request_body=UserMovieCreateOrUpdateRequestSerializer
-    )
+    @swagger_auto_schema(method="post", request_body=UserMovieCreateOrUpdateRequestSerializer)
     @action(
         methods=["get", "post"],
         detail=False,
@@ -148,7 +157,7 @@ class UserViewSet(GenericViewSet):
     @swagger_auto_schema(
         method="post",
         request_body=UserSeriesCreateOrUpdateRequestSerializer,
-        responses={201: UserSeriesCreateOrUpdateSerializer(many=True)}
+        responses={201: UserSeriesCreateOrUpdateSerializer(many=True)},
     )
     @action(
         methods=["get", "post"],

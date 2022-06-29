@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import Any, List
 
 from TvFY.actor.models import Actor
 from TvFY.collector.base import Scraper
@@ -6,7 +6,6 @@ from TvFY.country.service import CountryService
 
 
 class ActorService:
-
     @classmethod
     def create_actor(cls, actor_data: dict[str, Any]) -> Actor:
         actor = Actor.objects.create(
@@ -18,11 +17,12 @@ class ActorService:
 
     @classmethod
     def create_multiple_actor(cls, cast_data: List[dict[str, str]]) -> dict[str, dict[str, Any]]:
-        """
-        This service is basic need of actor. Data only contains first_name, last_name and imdb_actor_url.
-        Only initialize actor or get if exists. update_actor method fill other fields.
+        """This service is basic need of actor. Data only contains first_name,
+        last_name and imdb_actor_url. Only initialize actor or get if exists.
+        update_actor method fill other fields.
 
-        Creates dictionary with key value as imdb_actor_url and value as actor object.
+        Creates dictionary with key value as imdb_actor_url and value as
+        actor object.
         """
         cast_dict = {cast["imdb_actor_url"]: cast for cast in cast_data}
         existing_actors = Actor.objects.filter(imdb_url__in=list(cast_dict.keys()))

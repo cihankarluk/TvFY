@@ -1,7 +1,7 @@
 from rest_framework.reverse import reverse
 
-from TvFY.country.models import Country
 from tests.base import BaseTestCase
+from TvFY.country.models import Country
 
 
 class ActorViewSetTestCase(BaseTestCase):
@@ -9,10 +9,10 @@ class ActorViewSetTestCase(BaseTestCase):
 
     @classmethod
     def get_actor_detail_url(cls, tvfy_code):
-        return reverse("actor-detail", kwargs={'tvfy_code': tvfy_code})
+        return reverse("actor-detail", kwargs={"tvfy_code": tvfy_code})
 
     def setUp(self) -> None:
-        super(ActorViewSetTestCase, self).setUp()
+        super().setUp()
         self.actor = self.create_actor()[0]
 
     def test__list(self):
@@ -34,8 +34,14 @@ class ActorViewSetTestCase(BaseTestCase):
         }
         born_at = Country.objects.first()
         died_at = Country.objects.last()
-        self.create_actor(index_start=11, count=1, born_at=born_at, died_at=died_at, born_date=self.now,
-                          died_date=self.now)
+        self.create_actor(
+            index_start=11,
+            count=1,
+            born_at=born_at,
+            died_at=died_at,
+            born_date=self.now,
+            died_date=self.now,
+        )
 
         response = self.client.get(self.actor_list_url)
         json_response = response.json()
@@ -81,9 +87,9 @@ class ActorViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_response = {
-            'code': 404,
-            'type': 'ActorNotFoundError',
-            'reason': 'Actor with notExists code does not exists.'
+            "code": 404,
+            "type": "ActorNotFoundError",
+            "reason": "Actor with notExists code does not exists.",
         }
 
         response = self.client.get(

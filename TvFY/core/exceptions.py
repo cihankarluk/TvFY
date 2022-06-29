@@ -1,4 +1,4 @@
-from rest_framework.exceptions import ValidationError, NotFound
+from rest_framework.exceptions import NotFound, ValidationError
 
 
 class UsernameAlreadyExists(ValidationError):

@@ -11,23 +11,37 @@ from rest_framework.viewsets import GenericViewSet
 
 from TvFY.core.exceptions import SeriesNotFoundError
 from TvFY.series.models import Series
-from TvFY.series.serializers import SeriesListSerializer, SeriesDetailSerializer, SeriesCastSerializer, \
-    SeriesSeasonSerializer, EpisodeSerializer
+from TvFY.series.serializers import (
+    EpisodeSerializer,
+    SeriesCastSerializer,
+    SeriesDetailSerializer,
+    SeriesListSerializer,
+    SeriesSeasonSerializer,
+)
 
 
 class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     queryset = (
-        Series.objects.prefetch_related(
-            "seriescast_set__actor", "genres", "country", "language"
-        ).select_related(
-            "creator"
-        ).order_by("-created_at")
+        Series.objects.prefetch_related("seriescast_set__actor", "genres", "country", "language")
+        .select_related("creator")
+        .order_by("-created_at")
     )
     serializer_class = SeriesListSerializer
-    permission_classes = AllowAny,
-    filter_backends = DjangoFilterBackend, OrderingFilter, SearchFilter,
-    search_fields = "title", "=tvfy_code",
-    ordering_fields = "imdb_rate", "wins", "nominations",
+    permission_classes = (AllowAny,)
+    filter_backends = (
+        DjangoFilterBackend,
+        OrderingFilter,
+        SearchFilter,
+    )
+    search_fields = (
+        "title",
+        "=tvfy_code",
+    )
+    ordering_fields = (
+        "imdb_rate",
+        "wins",
+        "nominations",
+    )
     lookup_field = "tvfy_code"
 
     def get_serializer_class(self):
@@ -43,7 +57,7 @@ class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_object(self):
         try:
-            series = super(SeriesViewSet, self).get_object()
+            series = super().get_object()
         except Http404:
             raise SeriesNotFoundError(f"Series with {self.kwargs['tvfy_code']} code does not exists.")
         return series
@@ -87,7 +101,7 @@ class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         methods=["get"],
         detail=True,
         url_path="season/(?P<season_id>[^/.]+)",
-        url_name="season_episodes"
+        url_name="season_episodes",
     )
     def season_episodes(self, request, *args, **kwargs):
         series: Series = self.get_object()

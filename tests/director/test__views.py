@@ -1,7 +1,7 @@
 from rest_framework.reverse import reverse
 
-from TvFY.country.models import Country
 from tests.base import BaseTestCase
+from TvFY.country.models import Country
 
 
 class DirectorViewSetTestCase(BaseTestCase):
@@ -9,10 +9,10 @@ class DirectorViewSetTestCase(BaseTestCase):
 
     @classmethod
     def get_director_detail_url(cls, tvfy_code):
-        return reverse("director-detail", kwargs={'tvfy_code': tvfy_code})
+        return reverse("director-detail", kwargs={"tvfy_code": tvfy_code})
 
     def setUp(self) -> None:
-        super(DirectorViewSetTestCase, self).setUp()
+        super().setUp()
         self.director = self.create_director()[0]
 
     def test__list(self):
@@ -35,8 +35,14 @@ class DirectorViewSetTestCase(BaseTestCase):
         }
         born_at = Country.objects.first()
         died_at = Country.objects.last()
-        self.create_director(index_start=11, count=1, born_at=born_at, died_at=died_at, born_date=self.now,
-                             died_date=self.now)
+        self.create_director(
+            index_start=11,
+            count=1,
+            born_at=born_at,
+            died_at=died_at,
+            born_date=self.now,
+            died_date=self.now,
+        )
 
         response = self.client.get(self.director_list_url)
         json_response = response.json()
@@ -83,9 +89,9 @@ class DirectorViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_response = {
-            'code': 404,
-            'type': 'DirectorNotFoundError',
-            'reason': 'Director with notExists code does not exists.'
+            "code": 404,
+            "type": "DirectorNotFoundError",
+            "reason": "Director with notExists code does not exists.",
         }
 
         response = self.client.get(

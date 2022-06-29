@@ -7,7 +7,7 @@ class LanguageViewSetTestCase(BaseTestCase):
     country_list_url = reverse("language-list")
 
     def setUp(self) -> None:
-        super(LanguageViewSetTestCase, self).setUp()
+        super().setUp()
         self.create_models()
 
     def test__list(self):

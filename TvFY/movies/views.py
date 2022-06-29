@@ -11,7 +11,7 @@ from rest_framework.viewsets import GenericViewSet
 from TvFY.core.exceptions import MovieNotFoundError
 from TvFY.movies.filters import MovieViewSetFilterSet
 from TvFY.movies.models import Movie
-from TvFY.movies.serializers import MovieListSerializer, MovieDetailSerializer, MovieCastSerializer
+from TvFY.movies.serializers import MovieCastSerializer, MovieDetailSerializer, MovieListSerializer
 
 
 class MovieViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -24,8 +24,17 @@ class MovieViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
     permission_classes = (AllowAny,)
     filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
     filterset_class = MovieViewSetFilterSet
-    search_fields = "title", "=tvfy_code", "director__full_name",
-    ordering_fields = "created_at", "imdb_rate", "wins", "nominations",
+    search_fields = (
+        "title",
+        "=tvfy_code",
+        "director__full_name",
+    )
+    ordering_fields = (
+        "created_at",
+        "imdb_rate",
+        "wins",
+        "nominations",
+    )
     lookup_field = "tvfy_code"
 
     def get_serializer_class(self):
@@ -37,7 +46,7 @@ class MovieViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
 
     def get_object(self):
         try:
-            movie = super(MovieViewSet, self).get_object()
+            movie = super().get_object()
         except Http404:
             raise MovieNotFoundError(f"Movie with {self.kwargs['tvfy_code']} code does not exists.")
         return movie

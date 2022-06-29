@@ -36,11 +36,15 @@ class Scraper:
 
     @backoff.on_exception(backoff.expo, (aiohttp.ClientError, AssertionError), max_tries=2)
     async def fetch_html(self, url: str):
-        headers = {"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"}  # noqa: E501
+        headers = {
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36"  # noqa: E501
+        }
         if "imdb" in url:
-            headers.update({
-               "accept-language": "en-US,en;q=0.9",
-            })
+            headers.update(
+                {
+                    "accept-language": "en-US,en;q=0.9",
+                }
+            )
         search_response = await self.session.get(url, headers=headers)
         assert search_response.status == 200
         return search_response

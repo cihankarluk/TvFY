@@ -1,7 +1,7 @@
 from rest_framework.reverse import reverse
 
-from TvFY.series.service import SeriesService
 from tests.base import BaseTestCase
+from TvFY.series.service import SeriesService
 
 
 class SeriesViewSetTestCase(BaseTestCase):
@@ -9,22 +9,25 @@ class SeriesViewSetTestCase(BaseTestCase):
 
     @classmethod
     def get_series_detail_url(cls, tvfy_code):
-        return reverse("series-detail", kwargs={'tvfy_code': tvfy_code})
+        return reverse("series-detail", kwargs={"tvfy_code": tvfy_code})
 
     @classmethod
     def get_cast_url(cls, tvfy_code):
-        return reverse("series-cast", kwargs={'tvfy_code': tvfy_code})
+        return reverse("series-cast", kwargs={"tvfy_code": tvfy_code})
 
     @classmethod
     def get_season_url(cls, tvfy_code):
-        return reverse("series-season", kwargs={'tvfy_code': tvfy_code})
+        return reverse("series-season", kwargs={"tvfy_code": tvfy_code})
 
     @classmethod
     def get_season_episodes_url(cls, tvfy_code, season_id):
-        return reverse("series-season_episodes", kwargs={'tvfy_code': tvfy_code, "season_id": season_id})
+        return reverse(
+            "series-season_episodes",
+            kwargs={"tvfy_code": tvfy_code, "season_id": season_id},
+        )
 
     def setUp(self) -> None:
-        super(SeriesViewSetTestCase, self).setUp()
+        super().setUp()
         series_data = self.read_file("series_the_boys.json", is_json=True)
         self.series = SeriesService.create_or_update_series(search_data=series_data)
 
@@ -101,9 +104,9 @@ class SeriesViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_result = {
-            'code': 404,
-            'type': 'SeriesNotFoundError',
-            'reason': 'Series with notExists code does not exists.'
+            "code": 404,
+            "type": "SeriesNotFoundError",
+            "reason": "Series with notExists code does not exists.",
         }
 
         response = self.client.get(
@@ -135,7 +138,7 @@ class SeriesViewSetTestCase(BaseTestCase):
         expected_result = {
             "code": 404,
             "type": "SeriesNotFoundError",
-            "reason": "Series with notExists code does not exists."
+            "reason": "Series with notExists code does not exists.",
         }
 
         response = self.client.get(

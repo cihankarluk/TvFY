@@ -1,7 +1,7 @@
+from itests.base import BaseTestCase
 from TvFY.collector.base import Scraper
 from TvFY.movies.models import Movie
 from TvFY.series.models import Series
-from itests.base import BaseTestCase
 
 
 class IMDBEpisodesTestCase(BaseTestCase):
@@ -24,7 +24,10 @@ class IMDBEpisodesTestCase(BaseTestCase):
         result = Scraper(urls=urls).handle()
 
         for url in urls:
-            self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result[url]['1']))
+            self.assertListEqual(
+                [],
+                self.take_diff(attrs=self.expected_attrs, results=result[url]["1"]),
+            )
 
         episode_data = result[urls[0]]["1"][0]
         self.assertTrue(episode_data["title"])
@@ -40,11 +43,13 @@ class IMDBEpisodesTestCase(BaseTestCase):
 
         result = Scraper(urls=[url]).handle()
 
-        self.assertListEqual([], self.take_diff(attrs=self.expected_attrs, results=result[url]['3']))
+        self.assertListEqual(
+            [],
+            self.take_diff(attrs=self.expected_attrs, results=result[url]["3"]),
+        )
 
 
 class IMDBCastTestCase(BaseTestCase):
-
     def test__1(self):
         # Series Case
         expected_attrs = {
@@ -60,7 +65,10 @@ class IMDBCastTestCase(BaseTestCase):
 
         result = Scraper(urls=[url]).handle()
 
-        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result[url]["cast"]))
+        self.assertListEqual(
+            [],
+            self.take_diff(attrs=expected_attrs, results=result[url]["cast"]),
+        )
 
     def test__2(self):
         expected_attrs = {
@@ -73,7 +81,10 @@ class IMDBCastTestCase(BaseTestCase):
 
         result = Scraper(urls=[url], search_type=Movie.TYPE).handle()
 
-        self.assertListEqual([], self.take_diff(attrs=expected_attrs, results=result[url]["cast"]))
+        self.assertListEqual(
+            [],
+            self.take_diff(attrs=expected_attrs, results=result[url]["cast"]),
+        )
 
 
 class IMDBAwardsTestCase(BaseTestCase):
@@ -99,17 +110,16 @@ class IMDBAwardsTestCase(BaseTestCase):
 
 
 class IMDBPersonalDataTestCase(BaseTestCase):
-
     def test__1(self):
         expected_attrs = {
-            'born_date',
-            'born_at',
-            'died_date',
-            'died_at',
-            'oscar_nominations',
-            'wins',
-            'nominations',
-            'perks'
+            "born_date",
+            "born_at",
+            "died_date",
+            "died_at",
+            "oscar_nominations",
+            "wins",
+            "nominations",
+            "perks",
         }
         url = "https://www.imdb.com/name/nm0000033/"
 
@@ -119,9 +129,9 @@ class IMDBPersonalDataTestCase(BaseTestCase):
 
     def test__2(self):
         expected_attrs = {
-            'born_date',
-            'born_at',
-            'perks',
+            "born_date",
+            "born_at",
+            "perks",
         }
         url = "https://www.imdb.com/name/nm0391866/"
 
@@ -131,9 +141,9 @@ class IMDBPersonalDataTestCase(BaseTestCase):
 
     def test__3(self):
         expected_attrs = {
-            'wins',
-            'nominations',
-            'perks',
+            "wins",
+            "nominations",
+            "perks",
         }
         url = "https://www.imdb.com/name/nm0458647"
 
@@ -143,35 +153,34 @@ class IMDBPersonalDataTestCase(BaseTestCase):
 
 
 class IMDBHomePageTestCase(BaseTestCase):
-
     def test__movie1(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'imdb_popularity',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'budget_amount',
-            'budget_currency',
-            'usa_ow_amount',
-            'usa_ow_currency',
-            'ww_amount',
-            'ww_currency',
-            'metacritic_score',
-            'imdb_vote_count',
-            'imdb_rate',
-            'usa_ow_amount',
-            'metacritic_score',
-            'imdb_popularity',
-            'usa_ow_currency',
-            'wins',
-            'nominations',
-            'oscar_wins',
-            'oscar_nominations',
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "imdb_popularity",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "budget_amount",
+            "budget_currency",
+            "usa_ow_amount",
+            "usa_ow_currency",
+            "ww_amount",
+            "ww_currency",
+            "metacritic_score",
+            "imdb_vote_count",
+            "imdb_rate",
+            "usa_ow_amount",
+            "metacritic_score",
+            "imdb_popularity",
+            "usa_ow_currency",
+            "wins",
+            "nominations",
+            "oscar_wins",
+            "oscar_nominations",
         }
         urls = [
             "https://www.imdb.com/title/tt0120737/",
@@ -184,20 +193,20 @@ class IMDBHomePageTestCase(BaseTestCase):
 
     def test__movie2(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'budget_amount',
-            'budget_currency',
-            'ww_amount',
-            'ww_currency',
-            'imdb_vote_count',
-            'imdb_rate',
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "budget_amount",
+            "budget_currency",
+            "ww_amount",
+            "ww_currency",
+            "imdb_vote_count",
+            "imdb_rate",
         }
         urls = [
             "https://www.imdb.com/title/tt7221896/",
@@ -210,30 +219,30 @@ class IMDBHomePageTestCase(BaseTestCase):
 
     def test__movie3(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'imdb_popularity',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'usa_ow_amount',
-            'usa_ow_currency',
-            'ww_amount',
-            'ww_currency',
-            'metacritic_score',
-            'imdb_vote_count',
-            'imdb_rate',
-            'usa_ow_amount',
-            'metacritic_score',
-            'imdb_popularity',
-            'usa_ow_currency',
-            'wins',
-            'nominations',
-            'oscar_wins',
-            'oscar_nominations',
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "imdb_popularity",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "usa_ow_amount",
+            "usa_ow_currency",
+            "ww_amount",
+            "ww_currency",
+            "metacritic_score",
+            "imdb_vote_count",
+            "imdb_rate",
+            "usa_ow_amount",
+            "metacritic_score",
+            "imdb_popularity",
+            "usa_ow_currency",
+            "wins",
+            "nominations",
+            "oscar_wins",
+            "oscar_nominations",
         }
         urls = [
             "https://www.imdb.com/title/tt1877830/",
@@ -246,20 +255,20 @@ class IMDBHomePageTestCase(BaseTestCase):
 
     def test__series1(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'is_active',
-            'end_date',
-            'imdb_vote_count',
-            'imdb_rate',
-            'episode_count',
-            'season_count',
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "is_active",
+            "end_date",
+            "imdb_vote_count",
+            "imdb_rate",
+            "episode_count",
+            "season_count",
         }
         urls = [
             "https://www.imdb.com/title/tt2098220/",
@@ -272,24 +281,22 @@ class IMDBHomePageTestCase(BaseTestCase):
 
     def test__series2(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'is_active',
-            'end_date',
-            'imdb_vote_count',
-            'imdb_rate',
-            'episode_count',
-            'season_count',
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "is_active",
+            "end_date",
+            "imdb_vote_count",
+            "imdb_rate",
+            "episode_count",
+            "season_count",
         }
-        urls = [
-            "https://www.imdb.com/title/tt0862622/"
-        ]
+        urls = ["https://www.imdb.com/title/tt0862622/"]
 
         results = Scraper(urls=urls, search_type=Series.TYPE).handle()
 

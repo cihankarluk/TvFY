@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Any, Optional
 
 from TvFY.collector.base import Scraper
 from TvFY.core.exceptions import NotAbleToFindDirectorSourceUrl
@@ -7,12 +7,9 @@ from TvFY.director.models import Director
 
 
 class DirectorService:
-
     @classmethod
     def check_source_urls(cls, search_data: dict[str, Any]):
-        """
-        At least one of them concur to find data about that movie.
-        """
+        """At least one of them concur to find data about that movie."""
         if not (search_data.get("imdb_director_url") or search_data.get("rt_director_url")):
             raise NotAbleToFindDirectorSourceUrl(
                 "Cannot find source url for that director. If you know address please contact."
@@ -29,9 +26,7 @@ class DirectorService:
 
     @classmethod
     def get_or_create_director(cls, search_data: dict[str, Any]) -> Optional[Director]:
-        """
-        This method only initialize director.
-        """
+        """This method only initialize director."""
         cls.check_source_urls(search_data=search_data)
 
         rt_url = search_data.get("rt_director_url")

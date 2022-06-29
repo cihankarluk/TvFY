@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from TvFY.series.models import Series, Season
+from TvFY.series.models import Season, Series
 from TvFY.series.serializers import EpisodeSerializer
 from TvFY.user.models import UserMovies, UserSeries
 
@@ -10,7 +10,11 @@ class UserMovieCreateOrUpdateRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserMovies
-        fields = "tvfy_code", "is_watched", "is_going_to_watch",
+        fields = (
+            "tvfy_code",
+            "is_watched",
+            "is_going_to_watch",
+        )
 
 
 class UserMovieCreateOrUpdateSerializer(serializers.ModelSerializer):
@@ -19,7 +23,14 @@ class UserMovieCreateOrUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserMovies
-        fields = "user", "username", "movie", "movie_title", "is_watched", "is_going_to_watch",
+        fields = (
+            "user",
+            "username",
+            "movie",
+            "movie_title",
+            "is_watched",
+            "is_going_to_watch",
+        )
 
 
 class UserMovieSerializer(serializers.ModelSerializer):
@@ -27,7 +38,10 @@ class UserMovieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserMovies
-        fields = "movie", "movie_title",
+        fields = (
+            "movie",
+            "movie_title",
+        )
 
 
 class UserMovieGetMoviesSerializer(serializers.Serializer):

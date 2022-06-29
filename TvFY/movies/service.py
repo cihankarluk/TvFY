@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Any, Optional
 
 from TvFY.actor.service import ActorService
 from TvFY.country.service import CountryService
@@ -9,7 +9,6 @@ from TvFY.movies.models import Movie, MovieCast
 
 
 class MovieService:
-
     @classmethod
     def prepare_movie_data(cls, search_data: dict[str, Any]) -> dict[str, Any]:
         movie_data = {}
@@ -45,9 +44,7 @@ class MovieService:
 
     @classmethod
     def create_movie_model_data(cls, movie_data: dict[str, Any]) -> dict[str, Any]:
-        """
-        Prepare data for movie model.
-        """
+        """Prepare data for movie model."""
         movie_model_data = {
             "title": movie_data.get("imdb_title") or movie_data.get("rt_title"),
             "storyline": movie_data.get("rt_storyline"),
@@ -80,8 +77,9 @@ class MovieService:
 
     @classmethod
     def update_movie(cls, movie: Movie, movie_data: dict[str, Any]) -> Movie:
-        """
-        Genre, Country, Language, Director fields are expected to not change.
+        """Genre, Country, Language, Director fields are expected to not
+        change.
+
         In that sense we only update movie model fields.
         """
         movie_model_data = cls.create_movie_model_data(movie_data=movie_data)
@@ -93,9 +91,7 @@ class MovieService:
 
     @classmethod
     def create_movie(cls, movie_data: dict[str, Any]) -> Movie:
-        """
-        Create movie and casts with them.
-        """
+        """Create movie and casts with them."""
         movie_model_data = cls.create_movie_model_data(movie_data=movie_data)
         movie = Movie.objects.create(**movie_model_data)
         for genre in GenreService.get_genre_ids(search_data=movie_data):
@@ -121,12 +117,10 @@ class MovieService:
 
 
 class MovieCastService:
-
     @classmethod
     def bulk_create_movie_cast(cls, movie: Movie, movie_data: dict[str, Any]):
-        """
-        This method creates Actor in same time if the actor is not registered to db.
-        """
+        """This method creates Actor in same time if the actor is not
+        registered to db."""
         cast_data = movie_data.get("cast", [])
         actor_dict = ActorService.create_multiple_actor(cast_data=cast_data)
 

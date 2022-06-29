@@ -4,8 +4,8 @@ from allauth.account.adapter import DefaultAccountAdapter
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from TvFY.user.models import UserMovies
 from tests.base import BaseTestCase
+from TvFY.user.models import UserMovies
 
 
 class UserSignupViewTestCase(BaseTestCase):
@@ -22,7 +22,7 @@ class UserSignupViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=request_data)
         json_response = response.json()
@@ -46,7 +46,7 @@ class UserLoginViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -81,7 +81,7 @@ class UserLogoutViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -103,7 +103,7 @@ class UserLogoutViewTestCase(BaseTestCase):
         json_response = response.json()
 
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'Successfully logged out.'}, json_response)
+        self.assertDictEqual({"detail": "Successfully logged out."}, json_response)
 
 
 class UserPasswordResetViewTestCase(BaseTestCase):
@@ -122,7 +122,7 @@ class UserPasswordResetViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -137,7 +137,7 @@ class UserPasswordResetViewTestCase(BaseTestCase):
         json_response = response.json()
 
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'Password reset e-mail has been sent.'}, json_response)
+        self.assertDictEqual({"detail": "Password reset e-mail has been sent."}, json_response)
         self.assertTrue(mock_send_mail.called)
 
 
@@ -161,7 +161,7 @@ class UserPasswordResetConfirmViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -174,7 +174,7 @@ class UserPasswordResetConfirmViewTestCase(BaseTestCase):
         response = self.client.post(self.password_reset_url, data=reset_request_data)
         json_response = response.json()
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'Password reset e-mail has been sent.'}, json_response)
+        self.assertDictEqual({"detail": "Password reset e-mail has been sent."}, json_response)
         self.assertTrue(mock_send_mail.called)
 
         args, kwargs = mock_send_mail.call_args
@@ -191,15 +191,18 @@ class UserPasswordResetConfirmViewTestCase(BaseTestCase):
         response = self.client.post(reset_confirm_url, data=reset_confirm_request_data)
         json_response = response.json()
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({"detail": "Password has been reset with the new password."}, json_response)
+        self.assertDictEqual(
+            {"detail": "Password has been reset with the new password."},
+            json_response,
+        )
 
         #########
         # LOGIN #
         #########
         expected_response = {
-            'code': 400,
-            'type': 'ValidationError',
-            'reason': {'non_field_errors': ['Unable to log in with provided credentials.']}
+            "code": 400,
+            "type": "ValidationError",
+            "reason": {"non_field_errors": ["Unable to log in with provided credentials."]},
         }
         login_request_data = {
             "username": "test1",
@@ -244,7 +247,7 @@ class UserPasswordChangeViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -268,20 +271,20 @@ class UserPasswordChangeViewTestCase(BaseTestCase):
         ###################
         password_change_request_data = {
             "new_password1": "123qwe123TtT",
-            "new_password2": "123qwe123TtT"
+            "new_password2": "123qwe123TtT",
         }
         response = self.client.post(self.password_change_url, data=password_change_request_data)
         json_response = response.json()
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'New password has been saved.'}, json_response)
+        self.assertDictEqual({"detail": "New password has been saved."}, json_response)
 
         #########
         # LOGIN #
         #########
         expected_response = {
-            'code': 400,
-            'type': 'ValidationError',
-            'reason': {'non_field_errors': ['Unable to log in with provided credentials.']}
+            "code": 400,
+            "type": "ValidationError",
+            "reason": {"non_field_errors": ["Unable to log in with provided credentials."]},
         }
         login_request_data = {
             "username": "test1",
@@ -320,7 +323,7 @@ class UserResendEmailVerificationViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -333,7 +336,7 @@ class UserResendEmailVerificationViewTestCase(BaseTestCase):
         response = self.client.post(self.resend_email, data=resend_request_data)
         json_response = response.json()
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'ok'}, json_response)
+        self.assertDictEqual({"detail": "ok"}, json_response)
         self.assertTrue(mock_send_mail.called)
 
 
@@ -356,7 +359,7 @@ class UserVerifyEmailViewTestCase(BaseTestCase):
             "username": "test1",
             "email": "test@gmail.com",
             "password1": "ph420wwwW",
-            "password2": "ph420wwwW"
+            "password2": "ph420wwwW",
         }
         response = self.client.post(self.signup_url, data=signup_request_data)
         json_response = response.json()
@@ -369,7 +372,7 @@ class UserVerifyEmailViewTestCase(BaseTestCase):
         response = self.client.post(self.resend_email, data=resend_request_data)
         json_response = response.json()
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'ok'}, json_response)
+        self.assertDictEqual({"detail": "ok"}, json_response)
         self.assertTrue(mock_send_mail.called)
 
         args, kwargs = mock_send_mail.call_args
@@ -382,7 +385,7 @@ class UserVerifyEmailViewTestCase(BaseTestCase):
         json_response = response.json()
 
         self.assertEqual(200, response.status_code)
-        self.assertDictEqual({'detail': 'ok'}, json_response)
+        self.assertDictEqual({"detail": "ok"}, json_response)
 
 
 class UserViewSetTestCase(BaseTestCase):
@@ -414,9 +417,9 @@ class UserViewSetTestCase(BaseTestCase):
 
     def test__user_movies__post__movie_does_not_exists(self):
         expected_response = {
-            'code': 404,
-            'type': 'MovieNotFoundError',
-            'reason': 'Movie not exists with x tvfy_code.'
+            "code": 404,
+            "type": "MovieNotFoundError",
+            "reason": "Movie not exists with x tvfy_code.",
         }
 
         request_data = {
@@ -470,7 +473,7 @@ class UserViewSetTestCase(BaseTestCase):
             "watched_season",
             "last_watched_episode",
             "is_watched",
-            "is_going_to_watch"
+            "is_going_to_watch",
         }
         series = self.create_series(count=1)[0]
         _ = self.create_season(count=1, season="1", series=series)[0]
@@ -496,7 +499,7 @@ class UserViewSetTestCase(BaseTestCase):
             "watched_seasons",
             "unwatched_seasons",
         }
-        user_series = self.create_user_series(count=1, last_watched_episode=10)[0]
+        _ = self.create_user_series(count=1, last_watched_episode=10)[0]
 
         response = self.client.get(self.series_url)
         json_response = response.json()

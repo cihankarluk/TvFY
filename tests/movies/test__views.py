@@ -3,12 +3,12 @@ from datetime import timedelta
 from django.urls import reverse
 from model_bakery import baker
 
+from tests.base import BaseTestCase
 from TvFY.country.models import Country
 from TvFY.genre.models import Genre
 from TvFY.language.models import Language
 from TvFY.movies.models import Movie
 from TvFY.movies.service import MovieService
-from tests.base import BaseTestCase
 
 
 class MovieViewSetTestCase(BaseTestCase):
@@ -16,14 +16,14 @@ class MovieViewSetTestCase(BaseTestCase):
 
     @classmethod
     def get_movie_detail_url(cls, tvfy_code):
-        return reverse("movie-detail", kwargs={'tvfy_code': tvfy_code})
+        return reverse("movie-detail", kwargs={"tvfy_code": tvfy_code})
 
     @classmethod
     def get_cast_url(cls, tvfy_code):
-        return reverse("movie-cast", kwargs={'tvfy_code': tvfy_code})
+        return reverse("movie-cast", kwargs={"tvfy_code": tvfy_code})
 
     def setUp(self) -> None:
-        super(MovieViewSetTestCase, self).setUp()
+        super().setUp()
         movie_data = self.read_file("movie_batman.json", is_json=True)
         self.movie = MovieService.create_or_update_movie(search_data=movie_data)
 
@@ -295,7 +295,10 @@ class MovieViewSetTestCase(BaseTestCase):
     def test__list__filter_director_full_name(self):
         baker.make(Movie)
 
-        response = self.client.get(self.movie_list_url, data={"director_full_name": self.movie.director.full_name})
+        response = self.client.get(
+            self.movie_list_url,
+            data={"director_full_name": self.movie.director.full_name},
+        )
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
@@ -356,10 +359,7 @@ class MovieViewSetTestCase(BaseTestCase):
     def test__search__title(self):
         movie2 = baker.make(Movie, title="Mahmut Tuncer Welcome to my Halay")
 
-        response = self.client.get(
-            self.movie_list_url,
-            data={"search": "Mahmut Tuncer"}
-        )
+        response = self.client.get(self.movie_list_url, data={"search": "Mahmut Tuncer"})
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
@@ -369,10 +369,7 @@ class MovieViewSetTestCase(BaseTestCase):
     def test__search__tvfy_code(self):
         movie2 = baker.make(Movie)
 
-        response = self.client.get(
-            self.movie_list_url,
-            data={"search": movie2.tvfy_code}
-        )
+        response = self.client.get(self.movie_list_url, data={"search": movie2.tvfy_code})
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
@@ -382,10 +379,7 @@ class MovieViewSetTestCase(BaseTestCase):
     def test__search__tvfy_code__not_exact_code(self):
         movie2 = baker.make(Movie)
 
-        response = self.client.get(
-            self.movie_list_url,
-            data={"search": movie2.tvfy_code[:5]}
-        )
+        response = self.client.get(self.movie_list_url, data={"search": movie2.tvfy_code[:5]})
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
@@ -395,10 +389,7 @@ class MovieViewSetTestCase(BaseTestCase):
         movie1 = baker.make(Movie, imdb_rate=self.movie.imdb_rate - 1)
         movie2 = baker.make(Movie, imdb_rate=self.movie.imdb_rate - 2)
 
-        response = self.client.get(
-            self.movie_list_url,
-            data={"ordering": "-imdb_rate"}
-        )
+        response = self.client.get(self.movie_list_url, data={"ordering": "-imdb_rate"})
         json_response = response.json()
 
         self.assertEqual(response.status_code, 200)
@@ -451,9 +442,9 @@ class MovieViewSetTestCase(BaseTestCase):
 
     def test__retrieve__not_exists(self):
         expected_result = {
-            'code': 404,
-            'type': 'MovieNotFoundError',
-            'reason': 'Movie with notExists code does not exists.'
+            "code": 404,
+            "type": "MovieNotFoundError",
+            "reason": "Movie with notExists code does not exists.",
         }
         response = self.client.get(
             self.get_movie_detail_url("notExists"),
@@ -464,10 +455,7 @@ class MovieViewSetTestCase(BaseTestCase):
         self.assertEqual(expected_result, json_response)
 
     def test__get_cast(self):
-        expected_attrs = {
-            "character_name",
-            "actor"
-        }
+        expected_attrs = {"character_name", "actor"}
         response = self.client.get(
             self.get_cast_url(self.movie.tvfy_code),
         )
@@ -478,9 +466,9 @@ class MovieViewSetTestCase(BaseTestCase):
 
     def test__cast__not_exists(self):
         expected_result = {
-            'code': 404,
-            'type': 'MovieNotFoundError',
-            'reason': 'Movie with notExists code does not exists.'
+            "code": 404,
+            "type": "MovieNotFoundError",
+            "reason": "Movie with notExists code does not exists.",
         }
         response = self.client.get(
             self.get_movie_detail_url("notExists"),

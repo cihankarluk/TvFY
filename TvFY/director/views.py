@@ -7,20 +7,18 @@ from rest_framework.viewsets import GenericViewSet
 
 from TvFY.core.exceptions import DirectorNotFoundError
 from TvFY.director.models import Director
-from TvFY.director.serializers import DirectorListSerializer, DirectorDetailSerializer
+from TvFY.director.serializers import DirectorDetailSerializer, DirectorListSerializer
 
 
 class DirectorViewSet(GenericViewSet, ListModelMixin):
     queryset = (
-        Director.objects.prefetch_related(
-            "movie_set", "series_set"
-        ).select_related(
-            "born_at", "died_at"
-        ).order_by("-created_at")
+        Director.objects.prefetch_related("movie_set", "series_set")
+        .select_related("born_at", "died_at")
+        .order_by("-created_at")
     )
     serializer_class = DirectorListSerializer
-    filter_backends = SearchFilter,
-    search_fields = "full_name",
+    filter_backends = (SearchFilter,)
+    search_fields = ("full_name",)
     lookup_field = "tvfy_code"
 
     def get_serializer_class(self):
@@ -30,7 +28,7 @@ class DirectorViewSet(GenericViewSet, ListModelMixin):
 
     def get_object(self):
         try:
-            director = super(DirectorViewSet, self).get_object()
+            director = super().get_object()
         except Http404:
             raise DirectorNotFoundError(f"Director with {self.kwargs['tvfy_code']} code does not exists.")
         return director

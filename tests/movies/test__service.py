@@ -1,54 +1,54 @@
 from unittest.mock import patch
 
+from tests.base import BaseTestCase
 from TvFY.actor.service import ActorService
 from TvFY.director.service import DirectorService
-from TvFY.movies.models import MovieCast, Movie
-from TvFY.movies.service import MovieService, MovieCastService
-from tests.base import BaseTestCase
+from TvFY.movies.models import Movie, MovieCast
+from TvFY.movies.service import MovieCastService, MovieService
 
 
 class MovieServiceTestCase(BaseTestCase):
     def setUp(self) -> None:
-        super(MovieServiceTestCase, self).setUp()
+        super().setUp()
         self.search_data = self.read_file("movie_batman.json", is_json=True)
         self.updated_search_data = self.read_file("movie_batman_updated.json", is_json=True)
 
     def test__prepare_movie_data(self):
         expected_attrs = {
-            'imdb_genre',
-            'imdb_director',
-            'imdb_director_url',
-            'run_time',
-            'imdb_popularity',
-            'country',
-            'language',
-            'release_date',
-            'imdb_title',
-            'budget_amount',
-            'budget_currency',
-            'usa_ow_amount',
-            'usa_ow_currency',
-            'ww_amount',
-            'ww_currency',
-            'metacritic_score',
-            'imdb_vote_count',
-            'imdb_rate',
-            'wins',
-            'nominations',
-            'oscar_wins',
-            'oscar_nominations',
-            'cast',
-            'imdb_url',
-            'rt_title',
-            'rt_genre',
-            'rt_director',
-            'rt_director_url',
-            'rt_audience_rate',
-            'rt_audience_count',
-            'rt_tomatometer_rate',
-            'rt_tomatometer_count',
-            'rt_storyline',
-            'rotten_tomatoes_url'
+            "imdb_genre",
+            "imdb_director",
+            "imdb_director_url",
+            "run_time",
+            "imdb_popularity",
+            "country",
+            "language",
+            "release_date",
+            "imdb_title",
+            "budget_amount",
+            "budget_currency",
+            "usa_ow_amount",
+            "usa_ow_currency",
+            "ww_amount",
+            "ww_currency",
+            "metacritic_score",
+            "imdb_vote_count",
+            "imdb_rate",
+            "wins",
+            "nominations",
+            "oscar_wins",
+            "oscar_nominations",
+            "cast",
+            "imdb_url",
+            "rt_title",
+            "rt_genre",
+            "rt_director",
+            "rt_director_url",
+            "rt_audience_rate",
+            "rt_audience_count",
+            "rt_tomatometer_rate",
+            "rt_tomatometer_count",
+            "rt_storyline",
+            "rotten_tomatoes_url",
         }
 
         result = MovieService.prepare_movie_data(search_data=self.search_data)
@@ -157,17 +157,17 @@ class MovieServiceTestCase(BaseTestCase):
 
     def test__create_or_update_movie__create_movie(self):
         expected_attribute_errors = {
-            'cast',
-            'imdb_director',
-            'imdb_director_url',
-            'imdb_genre',
-            'imdb_title',
-            'release_date',
-            'rt_director',
-            'rt_director_url',
-            'rt_genre',
-            'rt_storyline',
-            'rt_title',
+            "cast",
+            "imdb_director",
+            "imdb_director_url",
+            "imdb_genre",
+            "imdb_title",
+            "release_date",
+            "rt_director",
+            "rt_director_url",
+            "rt_genre",
+            "rt_storyline",
+            "rt_title",
         }
         movie_data = MovieService.prepare_movie_data(search_data=self.search_data)
 
@@ -193,9 +193,7 @@ class MovieServiceTestCase(BaseTestCase):
         self.assertEqual(5, movie.genres.count())
 
     def test__create_or_update_movie__update_movie(self):
-        """
-        wins is increased from 121 to 420
-        """
+        """wins is increased from 121 to 420."""
         MovieService.create_or_update_movie(search_data=self.search_data)
         initial_movie = Movie.objects.get(imdb_url=self.search_data["imdb_url"])
 
@@ -208,7 +206,7 @@ class MovieServiceTestCase(BaseTestCase):
 
 class MovieCastServiceTestCase(BaseTestCase):
     def setUp(self) -> None:
-        super(MovieCastServiceTestCase, self).setUp()
+        super().setUp()
         self.movie = self.create_movie()[0]
 
     @patch.object(ActorService, "create_multiple_actor")
@@ -230,8 +228,18 @@ class MovieCastServiceTestCase(BaseTestCase):
         }
         movie_data = {
             "cast": [
-                {"first_name": "K", "last_name": "U", "character_name": "B", "imdb_actor_url": "https://t.com/1/"},
-                {"first_name": "M", "last_name": "T", "character_name": "H", "imdb_actor_url": "https://t.com/2/"},
+                {
+                    "first_name": "K",
+                    "last_name": "U",
+                    "character_name": "B",
+                    "imdb_actor_url": "https://t.com/1/",
+                },
+                {
+                    "first_name": "M",
+                    "last_name": "T",
+                    "character_name": "H",
+                    "imdb_actor_url": "https://t.com/2/",
+                },
             ]
         }
 

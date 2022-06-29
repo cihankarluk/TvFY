@@ -1,11 +1,10 @@
+from itests.base import BaseTestCase
 from TvFY.movies.models import Movie
 from TvFY.search.service import SearchService
 from TvFY.series.models import Series
-from itests.base import BaseTestCase
 
 
 class SearchViewSetTestCase(BaseTestCase):
-
     def test__scrap__series(self):
         expected_attrs = {
             "tvfy_code",
@@ -38,11 +37,15 @@ class SearchViewSetTestCase(BaseTestCase):
         search_urls = [
             "https://www.imdb.com/title/tt1190634/",
             "https://www.imdb.com/title/tt1190634/fullcredits",
-            "https://www.imdb.com/title/tt1190634/episodes?season=1"
+            "https://www.imdb.com/title/tt1190634/episodes?season=1",
         ]
         google_results = {"imdb_url": "https://www.imdb.com/title/tt1190634/"}
 
-        result = SearchService.scrap(valid_data=valid_data, search_urls=search_urls, google_results=google_results)
+        result = SearchService.scrap(
+            valid_data=valid_data,
+            search_urls=search_urls,
+            google_results=google_results,
+        )
 
         self.assertTrue(self.is_subset(attrs=expected_attrs, results=result.data))
 
@@ -86,6 +89,10 @@ class SearchViewSetTestCase(BaseTestCase):
         ]
         google_results = {"imdb_url": "https://www.imdb.com/title/tt0120737/"}
 
-        result = SearchService.scrap(valid_data=valid_data, search_urls=search_urls, google_results=google_results)
+        result = SearchService.scrap(
+            valid_data=valid_data,
+            search_urls=search_urls,
+            google_results=google_results,
+        )
 
         self.assertTrue(self.is_subset(attrs=expected_attrs, results=result.data))

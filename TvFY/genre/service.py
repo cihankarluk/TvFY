@@ -7,7 +7,6 @@ from TvFY.genre.models import Genre
 
 
 class GenreService:
-
     @classmethod
     def load_genres(cls):
         genre_data = read_file(path="fixtures/genres.json", is_json=True)
