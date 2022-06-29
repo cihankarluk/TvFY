@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg, Max, Min
 
 from TvFY.actor.models import Actor
 from TvFY.core.models import AuditMixin
@@ -75,11 +76,22 @@ class Season(models.Model):
 
     season = models.CharField(db_column="season", max_length=3)
     imdb_url = models.URLField(db_column="imdb_url")
-    imdb_season_average_rate = models.FloatField(db_column="imdb_season_average_rate", null=True)
 
     series = models.ForeignKey(to=Series, db_column="series", on_delete=models.CASCADE)
 
     objects = SeriesSeasonManager()
+
+    def get_episodes_avg_imdb_rate(self) -> float:
+        # Returns average rate for that season
+        return self.episode_set.aggregate(Avg("imdb_rate"))["imdb_rate__avg"]
+
+    def get_episodes_max_imdb_rate(self) -> 'Episode':
+        # Returns maximum imdb_rate episode
+        return self.episode_set.order_by("-imdb_rate").first()
+
+    def get_episodes_min_imdb_rate(self) -> 'Episode':
+        # Returns minimum imdb_rate episode
+        return self.episode_set.order_by("imdb_rate").first()
 
     def __str__(self):
         return f"{self.season}: {self.series.title}"

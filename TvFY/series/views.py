@@ -12,7 +12,7 @@ from rest_framework.viewsets import GenericViewSet
 from TvFY.core.exceptions import SeriesNotFoundError
 from TvFY.series.models import Series
 from TvFY.series.serializers import SeriesListSerializer, SeriesDetailSerializer, SeriesCastSerializer, \
-    SeriesSeasonSerializer, SeriesSeasonEpisodeSerializer
+    SeriesSeasonSerializer, EpisodeSerializer
 
 
 class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
@@ -38,7 +38,7 @@ class SeriesViewSet(GenericViewSet, ListModelMixin, RetrieveModelMixin):
         elif self.action == "get_seasons":
             return SeriesSeasonSerializer
         elif self.action == "season_episodes":
-            return SeriesSeasonEpisodeSerializer
+            return EpisodeSerializer
         return self.serializer_class
 
     def get_object(self):

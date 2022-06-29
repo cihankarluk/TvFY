@@ -103,12 +103,11 @@ class SeriesSeasonSerializer(serializers.ModelSerializer):
         fields = (
             "season",
             "imdb_url",
-            "imdb_season_average_rate",
             "series_title",
         )
 
 
-class SeriesSeasonEpisodeSerializer(serializers.ModelSerializer):
+class EpisodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Episode
         fields = (
