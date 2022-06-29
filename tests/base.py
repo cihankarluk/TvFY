@@ -1,12 +1,14 @@
 import datetime
 import json
 import os
-from ctypes import Union
-from typing import List, Any
+from typing import Any
+from uuid import uuid4
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from model_bakery import baker
+from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
 from TvFY.actor.models import Actor
@@ -20,13 +22,41 @@ __all__ = ["BaseTestCase"]
 
 from TvFY.movies.models import Movie
 from TvFY.series.models import Series, SeriesCast, Season, Episode
+from TvFY.user.models import UserMovies, UserSeries
+
+UserModel = get_user_model()
 
 
 class BaseTestCase(TestCase):
     def setUp(self) -> None:
         self.client = APIClient()
+        self.uid = self.get_random_str()
+        self.account = UserModel.objects.create_user(
+            username=self.uid,
+            first_name=f"first_name_{self.uid}",
+            last_name=f"last_name_{self.uid}",
+            email=f"{self.uid}@tvfy.com",
+            password=self.uid,
+            is_superuser=False,
+            is_staff=False,
+        )
+        self.authenticate_client(self.client)
         self.now = datetime.datetime.now(tz=datetime.timezone.utc)
         GenreService.load_genres()
+
+    @classmethod
+    def get_random_str(cls) -> str:
+        return str(uuid4())[:10]
+
+    def authenticate_client(self, client):
+        login_url = reverse("rest_login")
+        login_request_data = {
+            "username": self.account.username,
+            "password": self.account.username,
+        }
+        response = self.client.post(login_url, data=login_request_data)
+        token = response.data["access_token"]
+        client.credentials(HTTP_AUTHORIZATION=f"JWT {token}")
 
     @staticmethod
     def read_file(path, is_json=False):
@@ -39,7 +69,7 @@ class BaseTestCase(TestCase):
     @classmethod
     def is_subset(cls, attrs: set, results: Any) -> bool:
         if not isinstance(results, list):
-            results: List[dict] = [results]
+            results: list[dict] = [results]
 
         is_subset: bool = all(
             attrs.issubset(transaction) and attrs.issuperset(transaction) for transaction in results
@@ -62,7 +92,7 @@ class BaseTestCase(TestCase):
             cls,
             count=10,
             name="test",
-    ) -> List[Country]:
+    ) -> list[Country]:
         countries = []
         for index in range(count):
             countries.append(baker.make(
@@ -76,7 +106,7 @@ class BaseTestCase(TestCase):
             cls,
             count=10,
             name="test",
-    ) -> List[Language]:
+    ) -> list[Language]:
         languages = []
         for index in range(count):
             languages.append(baker.make(
@@ -121,7 +151,7 @@ class BaseTestCase(TestCase):
             wins=None,
             nominations=None,
             is_updated=False,
-    ) -> List[Actor]:
+    ) -> list[Actor]:
         actors = []
         for index in range(index_start, count + index_start, 1):
             actors.append(baker.make(
@@ -165,7 +195,7 @@ class BaseTestCase(TestCase):
             wins=None,
             nominations=None,
             is_updated=False,
-    ) -> List[Director]:
+    ) -> list[Director]:
         directors = []
         for index in range(index_start, count + index_start, 1):
             directors.append(baker.make(
@@ -194,7 +224,6 @@ class BaseTestCase(TestCase):
             cls,
             index_start=0,
             count=10,
-            tvfy_code="",
             title="",
             storyline=None,
             release_date=None,
@@ -217,12 +246,11 @@ class BaseTestCase(TestCase):
             metacritic_score=None,
             imdb_url="https://test.com",
             rotten_tomatoes_url="https://rt-test.com",
-    ) -> List[Movie]:
+    ) -> list[Movie]:
         movies = []
         for index in range(index_start, count + index_start, 1):
             movies.append(baker.make(
                 Movie,
-                tvfy_code=f"{tvfy_code}_{index}",
                 title=f"{title}_{index}",
                 storyline=storyline,
                 release_date=release_date,
@@ -274,7 +302,7 @@ class BaseTestCase(TestCase):
             rotten_tomatoes_url=None,
             metacritic_score=None,
             creator=None,
-    ) -> List[Series]:
+    ) -> list[Series]:
         series = []
         for index in range(index_start, count + index_start, 1):
             series.append(baker.make(
@@ -314,7 +342,7 @@ class BaseTestCase(TestCase):
             end_acting=None,
             series=None,
             actor=None,
-    ) -> List[SeriesCast]:
+    ) -> list[SeriesCast]:
         series_cast = []
         for index in range(index_start, count + index_start, 1):
             series_cast.append(baker.make(
@@ -335,16 +363,14 @@ class BaseTestCase(TestCase):
             count=10,
             season=None,
             imdb_url=None,
-            imdb_season_average_rate=None,
             series=None,
-    ) -> List[Season]:
+    ) -> list[Season]:
         seasons = []
         for index in range(index_start, count + index_start, 1):
             seasons.append(baker.make(
                 Season,
                 season=season or f"{index}",
                 imdb_url=imdb_url or f"{imdb_url}/{index}/",
-                imdb_season_average_rate=imdb_season_average_rate or index,
                 series=series or cls.create_series(index_start=index_start + index, count=1)[0],
             ))
         return seasons
@@ -354,7 +380,6 @@ class BaseTestCase(TestCase):
             cls,
             index_start=0,
             count=10,
-            tvfy_code=None,
             title=None,
             storyline=None,
             release_date=None,
@@ -362,12 +387,11 @@ class BaseTestCase(TestCase):
             imdb_vote_count=None,
             episode=None,
             season=None,
-    ) -> List[Episode]:
+    ) -> list[Episode]:
         episodes = []
         for index in range(index_start, count + index_start, 1):
             episodes.append(baker.make(
                 Episode,
-                tvfy_code=tvfy_code or f"{tvfy_code}_{index}",
                 title=title or f"{title}_{index}",
                 storyline=storyline,
                 release_date=release_date,
@@ -377,3 +401,47 @@ class BaseTestCase(TestCase):
                 season=season or cls.create_season(index_start=index_start + index, count=1)[0],
             ))
         return episodes
+
+    def create_user_movies(
+            self,
+            index_start=0,
+            count=10,
+            user=None,
+            movie=None,
+            is_watched=True,
+            is_going_to_watch=False,
+    ) -> list[UserMovies]:
+        user_movies = []
+        for index in range(index_start, count + index_start, 1):
+            user_movies.append(baker.make(
+                UserMovies,
+                user=user or self.account,
+                movie=movie or self.create_movie(index_start=index_start + index, count=1)[0],
+                is_watched=is_watched,
+                is_going_to_watch=is_going_to_watch,
+            ))
+        return user_movies
+
+    def create_user_series(
+            self,
+            index_start=0,
+            count=10,
+            user=None,
+            series=None,
+            watched_season=None,
+            last_watched_episode=None,
+            is_watched=True,
+            is_going_to_watch=False,
+    ) -> list[UserSeries]:
+        user_series = []
+        for index in range(index_start, count + index_start, 1):
+            user_series.append(baker.make(
+                UserSeries,
+                user=user or self.account,
+                series=series or self.create_series(index_start=index_start + index, count=1)[0],
+                watched_season=watched_season or self.create_season(index_start=index_start + index, count=1)[0],
+                last_watched_episode=last_watched_episode,
+                is_watched=is_watched,
+                is_going_to_watch=is_going_to_watch,
+            ))
+        return user_series

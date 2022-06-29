@@ -219,14 +219,12 @@ class BaseTestCase(TestCase):
             cls,
             season=None,
             imdb_url=None,
-            imdb_season_average_rate=None,
             series=None,
     ) -> Season:
         season = baker.make(
             Season,
             season=season,
             imdb_url=imdb_url,
-            imdb_season_average_rate=imdb_season_average_rate,
             series=series or cls.create_series(),
         )
         return season

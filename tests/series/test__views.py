@@ -150,7 +150,6 @@ class SeriesViewSetTestCase(BaseTestCase):
         expected_attrs = {
             "season",
             "imdb_url",
-            "imdb_season_average_rate",
             "series_title",
         }
 
