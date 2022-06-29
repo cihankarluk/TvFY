@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 
 from TvFY.collector.imdb import IMDBBase
 from TvFY.collector.tomatoes import RottenTomatoesBase
-from TvFY.core.helpers import giveup_handler
 
 logger = logging.getLogger("main")
 
